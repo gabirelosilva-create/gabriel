@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#991b1b">
-    <meta name="description" content="Demandas Express - Gestão Gamificada com Controle ADM Criptografado">
-    <title>Demandas Express — Edição Gamificada</title>
-
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Demandas%20Express%20Gamificado%22%2C%22short_name%22%3A%22Demandas%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait-primary%22%2C%22background_color%22%3A%22%232a080c%22%2C%22theme_color%22%3A%22%23991b1b%22%7D">
+    <meta name="description" content="Demandas Express - Gestão Integrada Multidispositivo em Nuvem">
+    <title>Demandas Express — Edição Integrada em Nuvem</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap');
@@ -99,9 +97,19 @@
             font-weight: 900;
         }
 
+        .sync-badge {
+            font-size: 0.68rem;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .sync-online { background: #10b981; color: #fff; }
+        .sync-offline { background: #ef4444; color: #fff; }
+
         .user-controls {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             align-items: center;
         }
 
@@ -114,11 +122,6 @@
             color: var(--text-dark);
             outline: none;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        select:focus, input:focus, textarea:focus {
-            border-color: var(--yellow-main);
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
         }
 
         button {
@@ -135,22 +138,11 @@
             box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
         }
 
-        button:hover {
-            background: var(--red-bright);
-            transform: translateY(-1px);
-        }
-
-        button:active {
-            transform: scale(0.97);
-        }
-
         button.gold {
             background: var(--gold-gradient);
             color: #2a080c;
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
         }
-
-        button.gold:hover { filter: brightness(1.1); }
 
         button.secondary {
             background: rgba(255, 255, 255, 0.1);
@@ -159,19 +151,11 @@
             box-shadow: none;
         }
 
-        button.secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-        }
-
         button.danger {
             background: #fee2e2;
             color: var(--red-main);
             border: 1px solid #fca5a5;
-            box-shadow: none;
         }
-
-        button.danger:hover { background: #fca5a5; color: #7f1d1d; }
 
         main {
             flex: 1;
@@ -196,21 +180,10 @@
             margin-bottom: 1.2rem;
         }
 
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            top: -50%; right: -20%;
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(251, 191, 36, 0.25) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
         .user-profile-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            position: relative;
-            z-index: 2;
         }
 
         .avatar-frame {
@@ -219,7 +192,6 @@
             border-radius: 18px;
             background: var(--gold-gradient);
             padding: 3px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             flex-shrink: 0;
         }
 
@@ -245,34 +217,9 @@
             padding: 2px 6px;
             border-radius: 8px;
             border: 2px solid var(--yellow-bright);
-            text-transform: uppercase;
         }
 
-        .user-info { flex: 1; }
-
-        .user-name {
-            font-family: "Outfit", sans-serif;
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .user-title {
-            font-size: 0.78rem;
-            color: var(--yellow-bright);
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
-        .xp-container {
-            margin-top: 1rem;
-            position: relative;
-            z-index: 2;
-        }
+        .xp-container { margin-top: 1rem; }
 
         .xp-bar-bg {
             height: 12px;
@@ -286,8 +233,7 @@
             height: 100%;
             background: var(--gold-gradient);
             border-radius: 99px;
-            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+            transition: width 0.8s ease;
         }
 
         .xp-stats {
@@ -312,32 +258,23 @@
             border-radius: var(--radius-md);
             padding: 0.75rem;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(104, 13, 17, 0.05);
             border-bottom: 3px solid var(--red-main);
         }
 
-        .metric-card.gold {
-            border-bottom-color: var(--yellow-main);
-            background: #fffdf0;
-        }
+        .metric-card.gold { border-bottom-color: var(--yellow-main); }
 
         .metric-val {
             font-family: "Outfit", sans-serif;
             font-size: 1.4rem;
             font-weight: 800;
             color: var(--red-dark);
-            line-height: 1;
         }
-
-        .metric-card.gold .metric-val { color: #b45309; }
 
         .metric-lbl {
             font-size: 0.68rem;
             color: var(--text-muted);
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.3rem;
         }
 
         .admin-bar {
@@ -350,23 +287,6 @@
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-        }
-
-        .admin-bar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-badge {
-            background: var(--yellow-main);
-            color: #2a080c;
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 0.2rem 0.6rem;
-            border-radius: 99px;
-            text-transform: uppercase;
         }
 
         .admin-actions {
@@ -382,7 +302,6 @@
             padding: 0.3rem;
             border-radius: var(--radius-md);
             margin-bottom: 1.2rem;
-            border: 1px solid var(--border-subtle);
         }
 
         .tab-btn {
@@ -394,142 +313,12 @@
             border: none;
             background: transparent;
             color: var(--text-muted);
-            box-shadow: none;
-            min-height: 36px;
         }
 
         .tab-btn.active {
             background: var(--red-main);
             color: white;
-            box-shadow: 0 2px 8px rgba(185, 28, 28, 0.3);
         }
-
-        .sec-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-        }
-
-        .sec-title h2 {
-            font-family: "Outfit", sans-serif;
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--red-dark);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .podium-container {
-            background: var(--surface-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.2rem 1rem 0.8rem;
-            margin-bottom: 1rem;
-            box-shadow: var(--shadow-card);
-        }
-
-        .podium-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.15fr 1fr;
-            align-items: end;
-            gap: 0.5rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .podium-slot {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .podium-avatar {
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            background: var(--red-light);
-            border: 2px solid var(--yellow-main);
-            display: grid;
-            place-items: center;
-            font-weight: 800;
-            font-size: 0.9rem;
-            color: var(--red-dark);
-            margin-bottom: 0.3rem;
-        }
-
-        .podium-slot.p1 .podium-avatar {
-            width: 58px; height: 58px;
-            border-width: 3px;
-            border-color: var(--yellow-bright);
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
-            font-size: 1.2rem;
-        }
-
-        .podium-name {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .podium-xp {
-            font-size: 0.68rem;
-            color: #b45309;
-            font-weight: 800;
-        }
-
-        .podium-block {
-            width: 100%;
-            border-radius: 10px 10px 4px 4px;
-            display: grid;
-            place-items: center;
-            color: white;
-            font-weight: 900;
-            font-family: "Outfit", sans-serif;
-            margin-top: 0.4rem;
-        }
-
-        .p1 .podium-block { height: 75px; background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%); font-size: 1.4rem; }
-        .p2 .podium-block { height: 55px; background: linear-gradient(180deg, #94a3b8 0%, #475569 100%); font-size: 1.1rem; }
-        .p3 .podium-block { height: 40px; background: linear-gradient(180deg, #d97706 0%, #78350f 100%); font-size: 1rem; }
-
-        .rank-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .rank-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.6rem 0.8rem;
-            background: white;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-        }
-
-        .rank-item.is-me {
-            border-color: var(--yellow-main);
-            background: var(--yellow-soft);
-        }
-
-        .rank-pos {
-            font-family: "Outfit", sans-serif;
-            font-weight: 800;
-            font-size: 0.9rem;
-            color: var(--red-dark);
-            width: 24px;
-        }
-
-        .rank-details { flex: 1; }
-        .rank-user { font-weight: 700; font-size: 0.85rem; color: var(--text-dark); }
-        .rank-sub { font-size: 0.7rem; color: var(--text-muted); }
-        .rank-score { font-family: "Outfit", sans-serif; font-weight: 800; color: #b45309; font-size: 0.95rem; }
 
         .filter-scroll {
             display: flex;
@@ -537,10 +326,7 @@
             overflow-x: auto;
             padding-bottom: 0.5rem;
             margin-bottom: 0.8rem;
-            scrollbar-width: none;
         }
-
-        .filter-scroll::-webkit-scrollbar { display: none; }
 
         .chip {
             padding: 0.4rem 0.8rem;
@@ -571,15 +357,11 @@
             border-radius: var(--radius-lg);
             border: 1px solid var(--border);
             padding: 1rem;
-            box-shadow: var(--shadow-card);
-            position: relative;
             border-left: 6px solid var(--yellow-main);
         }
 
         .task-card.URGENTE { border-left-color: var(--red-bright); }
-        .task-card.ALTA { border-left-color: #f97316; }
         .task-card.is-done { border-left-color: #10b981; }
-        .task-card.is-late { border-left-color: #991b1b; background: #fff5f5; }
 
         .task-top {
             display: flex;
@@ -587,8 +369,6 @@
             align-items: flex-start;
             margin-bottom: 0.5rem;
         }
-
-        .task-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 
         .tag {
             font-size: 0.65rem;
@@ -599,56 +379,21 @@
         }
 
         .tag.prio { background: #fef3c7; color: #92400e; }
-        .tag.URGENTE { background: #fee2e2; color: #991b1b; }
         .tag.done { background: #d1fae5; color: #065f46; }
-        .tag.late { background: #7f1d1d; color: #fff; }
-
-        .task-xp-value {
-            font-family: "Outfit", sans-serif;
-            font-weight: 800;
-            color: #b45309;
-            font-size: 0.85rem;
-            background: var(--yellow-soft);
-            padding: 0.2rem 0.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
 
         .task-desc {
             font-size: 0.92rem;
             font-weight: 600;
             color: var(--text-dark);
-            line-height: 1.4;
             margin-bottom: 0.6rem;
         }
 
         .task-meta {
             display: flex;
-            flex-wrap: wrap;
             gap: 0.8rem;
             font-size: 0.72rem;
             color: var(--text-muted);
             margin-bottom: 0.6rem;
-        }
-
-        .task-img-thumb {
-            width: 100%;
-            max-height: 160px;
-            object-fit: cover;
-            border-radius: var(--radius-md);
-            margin: 0.5rem 0;
-            cursor: pointer;
-            border: 1px solid var(--border);
-        }
-
-        .task-devolutiva {
-            background: #fff8f0;
-            border-left: 3px solid var(--yellow-main);
-            padding: 0.5rem 0.7rem;
-            font-size: 0.78rem;
-            border-radius: 4px;
-            margin-top: 0.4rem;
-            color: #451a03;
         }
 
         .task-actions {
@@ -657,42 +402,6 @@
             margin-top: 0.8rem;
             padding-top: 0.6rem;
             border-top: 1px dashed var(--border-subtle);
-        }
-
-        .task-actions button {
-            flex: 1;
-            padding: 0.4rem;
-            font-size: 0.78rem;
-            min-height: 36px;
-        }
-
-        .rewards-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-
-        .reward-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 0.8rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .reward-icon { font-size: 2rem; }
-        .reward-title { font-weight: 700; font-size: 0.82rem; color: var(--text-dark); }
-        .reward-cost {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: #b45309;
-            background: var(--yellow-soft);
-            padding: 0.15rem 0.5rem;
-            border-radius: 99px;
         }
 
         .modal-overlay {
@@ -719,55 +428,20 @@
             width: 100%;
             max-width: 440px;
             padding: 1.5rem;
-            box-shadow: var(--shadow-glow), 0 20px 40px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            transform: translateY(20px) scale(0.95);
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
-
-        .modal-header { display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { font-family: "Outfit", sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--red-dark); }
-
         .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
         .form-group label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
-
-        #confettiCanvas {
-            position: fixed; inset: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 200;
-        }
-
-        .lightbox-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            display: none; align-items: center; justify-content: center;
-            z-index: 300; padding: 1rem;
-        }
-
-        .lightbox-overlay img {
-            max-width: 100%; max-height: 90vh;
-            border-radius: var(--radius-md);
-            border: 2px solid var(--yellow-main);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            background: white;
-            border-radius: var(--radius-lg);
-            border: 2px dashed var(--border);
-        }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
-
-    <canvas id="confettiCanvas"></canvas>
 
     <header>
         <div class="logo">
@@ -775,9 +449,10 @@
             <span>DEMANDAS<span style="color: var(--yellow-bright)">EXPRESS</span></span>
         </div>
         <div class="user-controls">
+            <span id="syncStatus" class="sync-badge sync-offline">Conectando...</span>
             <select id="userSelect" onchange="switchUser(this.value)"></select>
             <button id="adminBtn" onclick="openAdminAuthModal()" class="secondary">
-                <span>🔐 PIN ADM</span>
+                <span>🔐 PIN</span>
             </button>
         </div>
     </header>
@@ -801,74 +476,62 @@
         </div>
 
         <div id="adminPanel" class="admin-bar hidden">
-            <div class="admin-bar-header">
-                <div>
-                    <span class="admin-badge">Painel ADM Ativo</span>
-                    <span style="font-size: 0.78rem; font-weight: 600; margin-left: 0.4rem;">Ações de Gestão</span>
-                </div>
-                <button onclick="logoutAdmin()" class="secondary" style="min-height:28px; padding: 2px 8px; font-size:0.7rem;">Sair ADM</button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.75rem; font-weight:800; background:var(--yellow-main); color:#2a080c; padding:2px 6px; border-radius:4px;">PAINEL GESTOR</span>
+                <button onclick="logoutAdmin()" class="secondary" style="min-height:26px; padding:2px 8px; font-size:0.7rem;">Sair ADM</button>
             </div>
             <div class="admin-actions">
                 <button onclick="openTaskModal()" class="gold">+ Criar Demanda</button>
                 <button onclick="openUserModal()" class="secondary">+ Add Membro</button>
-                <button onclick="openTeamModal()" class="secondary">Gerenciar Equipe</button>
-                <button onclick="openChangePinModal()" class="secondary">Alterar PIN</button>
+                <button onclick="openCloudConfigModal()" class="secondary">⚙️ Chaves Nuvem</button>
+                <button onclick="openChangePinModal()" class="secondary">🔑 Alterar PIN</button>
             </div>
         </div>
 
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('tasks')" id="tabTasksBtn">📋 Demandas</button>
             <button class="tab-btn" onclick="switchTab('ranking')" id="tabRankingBtn">🏆 Ranking XP</button>
-            <button class="tab-btn" onclick="switchTab('rewards')" id="tabRewardsBtn">🎁 Recompensas</button>
         </div>
 
         <div id="tabTasks">
-            <div class="sec-title">
-                <h2><span>🔥</span> Fila de Trabalho</h2>
-                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight:700;" id="taskCountLbl">0 itens</span>
-            </div>
-
             <div class="filter-scroll" id="statusFilters">
                 <div class="chip active" onclick="setFilter('ALL', this)">Todas</div>
                 <div class="chip" onclick="setFilter('PENDENTE', this)">Pendentes</div>
                 <div class="chip" onclick="setFilter('MINHAS', this)">Minhas Tarefas</div>
-                <div class="chip" onclick="setFilter('ATRASADA', this)">Atrasadas</div>
                 <div class="chip" onclick="setFilter('CONCLUÍDO', this)">Concluídas</div>
             </div>
-
             <div id="tasksGrid" class="task-grid"></div>
         </div>
 
         <div id="tabRanking" class="hidden">
-            <div class="sec-title">
-                <h2><span>🏆</span> Pódio da Produtividade</h2>
-            </div>
-            <div class="podium-container">
-                <div class="podium-grid" id="podiumGrid"></div>
-                <div class="rank-list" id="rankList"></div>
-            </div>
-        </div>
-
-        <div id="tabRewards" class="hidden">
-            <div class="sec-title">
-                <h2><span>🎖️️</span> Loja de Recompensas</h2>
-                <span style="font-size: 0.75rem; color: #b45309; font-weight:800;">Resgate com Nível</span>
-            </div>
-            <div class="rewards-grid" id="rewardsGrid"></div>
+            <div id="rankList" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
         </div>
     </main>
+
+    <!-- MODAL CONFIGURAR NUVEM (JSONBIN) -->
+    <div id="modalCloud" class="modal-overlay">
+        <div class="modal-box">
+            <h3>🌐 Integrar Banco de Dados em Nuvem</h3>
+            <p style="font-size:0.78rem; color:var(--text-muted)">A Master Key já está configurada. Insira abaixo o <b>Bin ID</b> criado no JSONBin.io:</p>
+            <div class="form-group">
+                <label>Master Key (X-Master-Key)</label>
+                <input type="text" id="cloudMasterKey" readonly style="background:#f3f4f6; color:#6b7280;">
+            </div>
+            <div class="form-group">
+                <label>Bin ID</label>
+                <input type="text" id="cloudBinId" placeholder="Cole o Bin ID aqui (ex: 65f...)">
+            </div>
+            <button onclick="saveCloudConfig()" class="gold">Salvar e Sincronizar Tudo</button>
+        </div>
+    </div>
 
     <!-- MODAL AUTH ADM -->
     <div id="modalAuth" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-header">
-                <h3>🔐 Autenticação de Gestor</h3>
-                <button onclick="closeModal('modalAuth')" class="secondary" style="min-height:30px;">✕</button>
-            </div>
-            <p style="font-size: 0.82rem; color: var(--text-muted);">Digite o PIN de segurança para liberar as funções de Administrador.</p>
+            <h3>🔐 Autenticação de Gestor</h3>
             <div class="form-group">
-                <label for="adminPinInput">PIN de Acesso</label>
-                <input type="password" id="adminPinInput" placeholder="••••" maxlength="8" style="text-align: center; font-size: 1.4rem; letter-spacing: 0.3em;">
+                <label>PIN de Acesso (Padrão: 1234)</label>
+                <input type="password" id="adminPinInput" maxlength="8" style="text-align: center; font-size: 1.4rem;">
             </div>
             <button onclick="verifyAdminPin()" class="gold">Desbloquear ADM</button>
         </div>
@@ -877,40 +540,22 @@
     <!-- MODAL ALTERAR PIN -->
     <div id="modalChangePin" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-header">
-                <h3>🔑 Alterar PIN do ADM</h3>
-                <button onclick="closeModal('modalChangePin')" class="secondary">✕</button>
-            </div>
-            <div class="form-group">
-                <label>PIN Atual</label>
-                <input type="password" id="pinCurrentInput" maxlength="8">
-            </div>
-            <div class="form-group">
-                <label>Novo PIN</label>
-                <input type="password" id="pinNewInput" maxlength="8">
-            </div>
+            <h3>🔑 Alterar PIN do ADM</h3>
+            <div class="form-group"><label>PIN Atual</label><input type="password" id="pinCurrentInput"></div>
+            <div class="form-group"><label>Novo PIN</label><input type="password" id="pinNewInput"></div>
             <button onclick="changeAdminPin()" class="gold">Atualizar PIN</button>
         </div>
     </div>
 
-    <!-- MODAL CRIAR OU EDITAR TAREFA -->
+    <!-- MODAL TAREFA -->
     <div id="modalTask" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-header">
-                <h3 id="modalTaskTitle">🚀 Criar / Editar Demanda</h3>
-                <button onclick="closeModal('modalTask')" class="secondary">✕</button>
-            </div>
+            <h3 id="modalTaskTitle">🚀 Criar Demanda</h3>
             <input type="hidden" id="taskIdEdit">
+            <div class="form-group"><label>Atribuir a</label><select id="taskAssignee"></select></div>
+            <div class="form-group"><label>Descrição</label><textarea id="taskDesc" rows="3"></textarea></div>
             <div class="form-group">
-                <label for="taskAssignee">Atribuir a</label>
-                <select id="taskAssignee"></select>
-            </div>
-            <div class="form-group">
-                <label for="taskDesc">Instrução / Detalhes da Tarefa</label>
-                <textarea id="taskDesc" rows="3" placeholder="Ex: Organizar paletes do setor 3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="taskPriority">Prioridade (XP Ganho)</label>
+                <label>Prioridade</label>
                 <select id="taskPriority">
                     <option value="BAIXA">🟢 Baixa (60 XP)</option>
                     <option value="NORMAL" selected>🟡 Normal (100 XP)</option>
@@ -918,134 +563,152 @@
                     <option value="URGENTE">🔴 Urgente (250 XP)</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="taskDeadline">Prazo Limite de Entrega</label>
-                <input type="datetime-local" id="taskDeadline">
-            </div>
-            <button onclick="saveTask()" class="gold">Salvar Demanda</button>
-        </div>
-    </div>
-
-    <!-- MODAL ADD MEMBRO -->
-    <div id="modalUser" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>👤 Adicionar Novo Membro</h3>
-                <button onclick="closeModal('modalUser')" class="secondary">✕</button>
-            </div>
-            <div class="form-group">
-                <label>Nome Completo</label>
-                <input type="text" id="newUserName" placeholder="Ex: Carlos Silva">
-            </div>
-            <div class="form-group">
-                <label>Cargo / Função</label>
-                <input type="text" id="newUserRole" placeholder="Ex: Operador Logístico">
-            </div>
-            <button onclick="saveUser()" class="gold">Cadastrar Membro</button>
-        </div>
-    </div>
-
-    <!-- MODAL GERENCIAR EQUIPE -->
-    <div id="modalTeam" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>👥 Gerenciar Equipe</h3>
-                <button onclick="closeModal('modalTeam')" class="secondary">✕</button>
-            </div>
-            <div id="teamMembersList" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
+            <div class="form-group"><label>Prazo Limite</label><input type="datetime-local" id="taskDeadline"></div>
+            <button onclick="saveTask()" class="gold">Salvar na Nuvem</button>
+            <button onclick="closeModal('modalTask')" class="secondary">Cancelar</button>
         </div>
     </div>
 
     <!-- MODAL CONCLUIR TAREFA -->
     <div id="modalComplete" class="modal-overlay">
         <div class="modal-box">
-            <div class="modal-header">
-                <h3>✅ Concluir Demanda</h3>
-                <button onclick="closeModal('modalComplete')" class="secondary">✕</button>
-            </div>
+            <h3>✅ Concluir Demanda</h3>
             <input type="hidden" id="completeTaskId">
             <div class="form-group">
-                <label>Observação / Devolutiva</label>
-                <textarea id="completeComment" rows="3" placeholder="Descreva o que foi feito..."></textarea>
+                <label>Devolutiva / Observações</label>
+                <textarea id="completeComment" rows="3" placeholder="O que foi realizado?"></textarea>
             </div>
-            <div class="form-group">
-                <label>Anexar Foto de Evidência (Opcional)</label>
-                <input type="file" id="completeImageFile" accept="image/*">
-            </div>
-            <button onclick="submitTaskCompletion()" class="gold">Finalizar e Ganhar XP</button>
+            <button onclick="submitTaskCompletion()" class="gold">Finalizar e Enviar</button>
+            <button onclick="closeModal('modalComplete')" class="secondary">Cancelar</button>
         </div>
     </div>
 
-    <div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
-        <img id="lightboxImg" src="" alt="Ampliação da Imagem">
+    <!-- MODAL ADD MEMBRO -->
+    <div id="modalUser" class="modal-overlay">
+        <div class="modal-box">
+            <h3>👤 Adicionar Novo Membro</h3>
+            <div class="form-group"><label>Nome</label><input type="text" id="newUserName"></div>
+            <div class="form-group"><label>Cargo</label><input type="text" id="newUserRole"></div>
+            <button onclick="saveUser()" class="gold">Cadastrar</button>
+            <button onclick="closeModal('modalUser')" class="secondary">Cancelar</button>
+        </div>
     </div>
 
     <script>
-        // HASH SHA-256 DO PIN PADRÃO INICIAL "1234" (SEM EXPOSIÇÃO EM TEXTO CLARO)
-        const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4";
+        const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // PIN padrão: 1234
+        const HARDCODED_MASTER_KEY = "$2a$10$.3YPOy3ggh2Gtp6tcxz6lesIbatq8BUDOMQ0uDUalcx.7hJkBLi1";
+
+        let config = {
+            masterKey: HARDCODED_MASTER_KEY,
+            binId: localStorage.getItem('express_bin_id') || ''
+        };
 
         let state = {
-            users: JSON.parse(localStorage.getItem('express_users')) || [
+            users: [
                 { id: 'u1', name: 'Ana Oliveira', role: 'Supervisora', xp: 450, streak: 3 },
-                { id: 'u2', name: 'Bruno Souza', role: 'Operador', xp: 280, streak: 1 },
-                { id: 'u3', name: 'Carla Dias', role: 'Analista', xp: 620, streak: 5 }
+                { id: 'u2', name: 'Bruno Souza', role: 'Operador', xp: 280, streak: 1 }
             ],
-            tasks: JSON.parse(localStorage.getItem('express_tasks')) || [
-                {
-                    id: 't1',
-                    assigneeId: 'u2',
-                    desc: 'Conferência de lote de entrada do estoque principal',
-                    priority: 'URGENTE',
-                    xp: 250,
-                    deadline: new Date(Date.now() + 86400000).toISOString().slice(0, 16),
-                    status: 'PENDENTE',
-                    createdAt: new Date().toISOString()
-                }
-            ],
-            rewards: [
-                { id: 'r1', icon: '☕', title: 'Pausa para Café Premium', minLevel: 2 },
-                { id: 'r2', icon: '🎧', title: 'Uso de Fone na Operação', minLevel: 3 },
-                { id: 'r3', icon: '👑', title: 'Escolha de Turno Preferencial', minLevel: 5 },
-                { id: 'r4', icon: '🎟️', title: 'Folga Meio Aniversário', minLevel: 8 }
-            ],
+            tasks: [],
             activeUserId: localStorage.getItem('express_active_user') || 'u1',
             isAdmin: false,
             adminPinHash: localStorage.getItem('express_admin_pin_hash') || INITIAL_PIN_HASH,
-            currentFilter: 'ALL',
-            currentTab: 'tasks'
+            currentFilter: 'ALL'
         };
 
-        // FUNÇÃO DE HASH CRIPTOGRÁFICO NATIVO DO NAVEGADOR (SHA-256)
         async function hashString(str) {
             const encoder = new TextEncoder();
             const data = encoder.encode(str);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        function getLevelData(xp) {
-            const level = Math.floor(xp / 300) + 1;
-            const currentLevelXP = xp % 300;
-            const progress = Math.min(Math.round((currentLevelXP / 300) * 100), 100);
-            return { level, currentLevelXP, progress, nextLevelXP: 300 };
+        async function fetchCloudData() {
+            if (!config.binId) {
+                updateSyncBadge(false, 'Informe o Bin ID');
+                return;
+            }
+
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}/latest`, {
+                    headers: { 'X-Master-Key': config.masterKey }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.record) {
+                        state.users = data.record.users || state.users;
+                        state.tasks = data.record.tasks || state.tasks;
+                        if (data.record.adminPinHash) state.adminPinHash = data.record.adminPinHash;
+                        updateSyncBadge(true, 'Sincronizado');
+                        renderApp();
+                    }
+                } else {
+                    updateSyncBadge(false, 'Bin ID Inválido');
+                }
+            } catch (e) {
+                updateSyncBadge(false, 'Sem Conexão');
+            }
         }
 
-        function saveData() {
-            localStorage.setItem('express_users', JSON.stringify(state.users));
-            localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
-            localStorage.setItem('express_active_user', state.activeUserId);
-            localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
+        async function syncToCloud() {
+            if (!config.binId) {
+                openCloudConfigModal();
+                return;
+            }
+
+            updateSyncBadge(true, 'Salvando...');
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': config.masterKey
+                    },
+                    body: JSON.stringify({
+                        users: state.users,
+                        tasks: state.tasks,
+                        adminPinHash: state.adminPinHash
+                    })
+                });
+                if (res.ok) {
+                    updateSyncBadge(true, 'Sincronizado');
+                } else {
+                    alert('Erro ao salvar na nuvem. Verifique seu Bin ID.');
+                    updateSyncBadge(false, 'Erro ao Salvar');
+                }
+            } catch (e) {
+                updateSyncBadge(false, 'Erro de Rede');
+            }
         }
 
-        function initApp() {
+        function updateSyncBadge(online, text) {
+            const el = document.getElementById('syncStatus');
+            el.innerText = text;
+            el.className = `sync-badge ${online ? 'sync-online' : 'sync-offline'}`;
+        }
+
+        function openCloudConfigModal() {
+            document.getElementById('cloudMasterKey').value = config.masterKey;
+            document.getElementById('cloudBinId').value = config.binId;
+            openModal('modalCloud');
+        }
+
+        function saveCloudConfig() {
+            config.binId = document.getElementById('cloudBinId').value.trim();
+            localStorage.setItem('express_bin_id', config.binId);
+            closeModal('modalCloud');
+            fetchCloudData();
+        }
+
+        function renderApp() {
             renderUserSelect();
             renderHeroCard();
             renderMetrics();
             renderTasks();
             renderRanking();
-            renderRewards();
-            updateAdminPanelUI();
+        }
+
+        function getActiveUser() {
+            return state.users.find(u => u.id === state.activeUserId) || state.users[0] || { name: 'Usuário', xp: 0 };
         }
 
         function renderUserSelect() {
@@ -1055,490 +718,221 @@
             ).join('');
         }
 
-        function switchUser(userId) {
-            state.activeUserId = userId;
-            saveData();
+        function switchUser(id) {
+            state.activeUserId = id;
+            localStorage.setItem('express_active_user', id);
             renderHeroCard();
             renderTasks();
-            renderRanking();
-        }
-
-        function getActiveUser() {
-            return state.users.find(u => u.id === state.activeUserId) || state.users[0];
         }
 
         function renderHeroCard() {
-            const user = getActiveUser();
-            const lvl = getLevelData(user.xp);
-            
+            const u = getActiveUser();
+            const lvl = Math.floor((u.xp || 0) / 300) + 1;
+            const progress = Math.min(Math.round(((u.xp % 300) / 300) * 100), 100);
+
             document.getElementById('heroCard').innerHTML = `
                 <div class="user-profile-header">
                     <div class="avatar-frame">
-                        <div class="avatar-inner">${user.name.charAt(0)}</div>
-                        <div class="level-badge-floating">NÍV ${lvl.level}</div>
+                        <div class="avatar-inner">${u.name ? u.name.charAt(0) : 'U'}</div>
+                        <div class="level-badge-floating">NÍV ${lvl}</div>
                     </div>
-                    <div class="user-info">
-                        <div class="user-name">${user.name} <span>⚡</span></div>
-                        <div class="user-title">${user.role}</div>
+                    <div>
+                        <div style="font-weight:800; font-size:1.2rem; color:#fff;">${u.name}</div>
+                        <div style="font-size:0.75rem; color:var(--yellow-bright);">${u.role || 'Membro'}</div>
                     </div>
                 </div>
                 <div class="xp-container">
-                    <div class="xp-bar-bg">
-                        <div class="xp-bar-fill" style="width: ${lvl.progress}%"></div>
-                    </div>
-                    <div class="xp-stats">
-                        <span>XP Atual: ${user.xp} pts</span>
-                        <span>Próximo Nível: ${lvl.currentLevelXP}/300 XP</span>
-                    </div>
+                    <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${progress}%"></div></div>
+                    <div class="xp-stats"><span>${u.xp || 0} XP Total</span><span>Progresso: ${progress}%</span></div>
                 </div>
             `;
         }
 
         function renderMetrics() {
-            const pending = state.tasks.filter(t => t.status === 'PENDENTE').length;
-            const done = state.tasks.filter(t => t.status === 'CONCLUÍDO').length;
-            const activeUser = getActiveUser();
-
-            document.getElementById('metricPending').innerText = pending;
-            document.getElementById('metricDone').innerText = done;
-            document.getElementById('metricStreak').innerText = `${activeUser.streak || 0}🔥`;
+            document.getElementById('metricPending').innerText = state.tasks.filter(t => t.status === 'PENDENTE').length;
+            document.getElementById('metricDone').innerText = state.tasks.filter(t => t.status === 'CONCLUÍDO').length;
+            document.getElementById('metricStreak').innerText = `${getActiveUser().streak || 0}🔥`;
         }
 
-        // SEGURANÇA E ADMIN COM CRIPTOGRAFIA
-        function openAdminAuthModal() {
-            if (state.isAdmin) {
-                alert('Você já está autenticado como ADM!');
-                return;
-            }
-            document.getElementById('adminPinInput').value = '';
-            openModal('modalAuth');
-        }
+        function renderTasks() {
+            const container = document.getElementById('tasksGrid');
+            let list = state.tasks.filter(t => {
+                if (state.currentFilter === 'PENDENTE') return t.status === 'PENDENTE';
+                if (state.currentFilter === 'MINHAS') return t.assigneeId === state.activeUserId;
+                if (state.currentFilter === 'CONCLUÍDO') return t.status === 'CONCLUÍDO';
+                return true;
+            });
 
-        async function verifyAdminPin() {
-            const pinEntered = document.getElementById('adminPinInput').value;
-            const enteredHash = await hashString(pinEntered);
-
-            if (enteredHash === state.adminPinHash) {
-                state.isAdmin = true;
-                closeModal('modalAuth');
-                updateAdminPanelUI();
-                renderTasks();
-                alert('🔑 Acesso Administrativo Concedido!');
-            } else {
-                alert('❌ PIN Incorreto! Acesso negado.');
-            }
-        }
-
-        function logoutAdmin() {
-            state.isAdmin = false;
-            updateAdminPanelUI();
-            renderTasks();
-        }
-
-        function updateAdminPanelUI() {
-            const panel = document.getElementById('adminPanel');
-            const btn = document.getElementById('adminBtn');
-            if (state.isAdmin) {
-                panel.classList.remove('hidden');
-                btn.innerHTML = '<span>🔓 ADM Ativo</span>';
-                btn.style.borderColor = 'var(--yellow-main)';
-            } else {
-                panel.classList.add('hidden');
-                btn.innerHTML = '<span>🔐 PIN ADM</span>';
-                btn.style.borderColor = '';
-            }
-        }
-
-        function openChangePinModal() {
-            openModal('modalChangePin');
-        }
-
-        async function changeAdminPin() {
-            const current = document.getElementById('pinCurrentInput').value;
-            const newPin = document.getElementById('pinNewInput').value;
-
-            const currentHash = await hashString(current);
-
-            if (currentHash !== state.adminPinHash) {
-                alert('❌ PIN Atual incorreto.');
-                return;
-            }
-            if (!newPin || newPin.length < 4) {
-                alert('⚠️ O novo PIN deve conter no mínimo 4 dígitos.');
+            if (list.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px;">Nenhuma demanda encontrada.</div>`;
                 return;
             }
 
-            state.adminPinHash = await hashString(newPin);
-            saveData();
-            closeModal('modalChangePin');
-            alert('✅ PIN alterado e criptografado com sucesso!');
+            container.innerHTML = list.map(t => {
+                const assignee = state.users.find(u => u.id === t.assigneeId) || { name: 'Desconhecido' };
+                const isDone = t.status === 'CONCLUÍDO';
+                const canComplete = t.assigneeId === state.activeUserId && !isDone;
+
+                return `
+                    <div class="task-card ${t.priority} ${isDone ? 'is-done' : ''}">
+                        <div class="task-top">
+                            <span class="tag prio">${t.priority}</span>
+                            <span style="font-weight:800; color:#b45309;">+${t.xp} XP</span>
+                        </div>
+                        <div class="task-desc">${t.desc}</div>
+                        <div class="task-meta">
+                            <span>👤 ${assignee.name}</span>
+                            <span>⏰ ${new Date(t.deadline).toLocaleDateString('pt-BR')}</span>
+                        </div>
+                        ${t.devolutiva ? `<div style="background:#fff8f0; padding:6px; font-size:0.75rem; border-left:3px solid var(--yellow-main)">💬 ${t.devolutiva}</div>` : ''}
+                        <div class="task-actions">
+                            ${canComplete ? `<button onclick="openCompleteModal('${t.id}')" class="gold">✅ Finalizar Tarefa</button>` : ''}
+                            ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑️ Apagar</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function switchTab(tab) {
-            state.currentTab = tab;
-            document.querySelectorAll('.nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`).classList.add('active');
-
-            document.getElementById('tabTasks').classList.add('hidden');
-            document.getElementById('tabRanking').classList.add('hidden');
-            document.getElementById('tabRewards').classList.add('hidden');
-
-            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
+        function renderRanking() {
+            const sorted = [...state.users].sort((a, b) => b.xp - a.xp);
+            document.getElementById('rankList').innerHTML = sorted.map((u, i) => `
+                <div style="display:flex; justify-content:space-between; padding:0.6rem; background:#fff; border-radius:8px; border:1px solid var(--border);">
+                    <div><b>#${i+1} ${u.name}</b> <small>(${u.role})</small></div>
+                    <div style="font-weight:800; color:#b45309;">${u.xp} XP</div>
+                </div>
+            `).join('');
         }
 
-        function setFilter(filter, element) {
-            state.currentFilter = filter;
-            document.querySelectorAll('#statusFilters .chip').forEach(c => c.classList.remove('active'));
-            element.classList.add('active');
-            renderTasks();
-        }
-
-        function openTaskModal(taskId = null) {
-            const select = document.getElementById('taskAssignee');
-            select.innerHTML = state.users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-
-            if (taskId) {
-                const task = state.tasks.find(t => t.id === taskId);
-                document.getElementById('modalTaskTitle').innerText = '✏️ Editar Demanda';
-                document.getElementById('taskIdEdit').value = task.id;
-                document.getElementById('taskAssignee').value = task.assigneeId;
-                document.getElementById('taskDesc').value = task.desc;
-                document.getElementById('taskPriority').value = task.priority;
-                document.getElementById('taskDeadline').value = task.deadline;
-            } else {
-                document.getElementById('modalTaskTitle').innerText = '🚀 Nova Demanda Gamificada';
-                document.getElementById('taskIdEdit').value = '';
-                document.getElementById('taskDesc').value = '';
-            }
+        function openTaskModal() {
+            document.getElementById('taskAssignee').innerHTML = state.users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
             openModal('modalTask');
         }
 
         function saveTask() {
-            const idEdit = document.getElementById('taskIdEdit').value;
             const assigneeId = document.getElementById('taskAssignee').value;
             const desc = document.getElementById('taskDesc').value.trim();
             const priority = document.getElementById('taskPriority').value;
             const deadline = document.getElementById('taskDeadline').value;
 
-            if (!desc || !deadline) {
-                alert('Por favor preencha todos os campos!');
-                return;
-            }
+            if (!desc || !deadline) return alert('Preencha os campos obrigatórios.');
 
-            const xpValues = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
+            const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
 
-            if (idEdit) {
-                const task = state.tasks.find(t => t.id === idEdit);
-                task.assigneeId = assigneeId;
-                task.desc = desc;
-                task.priority = priority;
-                task.xp = xpValues[priority];
-                task.deadline = deadline;
-            } else {
-                state.tasks.unshift({
-                    id: 't_' + Date.now(),
-                    assigneeId,
-                    desc,
-                    priority,
-                    xp: xpValues[priority],
-                    deadline,
-                    status: 'PENDENTE',
-                    createdAt: new Date().toISOString()
-                });
-            }
-
-            saveData();
-            closeModal('modalTask');
-            renderTasks();
-            renderMetrics();
-        }
-
-        function deleteTask(taskId) {
-            if (!confirm('Deseja realmente excluir esta demanda?')) return;
-            state.tasks = state.tasks.filter(t => t.id !== taskId);
-            saveData();
-            renderTasks();
-            renderMetrics();
-        }
-
-        function rejectTaskCompletion(taskId) {
-            if (!confirm('Deseja reprovar a devolutiva e retornar a tarefa para PENDENTE?')) return;
-            const task = state.tasks.find(t => t.id === taskId);
-            task.status = 'PENDENTE';
-            delete task.devolutiva;
-            delete task.evidenceImg;
-            saveData();
-            renderTasks();
-            renderMetrics();
-        }
-
-        function renderTasks() {
-            const container = document.getElementById('tasksGrid');
-            const now = new Date();
-
-            let list = state.tasks.filter(t => {
-                const isLate = new Date(t.deadline) < now && t.status !== 'CONCLUÍDO';
-                if (state.currentFilter === 'PENDENTE') return t.status === 'PENDENTE';
-                if (state.currentFilter === 'MINHAS') return t.assigneeId === state.activeUserId;
-                if (state.currentFilter === 'ATRASADA') return isLate;
-                if (state.currentFilter === 'CONCLUÍDO') return t.status === 'CONCLUÍDO';
-                return true;
+            state.tasks.unshift({
+                id: 't_' + Date.now(),
+                assigneeId, desc, priority, xp: xpMap[priority],
+                deadline, status: 'PENDENTE'
             });
 
-            document.getElementById('taskCountLbl').innerText = `${list.length} itens`;
-
-            if (list.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">🎉</div>
-                        <h3>Nenhuma demanda nesta categoria!</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.4rem;">Tudo limpo por aqui.</p>
-                    </div>`;
-                return;
-            }
-
-            container.innerHTML = list.map(t => {
-                const assignee = state.users.find(u => u.id === t.assigneeId) || { name: 'Não atribuído' };
-                const isLate = new Date(t.deadline) < now && t.status !== 'CONCLUÍDO';
-                const isDone = t.status === 'CONCLUÍDO';
-                const canComplete = t.assigneeId === state.activeUserId && !isDone;
-
-                return `
-                    <div class="task-card ${t.priority} ${isDone ? 'is-done' : ''} ${isLate ? 'is-late' : ''}">
-                        <div class="task-top">
-                            <div class="task-badges">
-                                <span class="tag prio ${t.priority}">${t.priority}</span>
-                                ${isDone ? '<span class="tag done">CONCLUÍDA</span>' : ''}
-                                ${isLate ? '<span class="tag late">ATRASADA</span>' : ''}
-                            </div>
-                            <span class="task-xp-value">+${t.xp} XP</span>
-                        </div>
-                        <div class="task-desc">${t.desc}</div>
-                        <div class="task-meta">
-                            <span>👤 ${assignee.name}</span>
-                            <span>⏰ ${new Date(t.deadline).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>
-                        </div>
-
-                        ${t.evidenceImg ? `<img src="${t.evidenceImg}" class="task-img-thumb" onclick="openLightbox('${t.evidenceImg}')">` : ''}
-                        ${t.devolutiva ? `<div class="task-devolutiva">💬 <b>Devolutiva:</b> ${t.devolutiva}</div>` : ''}
-
-                        <div class="task-actions">
-                            ${canComplete ? `<button onclick="openCompleteModal('${t.id}')" class="gold">✅ Concluir e Ganhar XP</button>` : ''}
-                            
-                            ${state.isAdmin ? `
-                                <button onclick="openTaskModal('${t.id}')" class="secondary">✏️ Editar</button>
-                                <button onclick="deleteTask('${t.id}')" class="danger">🗑️ Excluir</button>
-                                ${isDone ? `<button onclick="rejectTaskCompletion('${t.id}')" class="secondary" style="color:#ef4444;">↩️ Reprovar</button>` : ''}
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            closeModal('modalTask');
+            syncToCloud();
+            renderApp();
         }
 
-        function openCompleteModal(taskId) {
-            document.getElementById('completeTaskId').value = taskId;
-            document.getElementById('completeComment').value = '';
-            document.getElementById('completeImageFile').value = '';
+        function openCompleteModal(id) {
+            document.getElementById('completeTaskId').value = id;
             openModal('modalComplete');
         }
 
         function submitTaskCompletion() {
-            const taskId = document.getElementById('completeTaskId').value;
+            const id = document.getElementById('completeTaskId').value;
             const comment = document.getElementById('completeComment').value.trim();
-            const fileInput = document.getElementById('completeImageFile');
-
-            if (!comment) {
-                alert('Insira uma observação ou devolutiva.');
-                return;
-            }
-
-            const task = state.tasks.find(t => t.id === taskId);
+            
+            const task = state.tasks.find(t => t.id === id);
             const user = state.users.find(u => u.id === task.assigneeId);
 
             task.status = 'CONCLUÍDO';
             task.devolutiva = comment;
-
-            user.xp += task.xp;
+            user.xp = (user.xp || 0) + task.xp;
             user.streak = (user.streak || 0) + 1;
 
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    task.evidenceImg = e.target.result;
-                    finalizeCompletion();
-                }
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                finalizeCompletion();
-            }
-        }
-
-        function finalizeCompletion() {
-            saveData();
             closeModal('modalComplete');
-            triggerConfetti();
-            renderHeroCard();
-            renderTasks();
-            renderMetrics();
-            renderRanking();
-            alert('🎉 Demanda concluída com sucesso! XP creditado.');
+            syncToCloud();
+            renderApp();
         }
 
-        function renderRanking() {
-            const sorted = [...state.users].sort((a, b) => b.xp - a.xp);
-
-            const p1 = sorted[0] || { name: '-', xp: 0 };
-            const p2 = sorted[1] || { name: '-', xp: 0 };
-            const p3 = sorted[2] || { name: '-', xp: 0 };
-
-            document.getElementById('podiumGrid').innerHTML = `
-                <div class="podium-slot p2">
-                    <div class="podium-avatar">${p2.name.charAt(0)}</div>
-                    <div class="podium-name">${p2.name}</div>
-                    <div class="podium-xp">${p2.xp} XP</div>
-                    <div class="podium-block">2</div>
-                </div>
-                <div class="podium-slot p1">
-                    <div class="podium-avatar">${p1.name.charAt(0)}</div>
-                    <div class="podium-name">${p1.name}</div>
-                    <div class="podium-xp">${p1.xp} XP</div>
-                    <div class="podium-block">1</div>
-                </div>
-                <div class="podium-slot p3">
-                    <div class="podium-avatar">${p3.name.charAt(0)}</div>
-                    <div class="podium-name">${p3.name}</div>
-                    <div class="podium-xp">${p3.xp} XP</div>
-                    <div class="podium-block">3</div>
-                </div>
-            `;
-
-            document.getElementById('rankList').innerHTML = sorted.map((u, idx) => `
-                <div class="rank-item ${u.id === state.activeUserId ? 'is-me' : ''}">
-                    <div class="rank-pos">#${idx + 1}</div>
-                    <div class="rank-details">
-                        <div class="rank-user">${u.name} ${u.id === state.activeUserId ? '(Você)' : ''}</div>
-                        <div class="rank-sub">${u.role} • Nível ${getLevelData(u.xp).level}</div>
-                    </div>
-                    <div class="rank-score">${u.xp} XP</div>
-                </div>
-            `).join('');
+        function deleteTask(id) {
+            if (!confirm('Remover esta demanda?')) return;
+            state.tasks = state.tasks.filter(t => t.id !== id);
+            syncToCloud();
+            renderApp();
         }
 
-        function renderRewards() {
-            const user = getActiveUser();
-            const userLvl = getLevelData(user.xp).level;
-
-            document.getElementById('rewardsGrid').innerHTML = state.rewards.map(r => {
-                const unlocked = userLvl >= r.minLevel;
-                return `
-                    <div class="reward-card" style="opacity: ${unlocked ? '1' : '0.5'}">
-                        <div class="reward-icon">${r.icon}</div>
-                        <div class="reward-title">${r.title}</div>
-                        <div class="reward-cost">${unlocked ? '🔓 Desbloqueado' : `🔒 Requer Nível ${r.minLevel}`}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function openUserModal() {
-            document.getElementById('newUserName').value = '';
-            document.getElementById('newUserRole').value = '';
-            openModal('modalUser');
-        }
+        function openUserModal() { openModal('modalUser'); }
 
         function saveUser() {
             const name = document.getElementById('newUserName').value.trim();
             const role = document.getElementById('newUserRole').value.trim();
+            if (!name) return;
 
-            if (!name || !role) {
-                alert('Preencha nome e cargo.');
-                return;
-            }
-
-            state.users.push({
-                id: 'u_' + Date.now(),
-                name,
-                role,
-                xp: 0,
-                streak: 0
-            });
-
-            saveData();
+            state.users.push({ id: 'u_' + Date.now(), name, role, xp: 0, streak: 0 });
             closeModal('modalUser');
-            renderUserSelect();
-            renderRanking();
-            alert('👤 Novo membro adicionado!');
+            syncToCloud();
+            renderApp();
         }
 
-        function openTeamModal() {
-            const list = document.getElementById('teamMembersList');
-            list.innerHTML = state.users.map(u => `
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:0.6rem; border-radius:8px; border:1px solid var(--border);">
-                    <div>
-                        <b>${u.name}</b> (${u.role})<br>
-                        <small style="color:var(--text-muted);">${u.xp} XP • Nível ${getLevelData(u.xp).level}</small>
-                    </div>
-                    ${state.users.length > 1 ? `<button onclick="deleteUser('${u.id}')" class="danger" style="min-height:30px; font-size:0.7rem;">Remover</button>` : ''}
-                </div>
-            `).join('');
-            openModal('modalTeam');
+        async function verifyAdminPin() {
+            const pin = document.getElementById('adminPinInput').value;
+            const h = await hashString(pin);
+            if (h === state.adminPinHash) {
+                state.isAdmin = true;
+                closeModal('modalAuth');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                renderTasks();
+            } else {
+                alert('PIN Incorreto');
+            }
         }
 
-        function deleteUser(userId) {
-            if (!confirm('Deseja remover este membro da equipe?')) return;
-            state.users = state.users.filter(u => u.id !== userId);
-            if (state.activeUserId === userId) state.activeUserId = state.users[0].id;
-            saveData();
-            openTeamModal();
-            renderUserSelect();
-            renderHeroCard();
-            renderRanking();
+        function logoutAdmin() {
+            state.isAdmin = false;
+            document.getElementById('adminPanel').classList.add('hidden');
+            renderTasks();
+        }
+
+        function openAdminAuthModal() { openModal('modalAuth'); }
+        function openChangePinModal() { openModal('modalChangePin'); }
+
+        async function changeAdminPin() {
+            const cur = document.getElementById('pinCurrentInput').value;
+            const newP = document.getElementById('pinNewInput').value;
+            if ((await hashString(cur)) !== state.adminPinHash) return alert('PIN atual incorreto');
+
+            state.adminPinHash = await hashString(newP);
+            localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
+            closeModal('modalChangePin');
+            syncToCloud();
+            alert('PIN atualizado!');
+        }
+
+        function switchTab(t) {
+            document.querySelectorAll('.nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`).classList.add('active');
+            document.getElementById('tabTasks').classList.toggle('hidden', t !== 'tasks');
+            document.getElementById('tabRanking').classList.toggle('hidden', t !== 'ranking');
+        }
+
+        function setFilter(f, el) {
+            state.currentFilter = f;
+            document.querySelectorAll('#statusFilters .chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            renderTasks();
         }
 
         function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('remove'); document.getElementById(id).classList.remove('active'); }
 
-        function openLightbox(src) {
-            document.getElementById('lightboxImg').src = src;
-            document.getElementById('lightbox').style.display = 'flex';
-        }
+        // AUTO REFRESH A CADA 5 SEGUNDOS
+        setInterval(fetchCloudData, 5000);
 
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-        }
-
-        function triggerConfetti() {
-            const canvas = document.getElementById('confettiCanvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            let pieces = Array.from({ length: 80 }).map(() => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height - canvas.height,
-                size: Math.random() * 8 + 4,
-                color: ['#f59e0b', '#fbbf24', '#ef4444', '#10b981'][Math.floor(Math.random() * 4)],
-                speed: Math.random() * 4 + 2
-            }));
-
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                pieces.forEach(p => {
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(p.x, p.y, p.size, p.size);
-                    p.y += p.speed;
-                });
-                if (pieces.some(p => p.y < canvas.height)) {
-                    requestAnimationFrame(draw);
-                } else {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                }
+        window.onload = () => {
+            fetchCloudData();
+            renderApp();
+            if (!config.binId) {
+                openCloudConfigModal();
             }
-            draw();
-        }
-
-        window.onload = initApp;
+        };
     </script>
 </body>
 </html>
