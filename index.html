@@ -3,113 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>App Gamificado de Demandas</title>
+    <title>Gerenciador de Demandas</title>
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --bg: #f3f4f6;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --border: #e5e7eb;
+            --border: #e2e8f0;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text-main);
-            padding-bottom: 70px; /* Espaço para o bottom nav */
-            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 20px;
         }
 
-        /* --- Cabeçalho --- */
         header {
-            background-color: var(--primary);
-            color: white;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
             padding: 1rem;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
             position: sticky;
             top: 0;
             z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .user-info-header {
-            font-size: 0.85rem;
-            font-weight: normal;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        /* --- Layout Principal --- */
-        #mainContent {
-            padding: 1rem;
-            max-width: 600px; /* Mantém o visual mobile mesmo no PC */
+        .header-content {
+            max-width: 600px;
             margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        /* --- Modo Retrato / Otimização Mobile --- */
+        #mainContent {
+            max-width: 600px; /* Mantém largura ideal em retrato */
+            margin: 0 auto;
+            padding: 1rem;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: 1fr; /* Modo Retrato = 1 coluna */
+            grid-template-columns: 1fr; /* 1 coluna no modo retrato */
             gap: 1rem;
+        }
+
+        /* --- Navegação e Abas --- */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         /* --- Cards --- */
         .card {
             background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            overflow: hidden;
             border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-header {
-            padding: 0.75rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.85rem;
-            font-weight: bold;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .card-image {
             width: 100%;
-            height: 150px;
-            background: #e2e8f0;
+            height: 180px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            font-size: 3rem;
         }
 
         .card-image img {
@@ -119,204 +115,154 @@
             cursor: pointer;
         }
 
-        .card-content {
-            padding: 1rem;
-        }
-
         .card-title {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
         }
 
         .card-desc {
             font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 0.5rem;
-            line-height: 1.4;
+            margin-bottom: 0.75rem;
         }
 
         .card-actions {
-            margin-top: 1rem;
             display: flex;
             gap: 0.5rem;
+            margin-top: 0.75rem;
         }
 
         button {
-            flex: 1;
-            padding: 0.75rem;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
             border: none;
-            border-radius: 8px;
             background: var(--primary);
             color: white;
-            font-weight: bold;
+            font-weight: 500;
             cursor: pointer;
-            transition: opacity 0.2s;
+            width: 100%;
         }
 
-        button:active { opacity: 0.8; }
-        button.btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
-
-        /* --- Badges & Status --- */
-        .badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            color: white;
-        }
-        .badge.pendente { background: var(--text-muted); }
-        .badge.aguardando { background: var(--warning); }
-        .badge.concluido { background: var(--success); }
-        .badge.rejeitado { background: var(--danger); }
-
-        .xp-tag {
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 0.9rem;
+        button:active {
+            opacity: 0.9;
         }
 
         /* --- Ranking --- */
-        .ranking-item {
+        .ranking-card {
             display: flex;
             align-items: center;
-            background: white;
+            justify-content: space-between;
             padding: 1rem;
-            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
             margin-bottom: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .ranking-pos { font-size: 1.5rem; font-weight: bold; margin-right: 1rem; width: 30px; text-align: center; }
-        .ranking-info { flex: 1; }
-        .ranking-name { font-weight: bold; font-size: 1.1rem; }
-        .ranking-xp { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
-
-        /* --- Bottom Nav --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            padding: 0.5rem 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            z-index: 10;
         }
 
-        .nav-item {
+        .ranking-user {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            text-decoration: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            flex: 1;
+            gap: 0.75rem;
         }
 
-        .nav-item.active { color: var(--primary); font-weight: bold; }
-        .nav-icon { font-size: 1.5rem; margin-bottom: 2px; }
+        .ranking-pos {
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 24px;
+        }
 
-        /* --- Modais --- */
+        .ranking-xp {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* --- Modais & Lightbox --- */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
             z-index: 100;
             align-items: center;
             justify-content: center;
             padding: 1rem;
         }
+
         .modal.active { display: flex; }
 
-        .modal-content {
-            background: white;
+        .modal-body {
+            background: var(--card-bg);
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             border-radius: 12px;
-            padding: 1.5rem;
-            max-height: 90vh;
-            overflow-y: auto;
+            padding: 1.25rem;
         }
 
-        .modal-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 0.5rem; color: var(--text-muted); }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;
+        .form-control {
+            margin-bottom: 1rem;
         }
-        
-        .empty-state { text-align: center; padding: 2rem; color: var(--text-muted); font-style: italic; }
 
-        /* Lightbox */
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; align-items: center; justify-content: center; }
+        .form-control label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .form-control input, .form-control select, .form-control textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
         #lightbox.active { display: flex; }
-        #lightbox img { max-width: 95%; max-height: 95%; border-radius: 8px; }
-        #lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; }
-        
-        /* Floating Action Button (FAB) */
-        .fab {
-            position: fixed; bottom: 80px; right: 20px;
-            width: 56px; height: 56px; border-radius: 50%;
-            background: var(--primary); color: white;
-            font-size: 2rem; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
-            cursor: pointer; z-index: 5;
+        #lightbox img { max-width: 90%; max-height: 80vh; border-radius: 8px; }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem 0;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div id="headerTitle">App Demandas</div>
-        <div id="headerUserInfo" class="user-info-header" style="display: none;"></div>
+        <div class="header-content">
+            <h3 id="appTitle">Demandas</h3>
+            <div id="userBadge" style="font-size: 0.85rem; background: #e0e7ff; color: var(--primary); padding: 4px 8px; border-radius: 12px; display: none;"></div>
+        </div>
     </header>
 
     <div id="mainContent">
-        <!-- O conteúdo será renderizado aqui dinamicamente pelo JS -->
+        <!-- Renderização Dinâmica -->
     </div>
-
-    <!-- Navegação Inferior (Bottom Nav) -->
-    <div id="bottomNav" class="bottom-nav" style="display: none;">
-        <div class="nav-item" id="nav-demandas" onclick="showView(isAdmin ? 'todas-demandas' : 'minhas-demandas')">
-            <span class="nav-icon">📋</span>
-            <span>Demandas</span>
-        </div>
-        <div class="nav-item" id="nav-admin" onclick="showView('admin')" style="display: none;">
-            <span class="nav-icon">🛡️</span>
-            <span>Aprovar</span>
-        </div>
-        <div class="nav-item" id="nav-ranking" onclick="showView('ranking')">
-            <span class="nav-icon">🏆</span>
-            <span>Ranking</span>
-        </div>
-        <div class="nav-item" onclick="logout()">
-            <span class="nav-icon">🚪</span>
-            <span>Sair</span>
-        </div>
-    </div>
-
-    <!-- Botão Flutuante (Apenas Admin) -->
-    <div id="fabAdd" class="fab" onclick="openModal('criarDemandaModal')" style="display: none;">+</div>
 
     <!-- Modais -->
-    <!-- Modal Criar Demanda (Admin) -->
     <div id="criarDemandaModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title">Nova Demanda</div>
-            <div class="form-group">
+        <div class="modal-body">
+            <h3>Nova Demanda</h3>
+            <br>
+            <div class="form-control">
                 <label>Atribuir para:</label>
                 <select id="demandaAssignedTo"></select>
             </div>
-            <div class="form-group">
+            <div class="form-control">
                 <label>Descrição:</label>
-                <textarea id="demandaDesc" rows="3" placeholder="O que precisa ser feito?"></textarea>
+                <textarea id="demandaDesc" rows="3"></textarea>
             </div>
-            <div class="form-group">
-                <label>Prioridade (XP Base):</label>
+            <div class="form-control">
+                <label>Prioridade:</label>
                 <select id="demandaPriority">
                     <option value="BAIXA">Baixa (60 XP)</option>
                     <option value="NORMAL" selected>Normal (100 XP)</option>
@@ -324,73 +270,69 @@
                     <option value="URGENTE">Urgente (200 XP)</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-control">
                 <label>Foto de Referência (Opcional):</label>
                 <input type="file" id="demandaPhoto" accept="image/*">
             </div>
             <div class="card-actions">
-                <button class="btn-outline" onclick="closeModal('criarDemandaModal')">Cancelar</button>
-                <button onclick="saveDemanda()">Criar</button>
+                <button style="background: var(--text-muted);" onclick="closeModal('criarDemandaModal')">Cancelar</button>
+                <button onclick="saveDemanda()">Salvar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Entregar Tarefa (Usuário) -->
     <div id="entregarModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title">Entregar Demanda</div>
+        <div class="modal-body">
+            <h3>Entregar Demanda</h3>
+            <br>
             <input type="hidden" id="entregarTaskId">
-            <div class="form-group">
-                <label>Foto da Conclusão (Obrigatório):</label>
+            <div class="form-control">
+                <label>Foto de Comprovação:</label>
                 <input type="file" id="entregarPhoto" accept="image/*" capture="environment">
             </div>
-            <div class="form-group">
+            <div class="form-control">
                 <label>Observações:</label>
-                <textarea id="entregarNotas" rows="2" placeholder="Algo a adicionar?"></textarea>
+                <textarea id="entregarNotas" rows="2"></textarea>
             </div>
             <div class="card-actions">
-                <button class="btn-outline" onclick="closeModal('entregarModal')">Cancelar</button>
-                <button onclick="submitEntrega()">Enviar para Aprovação</button>
+                <button style="background: var(--text-muted);" onclick="closeModal('entregarModal')">Cancelar</button>
+                <button onclick="submitEntrega()">Enviar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Aprovar Entrega (Admin) -->
     <div id="aprovaModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title">Avaliar Entrega</div>
+        <div class="modal-body">
+            <h3>Avaliar Entrega</h3>
+            <br>
             <div id="aprovaContent"></div>
-            <div class="form-group">
-                <label>Feedback (Opcional):</label>
-                <textarea id="aprovaObs" rows="2" placeholder="Ex: Faltou limpar o canto..."></textarea>
+            <div class="form-control">
+                <label>Observação/Feedback:</label>
+                <textarea id="aprovaObs" rows="2"></textarea>
             </div>
             <div class="card-actions">
                 <button style="background: var(--danger);" onclick="rejectEntrega()">Rejeitar</button>
-                <button style="background: var(--success);" onclick="approveEntrega()">Aprovar & Dar XP</button>
+                <button style="background: var(--success);" onclick="approveEntrega()">Aprovar</button>
             </div>
-            <button class="btn-outline" style="width: 100%; margin-top: 0.5rem;" onclick="closeModal('aprovaModal')">Fechar</button>
+            <button style="background: transparent; color: var(--text-muted); margin-top: 0.5rem;" onclick="closeModal('aprovaModal')">Fechar</button>
         </div>
     </div>
 
-    <!-- Lightbox para Imagens -->
     <div id="lightbox" onclick="closeLightbox()">
-        <span id="lightbox-close">&times;</span>
         <img id="lightboxImg" src="">
     </div>
 
     <script>
-        // --- Estrutura de Dados e Mock ---
+        // --- Estado do App ---
         let users = [];
         let tasks = [];
         let deliveries = [];
         let currentUser = null;
         let isAdmin = false;
         let selectedDeliveryId = null;
-
-        const XP_MAP = { 'BAIXA': 60, 'NORMAL': 100, 'ALTA': 140, 'URGENTE': 200 };
+        let currentTab = 'demandas';
 
         function init() {
-            // Carregar dados locais
             const localUsers = localStorage.getItem('appUsers');
             const localTasks = localStorage.getItem('appTasks');
             const localDeliveries = localStorage.getItem('appDeliveries');
@@ -399,24 +341,17 @@
             if (localTasks) tasks = JSON.parse(localTasks);
             if (localDeliveries) deliveries = JSON.parse(localDeliveries);
 
-            // Popula dados mockados na primeira vez (apenas para funcionar standalone)
             if (users.length === 0) {
                 users = [
-                    { id: 'u1', name: 'Gestor (Admin)', role: 'ADMIN' },
-                    { id: 'u2', name: 'João Silva', role: 'USER' },
-                    { id: 'u3', name: 'Maria Souza', role: 'USER' }
+                    { id: 'u1', name: 'Administrador', role: 'ADMIN' },
+                    { id: 'u2', name: 'Usuário 1', role: 'USER' },
+                    { id: 'u3', name: 'Usuário 2', role: 'USER' }
                 ];
                 tasks = [
-                    { id: 't1', description: 'Limpar e organizar a recepção principal', priority: 'NORMAL', assignedTo: 'u2', createdBy: 'u1', status: 'PENDENTE', photo: null, createdAt: new Date().toISOString() },
-                    { id: 't2', description: 'Manutenção no ar condicionado da sala 3', priority: 'ALTA', assignedTo: 'u3', createdBy: 'u1', status: 'PENDENTE', photo: null, createdAt: new Date().toISOString() }
+                    { id: 't1', description: 'Exemplo de tarefa pendente', priority: 'NORMAL', assignedTo: 'u2', createdBy: 'u1', status: 'PENDENTE', photo: null, createdAt: new Date().toISOString() }
                 ];
                 saveLocalData();
             }
-
-            // Atualiza select de usuários no modal de criação
-            const select = document.getElementById('demandaAssignedTo');
-            select.innerHTML = users.filter(u => u.role !== 'ADMIN')
-                                    .map(u => `<option value="${u.id}">${u.name}</option>`).join('');
 
             renderLogin();
         }
@@ -427,181 +362,149 @@
             localStorage.setItem('appDeliveries', JSON.stringify(deliveries));
         }
 
-        // --- Navegação e Views ---
         function login(userId) {
             currentUser = users.find(u => u.id === userId);
             isAdmin = currentUser.role === 'ADMIN';
             
-            document.getElementById('headerUserInfo').innerText = currentUser.name;
-            document.getElementById('headerUserInfo').style.display = 'block';
-            document.getElementById('bottomNav').style.display = 'flex';
-            
-            document.getElementById('nav-admin').style.display = isAdmin ? 'flex' : 'none';
-            document.getElementById('fabAdd').style.display = isAdmin ? 'flex' : 'none';
+            document.getElementById('userBadge').innerText = currentUser.name;
+            document.getElementById('userBadge').style.display = 'block';
 
-            showView(isAdmin ? 'todas-demandas' : 'minhas-demandas');
+            // Atualiza select de usuários para criação de tarefas
+            const select = document.getElementById('demandaAssignedTo');
+            select.innerHTML = users.filter(u => u.role !== 'ADMIN')
+                                    .map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+
+            showView('demandas');
         }
 
         function logout() {
             currentUser = null;
             isAdmin = false;
-            document.getElementById('headerUserInfo').style.display = 'none';
-            document.getElementById('bottomNav').style.display = 'none';
-            document.getElementById('fabAdd').style.display = 'none';
+            document.getElementById('userBadge').style.display = 'none';
             renderLogin();
         }
 
-        function showView(view) {
-            // Atualizar UI da bottom nav
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if(view === 'todas-demandas' || view === 'minhas-demandas') document.getElementById('nav-demandas').classList.add('active');
-            if(view === 'admin') document.getElementById('nav-admin').classList.add('active');
-            if(view === 'ranking') document.getElementById('nav-ranking').classList.add('active');
+        function showView(tab) {
+            currentTab = tab;
+            const main = document.getElementById('mainContent');
+            main.innerHTML = renderTabs() + '<div id="tabContent"></div>';
 
-            const container = document.getElementById('mainContent');
-            container.innerHTML = ''; // Limpa a tela
-
-            if (view === 'minhas-demandas') renderMinhasDemandas();
-            else if (view === 'todas-demandas') renderTodasDemandas();
-            else if (view === 'admin') renderAdmin();
-            else if (view === 'ranking') renderRanking();
+            if (tab === 'demandas') {
+                if (isAdmin) renderTodasDemandas();
+                else renderMinhasDemandas();
+            } else if (tab === 'admin') {
+                renderAdmin();
+            } else if (tab === 'ranking') {
+                renderRanking();
+            }
         }
 
-        // --- Renderização de Telas ---
+        function renderTabs() {
+            return `
+                <div class="tabs">
+                    <button class="tab-btn ${currentTab === 'demandas' ? 'active' : ''}" onclick="showView('demandas')">Demandas</button>
+                    ${isAdmin ? `<button class="tab-btn ${currentTab === 'admin' ? 'active' : ''}" onclick="showView('admin')">Aprovações</button>` : ''}
+                    <button class="tab-btn ${currentTab === 'ranking' ? 'active' : ''}" onclick="showView('ranking')">🏆 Ranking</button>
+                    <button class="tab-btn" onclick="logout()" style="background: transparent; color: var(--danger); border: none; width: auto; margin-left: auto;">Sair</button>
+                </div>
+            `;
+        }
+
         function renderLogin() {
-            let html = `
-                <div style="text-align:center; padding-top: 3rem;">
-                    <h2 style="margin-bottom: 1rem; color: var(--primary);">Bem-vindo!</h2>
-                    <p style="margin-bottom: 2rem; color: var(--text-muted);">Selecione um usuário para testar o sistema.</p>
+            document.getElementById('mainContent').innerHTML = `
+                <div class="card" style="text-align: center; margin-top: 2rem;">
+                    <h2>Entrar no Sistema</h2>
+                    <br>
                     <div class="grid">
                         ${users.map(u => `
-                            <button onclick="login('${u.id}')" style="background: ${u.role === 'ADMIN' ? 'var(--text-main)' : 'var(--primary)'}; font-size: 1.1rem; padding: 1rem;">
-                                Entrar como ${u.name}${u.role === 'ADMIN' ? '🛡️' : '👤'}
-                            </button>
+                            <button onclick="login('${u.id}')">${u.name} (${u.role})</button>
                         `).join('')}
                     </div>
                 </div>
             `;
-            document.getElementById('mainContent').innerHTML = html;
         }
 
         function renderMinhasDemandas() {
-            const minhasTasks = tasks.filter(t => t.assignedTo === currentUser.id);
-            const pendentes = minhasTasks.filter(t => t.status === 'PENDENTE' || t.status === 'REJEITADO');
-            const outras = minhasTasks.filter(t => t.status !== 'PENDENTE' && t.status !== 'REJEITADO');
+            const container = document.getElementById('tabContent');
+            const myTasks = tasks.filter(t => t.assignedTo === currentUser.id);
 
-            let html = `<div class="section-title">Minhas Demandas Pendentes</div><div class="grid">`;
-            
-            if (pendentes.length > 0) {
-                html += pendentes.map(t => renderTaskCard(t, true)).join('');
-            } else {
-                html += `<div class="empty-state">Nenhuma demanda pendente! 🎉</div>`;
-            }
-
-            if (outras.length > 0) {
-                html += `</div><div class="section-title" style="margin-top: 2rem;">Aguardando / Concluídas</div><div class="grid">`;
-                html += outras.map(t => renderTaskCard(t, true)).join('');
-            }
-
-            html += `</div>`;
-            document.getElementById('mainContent').innerHTML = html;
+            container.innerHTML = `
+                <div class="section-title" style="margin-bottom: 1rem; font-weight: bold;">Minhas Demandas</div>
+                <div class="grid">
+                    ${myTasks.length > 0 ? myTasks.map(t => renderTaskCard(t, true)).join('') : '<div class="empty-state">Nenhuma demanda atribuída.</div>'}
+                </div>
+            `;
         }
 
         function renderTodasDemandas() {
-            let html = `<div class="section-title">Todas as Demandas (Visão Geral)</div><div class="grid">`;
-            if (tasks.length > 0) {
-                html += tasks.map(t => renderTaskCard(t, false)).join('');
-            } else {
-                html += `<div class="empty-state">Nenhuma demanda criada.</div>`;
-            }
-            html += `</div>`;
-            document.getElementById('mainContent').innerHTML = html;
+            const container = document.getElementById('tabContent');
+            container.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span style="font-weight: bold;">Todas as Demandas</span>
+                    <button onclick="openModal('criarDemandaModal')" style="width: auto;">+ Nova</button>
+                </div>
+                <div class="grid">
+                    ${tasks.length > 0 ? tasks.map(t => renderTaskCard(t, false)).join('') : '<div class="empty-state">Nenhuma demanda cadastrada.</div>'}
+                </div>
+            `;
         }
 
         function renderAdmin() {
+            const container = document.getElementById('tabContent');
             const pendingDeliveries = deliveries.filter(d => d.status === 'AGUARDANDO');
-            
-            let html = `
-                <div class="section-title">Painel de Aprovações</div>
+
+            container.innerHTML = `
+                <div class="section-title" style="margin-bottom: 1rem; font-weight: bold;">Aprovações Pendentes</div>
                 <div class="grid">
-                    ${pendingDeliveries.length > 0 ? pendingDeliveries.map(d => renderAprovacaoCard(d)).join('') : '<div class="empty-state">Nenhuma entrega aguardando aprovação no momento. ✅</div>'}
+                    ${pendingDeliveries.length > 0 ? pendingDeliveries.map(d => renderAprovacaoCard(d)).join('') : '<div class="empty-state">Nenhuma entrega pendente.</div>'}
                 </div>
             `;
-            document.getElementById('mainContent').innerHTML = html;
         }
 
         function renderRanking() {
-            // Calcular XP dos usuários comuns
+            const container = document.getElementById('tabContent');
+            
+            // Lógica para calcular a pontuação de todos os usuários
             const rankingData = users.filter(u => u.role !== 'ADMIN').map(user => {
                 const userDeliveries = deliveries.filter(d => d.userId === user.id && d.status === 'APROVADO');
-                const totalXp = userDeliveries.reduce((sum, d) => sum + (d.xp || 0), 0);
+                const totalXp = userDeliveries.reduce((acc, d) => acc + (d.xp || 0), 0);
                 return { ...user, xp: totalXp };
             }).sort((a, b) => b.xp - a.xp);
 
             const medals = ['🥇', '🥈', '🥉'];
 
-            let html = `
-                <div class="section-title">Ranking da Equipe 🏆</div>
-                <div style="margin-top: 1rem;">
-                    ${rankingData.map((user, index) => `
-                        <div class="ranking-item">
-                            <div class="ranking-pos">${medals[index] || (index + 1 + 'º')}</div>
-                            <div class="ranking-info">
-                                <div class="ranking-name">${user.name}</div>
+            container.innerHTML = `
+                <div class="section-title" style="margin-bottom: 1rem; font-weight: bold;">Ranking de Desempenho</div>
+                <div>
+                    ${rankingData.map((u, i) => `
+                        <div class="ranking-card">
+                            <div class="ranking-user">
+                                <span class="ranking-pos">${medals[i] || (i + 1) + 'º'}</span>
+                                <div>
+                                    <div style="font-weight: bold;">${u.name}</div>
+                                </div>
                             </div>
-                            <div class="ranking-xp">${user.xp} XP</div>
+                            <div class="ranking-xp">${u.xp} XP</div>
                         </div>
                     `).join('')}
                 </div>
             `;
-            document.getElementById('mainContent').innerHTML = html;
         }
 
-        // --- Componentes HTML Internos ---
-        function getStatusBadge(status) {
-            const map = {
-                'PENDENTE': '<span class="badge pendente">Pendente</span>',
-                'AGUARDANDO_APROVACAO': '<span class="badge aguardando">Aguardando Avaliação</span>',
-                'CONCLUÍDO': '<span class="badge concluido">Concluído</span>',
-                'REJEITADO': '<span class="badge rejeitado">Rejeitado (Refazer)</span>'
-            };
-            return map[status] || `<span class="badge">${status}</span>`;
-        }
-
-        function renderTaskCard(task, isUserView) {
+        function renderTaskCard(task, isUser) {
             const user = users.find(u => u.id === task.assignedTo);
-            const xp = XP_MAP[task.priority];
-            
-            // Checar se há nota de rejeição
-            const lastDelivery = deliveries.slice().reverse().find(d => d.taskId === task.id && d.status === 'REJEITADO');
-
             return `
                 <div class="card">
-                    <div class="card-header">
-                        ${getStatusBadge(task.status)}
-                        <span class="xp-tag">⚡ ${xp} XP</span>
+                    ${task.photo ? `<div class="card-image"><img src="${task.photo}" onclick="openLightbox('${task.photo}')"></div>` : ''}
+                    <div class="card-title">${task.description}</div>
+                    <div class="card-desc">
+                        ${!isUser ? `<strong>Para:</strong> ${user ? user.name : 'N/A'}<br>` : ''}
+                        <strong>Prioridade:</strong> ${task.priority}<br>
+                        <strong>Status:</strong> ${task.status}
                     </div>
-                    ${task.photo ? `
-                        <div class="card-image">
-                            <img src="${task.photo}" onclick="openLightbox('${task.photo}')" alt="Ref">
-                        </div>
+                    ${isUser && (task.status === 'PENDENTE' || task.status === 'REJEITADO') ? `
+                        <button onclick="openEntregarModal('${task.id}')">Entregar Demanda</button>
                     ` : ''}
-                    <div class="card-content">
-                        ${!isUserView ? `<div style="font-size: 0.8rem; color: var(--primary); font-weight: bold; margin-bottom: 5px;">👤 ${user ? user.name : 'Desconhecido'}</div>` : ''}
-                        <div class="card-title">${task.description}</div>
-                        
-                        ${lastDelivery && task.status === 'REJEITADO' ? `
-                            <div style="background: #fee2e2; border-left: 3px solid var(--danger); padding: 8px; font-size: 0.85rem; margin-top: 10px; border-radius: 4px;">
-                                <strong>Motivo da recusa:</strong> ${lastDelivery.adminObs}
-                            </div>
-                        ` : ''}
-
-                        ${isUserView && (task.status === 'PENDENTE' || task.status === 'REJEITADO') ? `
-                            <div class="card-actions">
-                                <button onclick="openEntregarModal('${task.id}')">Entregar Tarefa 📷</button>
-                            </div>
-                        ` : ''}
-                    </div>
                 </div>
             `;
         }
@@ -609,43 +512,25 @@
         function renderAprovacaoCard(delivery) {
             const task = tasks.find(t => t.id === delivery.taskId);
             const user = users.find(u => u.id === delivery.userId);
-            const xp = XP_MAP[task.priority];
-
             return `
                 <div class="card">
-                    <div class="card-header">
-                        <span class="badge aguardando">Revisão Pendente</span>
-                        <span class="xp-tag">Vale ⚡ ${xp} XP</span>
+                    <div class="card-image">
+                        ${delivery.photo ? `<img src="${delivery.photo}" onclick="openLightbox('${delivery.photo}')">` : '🖼️ Sem foto'}
                     </div>
-                    ${delivery.photo ? `
-                        <div class="card-image">
-                            <img src="${delivery.photo}" onclick="openLightbox('${delivery.photo}')" alt="Entrega">
-                        </div>
-                    ` : '<div class="card-image" style="font-size: 2rem; color: #94a3b8;">Sem Imagem</div>'}
-                    <div class="card-content">
-                        <div style="font-size: 0.8rem; color: var(--primary); font-weight: bold; margin-bottom: 5px;">👤 ${user ? user.name : 'Desconhecido'}</div>
-                        <div class="card-desc"><strong>Tarefa:</strong> ${task ? task.description : ''}</div>
-                        ${delivery.notes ? `<div class="card-desc"><strong>Nota do Usuário:</strong> "${delivery.notes}"</div>` : ''}
-                        <div class="card-actions">
-                            <button onclick="openAprovaModal('${delivery.id}')">Avaliar Entrega ✅</button>
-                        </div>
+                    <div class="card-title">Entrega de: ${user ? user.name : 'Desconhecido'}</div>
+                    <div class="card-desc">
+                        <strong>Demanda:</strong> ${task ? task.description : ''}<br>
+                        <strong>Notas:</strong> ${delivery.notes || 'Sem observações.'}
                     </div>
+                    <button onclick="openAprovaModal('${delivery.id}')" style="background: var(--warning);">Avaliar Entrega</button>
                 </div>
             `;
         }
 
-        // --- Funções de Ação e Modais ---
-        const getBase64 = (file) => new Promise((resolve, reject) => {
-            if (!file) return resolve(null);
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
+        // --- Ações de Modal e Negócio ---
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
-        function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
-        
         function openLightbox(src) {
             document.getElementById('lightboxImg').src = src;
             document.getElementById('lightbox').classList.add('active');
@@ -654,10 +539,16 @@
 
         function openEntregarModal(taskId) {
             document.getElementById('entregarTaskId').value = taskId;
-            document.getElementById('entregarPhoto').value = '';
-            document.getElementById('entregarNotas').value = '';
             openModal('entregarModal');
         }
+
+        const getBase64 = (file) => new Promise((resolve, reject) => {
+            if (!file) return resolve(null);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
 
         async function saveDemanda() {
             const assignedTo = document.getElementById('demandaAssignedTo').value;
@@ -665,7 +556,7 @@
             const priority = document.getElementById('demandaPriority').value;
             const photoFile = document.getElementById('demandaPhoto').files[0];
 
-            if (!description || !assignedTo) return alert('Preencha a descrição e escolha um usuário!');
+            if (!description || !assignedTo) return alert('Preencha os campos obrigatórios!');
 
             const photoBase64 = await getBase64(photoFile);
 
@@ -680,17 +571,13 @@
 
             saveLocalData();
             closeModal('criarDemandaModal');
-            document.getElementById('demandaDesc').value = '';
-            document.getElementById('demandaPhoto').value = '';
-            showView('todas-demandas');
+            showView('demandas');
         }
 
         async function submitEntrega() {
             const taskId = document.getElementById('entregarTaskId').value;
             const notes = document.getElementById('entregarNotas').value;
             const photoFile = document.getElementById('entregarPhoto').files[0];
-
-            if (!photoFile) return alert('A foto da conclusão é obrigatória para ganhar XP!');
 
             const task = tasks.find(t => t.id === taskId);
             const photoBase64 = await getBase64(photoFile);
@@ -706,31 +593,32 @@
             task.status = 'AGUARDANDO_APROVACAO';
             saveLocalData();
             closeModal('entregarModal');
-            showView('minhas-demandas');
+            showView('demandas');
         }
 
         function openAprovaModal(deliveryId) {
             selectedDeliveryId = deliveryId;
             const delivery = deliveries.find(d => d.id === deliveryId);
             const task = tasks.find(t => t.id === delivery.taskId);
-            
+            const user = users.find(u => u.id === delivery.userId);
+
             document.getElementById('aprovaContent').innerHTML = `
-                <div style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">
-                    <strong>Tarefa:</strong> ${task.description}<br>
-                    <strong>XP em jogo:</strong> ⚡ ${XP_MAP[task.priority]} XP
-                </div>
+                <p><strong>Usuário:</strong> ${user ? user.name : ''}</p>
+                <p><strong>Demanda:</strong> ${task ? task.description : ''}</p>
+                <br>
             `;
-            document.getElementById('aprovaObs').value = '';
             openModal('aprovaModal');
         }
 
         function approveEntrega() {
             const delivery = deliveries.find(d => d.id === selectedDeliveryId);
             const task = tasks.find(t => t.id === delivery.taskId);
-            
+            const obs = document.getElementById('aprovaObs').value;
+            const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 140, URGENTE: 200 };
+
             delivery.status = 'APROVADO';
-            delivery.adminObs = document.getElementById('aprovaObs').value;
-            delivery.xp = XP_MAP[task.priority];
+            delivery.adminObs = obs;
+            delivery.xp = xpMap[task.priority] || 100;
             task.status = 'CONCLUÍDO';
 
             saveLocalData();
@@ -741,20 +629,16 @@
         function rejectEntrega() {
             const delivery = deliveries.find(d => d.id === selectedDeliveryId);
             const task = tasks.find(t => t.id === delivery.taskId);
-            const obs = document.getElementById('aprovaObs').value;
-
-            if(!obs) return alert('Por favor, informe no feedback por que está rejeitando para que o usuário possa corrigir.');
 
             delivery.status = 'REJEITADO';
-            delivery.adminObs = obs;
-            task.status = 'REJEITADO'; // Volta para a tela do usuário para refazer
+            delivery.adminObs = document.getElementById('aprovaObs').value;
+            task.status = 'PENDENTE';
 
             saveLocalData();
             closeModal('aprovaModal');
             showView('admin');
         }
 
-        // Inicializar aplicação ao carregar
         window.onload = init;
     </script>
 </body>
