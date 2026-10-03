@@ -512,16 +512,17 @@
     <div id="modalCloud" class="modal-overlay">
         <div class="modal-box">
             <h3>🌐 Integrar Banco de Dados em Nuvem</h3>
-            <p style="font-size:0.78rem; color:var(--text-muted)">A Master Key já está configurada. Insira abaixo o <b>Bin ID</b> criado no JSONBin.io:</p>
+            <p style="font-size:0.78rem; color:var(--text-muted)">Sincronização em tempo real via JSONBin.io:</p>
             <div class="form-group">
                 <label>Master Key (X-Master-Key)</label>
-                <input type="text" id="cloudMasterKey" readonly style="background:#f3f4f6; color:#6b7280;">
+                <input type="text" id="cloudMasterKey" readonly style="background:#f3f4f6; color:#6b7280; font-size:0.75rem;">
             </div>
             <div class="form-group">
                 <label>Bin ID</label>
-                <input type="text" id="cloudBinId" placeholder="Cole o Bin ID aqui (ex: 65f...)">
+                <input type="text" id="cloudBinId" placeholder="Cole o Bin ID aqui">
             </div>
             <button onclick="saveCloudConfig()" class="gold">Salvar e Sincronizar Tudo</button>
+            <button onclick="closeModal('modalCloud')" class="secondary">Fechar</button>
         </div>
     </div>
 
@@ -534,6 +535,7 @@
                 <input type="password" id="adminPinInput" maxlength="8" style="text-align: center; font-size: 1.4rem;">
             </div>
             <button onclick="verifyAdminPin()" class="gold">Desbloquear ADM</button>
+            <button onclick="closeModal('modalAuth')" class="secondary">Cancelar</button>
         </div>
     </div>
 
@@ -544,6 +546,7 @@
             <div class="form-group"><label>PIN Atual</label><input type="password" id="pinCurrentInput"></div>
             <div class="form-group"><label>Novo PIN</label><input type="password" id="pinNewInput"></div>
             <button onclick="changeAdminPin()" class="gold">Atualizar PIN</button>
+            <button onclick="closeModal('modalChangePin')" class="secondary">Cancelar</button>
         </div>
     </div>
 
@@ -597,10 +600,11 @@
     <script>
         const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // PIN padrão: 1234
         const HARDCODED_MASTER_KEY = "$2a$10$.3YPOy3ggh2Gtp6tcxz6lesIbatq8BUDOMQ0uDUalcx.7hJkBLi1";
+        const DEFAULT_BIN_ID = "6ac115b2ffd5d160534967b8";
 
         let config = {
             masterKey: HARDCODED_MASTER_KEY,
-            binId: localStorage.getItem('express_bin_id') || ''
+            binId: localStorage.getItem('express_bin_id') || DEFAULT_BIN_ID
         };
 
         let state = {
@@ -672,7 +676,7 @@
                 if (res.ok) {
                     updateSyncBadge(true, 'Sincronizado');
                 } else {
-                    alert('Erro ao salvar na nuvem. Verifique seu Bin ID.');
+                    alert('Erro ao salvar na nuvem. Verifique o seu Bin ID.');
                     updateSyncBadge(false, 'Erro ao Salvar');
                 }
             } catch (e) {
@@ -782,7 +786,7 @@
                         <div class="task-desc">${t.desc}</div>
                         <div class="task-meta">
                             <span>👤 ${assignee.name}</span>
-                            <span>⏰ ${new Date(t.deadline).toLocaleDateString('pt-BR')}</span>
+                            <span>⏰ ${t.deadline ? new Date(t.deadline).toLocaleDateString('pt-BR') : 'Sem prazo'}</span>
                         </div>
                         ${t.devolutiva ? `<div style="background:#fff8f0; padding:6px; font-size:0.75rem; border-left:3px solid var(--yellow-main)">💬 ${t.devolutiva}</div>` : ''}
                         <div class="task-actions">
@@ -844,8 +848,10 @@
 
             task.status = 'CONCLUÍDO';
             task.devolutiva = comment;
-            user.xp = (user.xp || 0) + task.xp;
-            user.streak = (user.streak || 0) + 1;
+            if (user) {
+                user.xp = (user.xp || 0) + task.xp;
+                user.streak = (user.streak || 0) + 1;
+            }
 
             closeModal('modalComplete');
             syncToCloud();
@@ -903,7 +909,7 @@
             localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
             closeModal('modalChangePin');
             syncToCloud();
-            alert('PIN atualizado!');
+            alert('PIN atualizado com sucesso!');
         }
 
         function switchTab(t) {
@@ -921,17 +927,19 @@
         }
 
         function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('remove'); document.getElementById(id).classList.remove('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         // AUTO REFRESH A CADA 5 SEGUNDOS
         setInterval(fetchCloudData, 5000);
 
         window.onload = () => {
+            // Garante que se o localStorage estiver limpo ou com valor inválido antigo, assume o novo ID
+            if (!localStorage.getItem('express_bin_id') || localStorage.getItem('express_bin_id') === '6ac11432ac6210605a0fbe9f') {
+                localStorage.setItem('express_bin_id', DEFAULT_BIN_ID);
+                config.binId = DEFAULT_BIN_ID;
+            }
             fetchCloudData();
             renderApp();
-            if (!config.binId) {
-                openCloudConfigModal();
-            }
         };
     </script>
 </body>
