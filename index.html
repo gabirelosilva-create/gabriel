@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#991b1b">
-    <meta name="description" content="Demandas Express - Gestão Integrada com Google Planilhas">
     <title>Demandas Express — Google Planilhas</title>
 
     <style>
@@ -95,6 +94,7 @@
         }
         .sync-online { background: #10b981; color: #fff; }
         .sync-offline { background: #ef4444; color: #fff; }
+        .sync-syncing { background: #f59e0b; color: #000; }
 
         .user-controls {
             display: flex;
@@ -429,7 +429,7 @@
             <span>DEMANDAS<span style="color: var(--yellow-bright)">SHEETS</span></span>
         </div>
         <div class="user-controls">
-            <span id="syncStatus" class="sync-badge sync-offline">A ligar...</span>
+            <span id="syncStatus" class="sync-badge sync-syncing" onclick="fetchGoogleSheetsData()">Atualizar</span>
             <select id="userSelect" onchange="switchUser(this.value)"></select>
             <button id="adminBtn" onclick="openAdminAuthModal()" class="secondary">
                 <span>🔐 PIN</span>
@@ -487,7 +487,7 @@
         </div>
     </main>
 
-    <!-- MODAL AUTH ADM -->
+    <!-- MODAIS -->
     <div id="modalAuth" class="modal-overlay">
         <div class="modal-box">
             <h3>🔐 Autenticação de Gestor</h3>
@@ -500,7 +500,6 @@
         </div>
     </div>
 
-    <!-- MODAL ALTERAR PIN -->
     <div id="modalChangePin" class="modal-overlay">
         <div class="modal-box">
             <h3>🔑 Alterar PIN do ADM</h3>
@@ -511,7 +510,6 @@
         </div>
     </div>
 
-    <!-- MODAL TAREFA -->
     <div id="modalTask" class="modal-overlay">
         <div class="modal-box">
             <h3>🚀 Criar Demanda</h3>
@@ -532,7 +530,6 @@
         </div>
     </div>
 
-    <!-- MODAL CONCLUIR TAREFA -->
     <div id="modalComplete" class="modal-overlay">
         <div class="modal-box">
             <h3>✅ Concluir Demanda</h3>
@@ -546,7 +543,6 @@
         </div>
     </div>
 
-    <!-- MODAL ADD MEMBRO -->
     <div id="modalUser" class="modal-overlay">
         <div class="modal-box">
             <h3>👤 Adicionar Novo Membro</h3>
@@ -558,16 +554,15 @@
     </div>
 
     <script>
-        // URL da sua implantação do Google Apps Script
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbze7yLOHRoUWX6zJH5ChHsGEziSyO5GsI5fZVXJVDH5IMo9ktXnKKxzTuW4fEOP0IQj/exec";
         const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // PIN: 1234
 
         let state = {
-            users: [
+            users: JSON.parse(localStorage.getItem('express_users')) || [
                 { id: 'u1', name: 'Ana Oliveira', role: 'Supervisora', xp: 450, streak: 3 },
                 { id: 'u2', name: 'Bruno Souza', role: 'Operador', xp: 280, streak: 1 }
             ],
-            tasks: [],
+            tasks: JSON.parse(localStorage.getItem('express_tasks')) || [],
             activeUserId: localStorage.getItem('express_active_user') || 'u1',
             isAdmin: false,
             adminPinHash: localStorage.getItem('express_admin_pin_hash') || INITIAL_PIN_HASH,
@@ -582,48 +577,56 @@
         }
 
         async function fetchGoogleSheetsData() {
-            updateSyncBadge(true, 'A sincronizar...');
+            updateSyncBadge('syncing', 'A carregar...');
             try {
-                const res = await fetch(GOOGLE_SCRIPT_URL);
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+                
                 if (res.ok) {
                     const tasksFromSheet = await res.json();
                     if (Array.isArray(tasksFromSheet)) {
                         state.tasks = tasksFromSheet.filter(t => t.id && t.id !== '');
-                        updateSyncBadge(true, 'Google Sheets OK');
+                        localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
+                        updateSyncBadge('online', 'Online');
                         renderApp();
                     }
                 } else {
-                    updateSyncBadge(false, 'Erro na Planilha');
+                    updateSyncBadge('offline', 'Offline');
                 }
             } catch (e) {
-                console.error(e);
-                updateSyncBadge(false, 'Erro Conexão');
+                console.error("Erro no fetch:", e);
+                updateSyncBadge('offline', 'Offline');
             }
         }
 
         async function syncToGoogleSheets() {
-            updateSyncBadge(true, 'A Salvar...');
+            updateSyncBadge('syncing', 'A Salvar...');
+            localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
+            localStorage.setItem('express_users', JSON.stringify(state.users));
+            
             try {
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: "CLEAR_AND_WRITE",
                         tasks: state.tasks
                     })
                 });
-                updateSyncBadge(true, 'Google Sheets OK');
+                updateSyncBadge('online', 'Sincronizado');
             } catch (e) {
-                console.error(e);
-                updateSyncBadge(false, 'Erro ao Salvar');
+                console.error("Erro no save:", e);
+                updateSyncBadge('offline', 'Erro ao salvar');
             }
         }
 
-        function updateSyncBadge(online, text) {
+        function updateSyncBadge(type, text) {
             const el = document.getElementById('syncStatus');
             el.innerText = text;
-            el.className = `sync-badge ${online ? 'sync-online' : 'sync-offline'}`;
+            el.className = `sync-badge sync-${type}`;
         }
 
         function renderApp() {
@@ -691,7 +694,7 @@
             });
 
             if (list.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px;">Nenhuma demanda cadastrada.</div>`;
+                container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px;">Nenhuma demanda encontrada.</div>`;
                 return;
             }
 
@@ -714,7 +717,7 @@
                         ${t.devolutiva ? `<div style="background:#fff8f0; padding:6px; font-size:0.75rem; border-left:3px solid var(--yellow-main)">💬 ${t.devolutiva}</div>` : ''}
                         <div class="task-actions">
                             ${canComplete ? `<button onclick="openCompleteModal('${t.id}')" class="gold">✅ Finalizar Tarefa</button>` : ''}
-                            ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑️️ Apagar</button>` : ''}
+                            ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑 Apagar</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -753,8 +756,8 @@
             });
 
             closeModal('modalTask');
-            syncToGoogleSheets();
             renderApp();
+            syncToGoogleSheets();
         }
 
         function openCompleteModal(id) {
@@ -777,15 +780,15 @@
             }
 
             closeModal('modalComplete');
-            syncToGoogleSheets();
             renderApp();
+            syncToGoogleSheets();
         }
 
         function deleteTask(id) {
             if (!confirm('Remover esta demanda?')) return;
             state.tasks = state.tasks.filter(t => t.id !== id);
-            syncToGoogleSheets();
             renderApp();
+            syncToGoogleSheets();
         }
 
         function openUserModal() { openModal('modalUser'); }
@@ -796,6 +799,7 @@
             if (!name) return;
 
             state.users.push({ id: 'u_' + Date.now(), name, role, xp: 0, streak: 0 });
+            localStorage.setItem('express_users', JSON.stringify(state.users));
             closeModal('modalUser');
             renderApp();
         }
@@ -850,12 +854,12 @@
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        // Sincroniza periodicamente a cada 5 segundos
-        setInterval(fetchGoogleSheetsData, 5000);
+        // Sincronização em background a cada 10 segundos
+        setInterval(fetchGoogleSheetsData, 10000);
 
         window.onload = () => {
-            fetchGoogleSheetsData();
             renderApp();
+            fetchGoogleSheetsData();
         };
     </script>
 </body>
