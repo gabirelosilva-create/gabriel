@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#991b1b">
-    <meta name="description" content="Demandas Express - Gestão Gamificada com Controle ADM por Senha">
+    <meta name="description" content="Demandas Express - Gestão Gamificada com Controle ADM Criptografado">
     <title>Demandas Express — Edição Gamificada</title>
 
     <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Demandas%20Express%20Gamificado%22%2C%22short_name%22%3A%22Demandas%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait-primary%22%2C%22background_color%22%3A%22%232a080c%22%2C%22theme_color%22%3A%22%23991b1b%22%7D">
@@ -59,7 +59,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER & TOP BAR */
         header {
             background: rgba(42, 8, 12, 0.92);
             backdrop-filter: blur(16px);
@@ -174,7 +173,6 @@
 
         button.danger:hover { background: #fca5a5; color: #7f1d1d; }
 
-        /* CONTAINER PRINCIPAL */
         main {
             flex: 1;
             max-width: 560px;
@@ -186,7 +184,6 @@
             min-height: calc(100vh - 60px);
         }
 
-        /* HERO CARD */
         .hero-card {
             background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
             border: 2px solid var(--yellow-main);
@@ -302,7 +299,6 @@
             font-weight: 600;
         }
 
-        /* METRICAS */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -344,7 +340,6 @@
             margin-top: 0.3rem;
         }
 
-        /* ADMIN BAR */
         .admin-bar {
             background: var(--red-dark);
             color: white;
@@ -380,7 +375,6 @@
             gap: 0.5rem;
         }
 
-        /* TABS DE NAV */
         .nav-tabs {
             display: flex;
             gap: 0.4rem;
@@ -427,7 +421,6 @@
             gap: 0.4rem;
         }
 
-        /* PODIUM & RANKING */
         .podium-container {
             background: var(--surface-card);
             border: 1px solid var(--border);
@@ -538,7 +531,6 @@
         .rank-sub { font-size: 0.7rem; color: var(--text-muted); }
         .rank-score { font-family: "Outfit", sans-serif; font-weight: 800; color: #b45309; font-size: 0.95rem; }
 
-        /* CARDS DE DEMANDA */
         .filter-scroll {
             display: flex;
             gap: 0.4rem;
@@ -674,7 +666,6 @@
             min-height: 36px;
         }
 
-        /* RECOMPENSAS */
         .rewards-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -704,7 +695,6 @@
             border-radius: 99px;
         }
 
-        /* MODAIS */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -747,7 +737,6 @@
         .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
         .form-group label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
 
-        /* CONFETTI & LIGHTBOX */
         #confettiCanvas {
             position: fixed; inset: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: 200;
@@ -780,7 +769,6 @@
 
     <canvas id="confettiCanvas"></canvas>
 
-    <!-- HEADER TOP -->
     <header>
         <div class="logo">
             <span class="brand-mark">⚡</span>
@@ -795,10 +783,8 @@
     </header>
 
     <main>
-        <!-- HERO STATS CARD -->
         <div class="hero-card" id="heroCard"></div>
 
-        <!-- METRICAS DA OPERAÇÃO -->
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-val" id="metricPending">0</div>
@@ -814,7 +800,6 @@
             </div>
         </div>
 
-        <!-- BARRA DO ADMINISTRADOR -->
         <div id="adminPanel" class="admin-bar hidden">
             <div class="admin-bar-header">
                 <div>
@@ -831,21 +816,18 @@
             </div>
         </div>
 
-        <!-- TABS PRINCIPAIS -->
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('tasks')" id="tabTasksBtn">📋 Demandas</button>
             <button class="tab-btn" onclick="switchTab('ranking')" id="tabRankingBtn">🏆 Ranking XP</button>
             <button class="tab-btn" onclick="switchTab('rewards')" id="tabRewardsBtn">🎁 Recompensas</button>
         </div>
 
-        <!-- TAB 1: DEMANDAS -->
         <div id="tabTasks">
             <div class="sec-title">
                 <h2><span>🔥</span> Fila de Trabalho</h2>
                 <span style="font-size: 0.75rem; color: var(--text-muted); font-weight:700;" id="taskCountLbl">0 itens</span>
             </div>
 
-            <!-- FILTROS -->
             <div class="filter-scroll" id="statusFilters">
                 <div class="chip active" onclick="setFilter('ALL', this)">Todas</div>
                 <div class="chip" onclick="setFilter('PENDENTE', this)">Pendentes</div>
@@ -857,7 +839,6 @@
             <div id="tasksGrid" class="task-grid"></div>
         </div>
 
-        <!-- TAB 2: RANKING -->
         <div id="tabRanking" class="hidden">
             <div class="sec-title">
                 <h2><span>🏆</span> Pódio da Produtividade</h2>
@@ -868,17 +849,14 @@
             </div>
         </div>
 
-        <!-- TAB 3: RECOMPENSAS -->
         <div id="tabRewards" class="hidden">
             <div class="sec-title">
-                <h2><span>🎖️</span> Loja de Recompensas</h2>
+                <h2><span>🎖️️</span> Loja de Recompensas</h2>
                 <span style="font-size: 0.75rem; color: #b45309; font-weight:800;">Resgate com Nível</span>
             </div>
             <div class="rewards-grid" id="rewardsGrid"></div>
         </div>
     </main>
-
-    <!-- MODAIS -->
 
     <!-- MODAL AUTH ADM -->
     <div id="modalAuth" class="modal-overlay">
@@ -890,7 +868,7 @@
             <p style="font-size: 0.82rem; color: var(--text-muted);">Digite o PIN de segurança para liberar as funções de Administrador.</p>
             <div class="form-group">
                 <label for="adminPinInput">PIN de Acesso</label>
-                <input type="password" id="adminPinInput" placeholder="PIN padrão: 1234" maxlength="8" style="text-align: center; font-size: 1.4rem; letter-spacing: 0.3em;">
+                <input type="password" id="adminPinInput" placeholder="••••" maxlength="8" style="text-align: center; font-size: 1.4rem; letter-spacing: 0.3em;">
             </div>
             <button onclick="verifyAdminPin()" class="gold">Desbloquear ADM</button>
         </div>
@@ -978,7 +956,7 @@
         </div>
     </div>
 
-    <!-- MODAL CONCLUIR TAREFA (DEVOLUTIVA) -->
+    <!-- MODAL CONCLUIR TAREFA -->
     <div id="modalComplete" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-header">
@@ -998,15 +976,14 @@
         </div>
     </div>
 
-    <!-- LIGHTBOX -->
     <div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
         <img id="lightboxImg" src="" alt="Ampliação da Imagem">
     </div>
 
     <script>
-        // ESTADO GLOBAL DA APLICAÇÃO
-        const DEFAULT_PIN = "1234";
-        
+        // HASH SHA-256 DO PIN PADRÃO INICIAL "1234" (SEM EXPOSIÇÃO EM TEXTO CLARO)
+        const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4";
+
         let state = {
             users: JSON.parse(localStorage.getItem('express_users')) || [
                 { id: 'u1', name: 'Ana Oliveira', role: 'Supervisora', xp: 450, streak: 3 },
@@ -1033,12 +1010,20 @@
             ],
             activeUserId: localStorage.getItem('express_active_user') || 'u1',
             isAdmin: false,
-            adminPin: localStorage.getItem('express_admin_pin') || DEFAULT_PIN,
+            adminPinHash: localStorage.getItem('express_admin_pin_hash') || INITIAL_PIN_HASH,
             currentFilter: 'ALL',
             currentTab: 'tasks'
         };
 
-        // CALCULA O NÍVEL A PARTIR DO XP (300 XP POR NÍVEL)
+        // FUNÇÃO DE HASH CRIPTOGRÁFICO NATIVO DO NAVEGADOR (SHA-256)
+        async function hashString(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
         function getLevelData(xp) {
             const level = Math.floor(xp / 300) + 1;
             const currentLevelXP = xp % 300;
@@ -1046,15 +1031,13 @@
             return { level, currentLevelXP, progress, nextLevelXP: 300 };
         }
 
-        // SALVA DADOS NO LOCALSTORAGE
         function saveData() {
             localStorage.setItem('express_users', JSON.stringify(state.users));
             localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
             localStorage.setItem('express_active_user', state.activeUserId);
-            localStorage.setItem('express_admin_pin', state.adminPin);
+            localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
         }
 
-        // INICIALIZA A APLICAÇÃO
         function initApp() {
             renderUserSelect();
             renderHeroCard();
@@ -1065,7 +1048,6 @@
             updateAdminPanelUI();
         }
 
-        // CONTROLADORES DE USUÁRIO
         function renderUserSelect() {
             const select = document.getElementById('userSelect');
             select.innerHTML = state.users.map(u => 
@@ -1085,7 +1067,6 @@
             return state.users.find(u => u.id === state.activeUserId) || state.users[0];
         }
 
-        // PAINEL DE HERO & METRICAS
         function renderHeroCard() {
             const user = getActiveUser();
             const lvl = getLevelData(user.xp);
@@ -1123,7 +1104,7 @@
             document.getElementById('metricStreak').innerText = `${activeUser.streak || 0}🔥`;
         }
 
-        // SEGURANÇA E ADMIN
+        // SEGURANÇA E ADMIN COM CRIPTOGRAFIA
         function openAdminAuthModal() {
             if (state.isAdmin) {
                 alert('Você já está autenticado como ADM!');
@@ -1133,9 +1114,11 @@
             openModal('modalAuth');
         }
 
-        function verifyAdminPin() {
+        async function verifyAdminPin() {
             const pinEntered = document.getElementById('adminPinInput').value;
-            if (pinEntered === state.adminPin) {
+            const enteredHash = await hashString(pinEntered);
+
+            if (enteredHash === state.adminPinHash) {
                 state.isAdmin = true;
                 closeModal('modalAuth');
                 updateAdminPanelUI();
@@ -1170,11 +1153,13 @@
             openModal('modalChangePin');
         }
 
-        function changeAdminPin() {
+        async function changeAdminPin() {
             const current = document.getElementById('pinCurrentInput').value;
             const newPin = document.getElementById('pinNewInput').value;
 
-            if (current !== state.adminPin) {
+            const currentHash = await hashString(current);
+
+            if (currentHash !== state.adminPinHash) {
                 alert('❌ PIN Atual incorreto.');
                 return;
             }
@@ -1183,13 +1168,12 @@
                 return;
             }
 
-            state.adminPin = newPin;
+            state.adminPinHash = await hashString(newPin);
             saveData();
             closeModal('modalChangePin');
-            alert('✅ PIN alterado com sucesso!');
+            alert('✅ PIN alterado e criptografado com sucesso!');
         }
 
-        // TABS DE NAVEGAÇÃO
         function switchTab(tab) {
             state.currentTab = tab;
             document.querySelectorAll('.nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
@@ -1202,7 +1186,6 @@
             document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
         }
 
-        // CRUD DE DEMANDAS
         function setFilter(filter, element) {
             state.currentFilter = filter;
             document.querySelectorAll('#statusFilters .chip').forEach(c => c.classList.remove('active'));
@@ -1353,7 +1336,6 @@
             }).join('');
         }
 
-        // DEVOLUTIVA E CONCLUSÃO
         function openCompleteModal(taskId) {
             document.getElementById('completeTaskId').value = taskId;
             document.getElementById('completeComment').value = '';
@@ -1377,7 +1359,6 @@
             task.status = 'CONCLUÍDO';
             task.devolutiva = comment;
 
-            // ADICIONA XP AO USUÁRIO
             user.xp += task.xp;
             user.streak = (user.streak || 0) + 1;
 
@@ -1404,11 +1385,9 @@
             alert('🎉 Demanda concluída com sucesso! XP creditado.');
         }
 
-        // RANKING E PÓDIO
         function renderRanking() {
             const sorted = [...state.users].sort((a, b) => b.xp - a.xp);
 
-            // PODIUM (TOP 3)
             const p1 = sorted[0] || { name: '-', xp: 0 };
             const p2 = sorted[1] || { name: '-', xp: 0 };
             const p3 = sorted[2] || { name: '-', xp: 0 };
@@ -1434,7 +1413,6 @@
                 </div>
             `;
 
-            // LISTA DE CLASSIFICAÇÃO
             document.getElementById('rankList').innerHTML = sorted.map((u, idx) => `
                 <div class="rank-item ${u.id === state.activeUserId ? 'is-me' : ''}">
                     <div class="rank-pos">#${idx + 1}</div>
@@ -1447,7 +1425,6 @@
             `).join('');
         }
 
-        // RECOMPENSAS
         function renderRewards() {
             const user = getActiveUser();
             const userLvl = getLevelData(user.xp).level;
@@ -1464,7 +1441,6 @@
             }).join('');
         }
 
-        // GESTÃO DE EQUIPE (ADM)
         function openUserModal() {
             document.getElementById('newUserName').value = '';
             document.getElementById('newUserRole').value = '';
@@ -1520,7 +1496,6 @@
             renderRanking();
         }
 
-        // AUXILIARES DE MODAL & LIGHTBOX
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
@@ -1533,7 +1508,6 @@
             document.getElementById('lightbox').style.display = 'none';
         }
 
-        // ANIMAÇÃO DE CONFETES NATIVA
         function triggerConfetti() {
             const canvas = document.getElementById('confettiCanvas');
             const ctx = canvas.getContext('2d');
@@ -1564,7 +1538,6 @@
             draw();
         }
 
-        // START
         window.onload = initApp;
     </script>
 </body>
