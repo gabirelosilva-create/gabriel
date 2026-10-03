@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#991b1b">
-    <meta name="description" content="Demandas Express - Gestão Integrada Multidispositivo em Nuvem">
-    <title>Demandas Express — Sincronização em Nuvem</title>
+    <meta name="description" content="Demandas Express - Gestão Integrada com Google Planilhas">
+    <title>Demandas Express — Google Planilhas</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap');
@@ -27,8 +27,6 @@
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
-            --shadow-glow: 0 0 25px rgba(245, 158, 11, 0.35);
-            --shadow-card: 0 12px 30px rgba(104, 13, 17, 0.08);
         }
 
         * {
@@ -427,8 +425,8 @@
 
     <header>
         <div class="logo">
-            <span class="brand-mark">⚡</span>
-            <span>DEMANDAS<span style="color: var(--yellow-bright)">EXPRESS</span></span>
+            <span class="brand-mark">📊</span>
+            <span>DEMANDAS<span style="color: var(--yellow-bright)">SHEETS</span></span>
         </div>
         <div class="user-controls">
             <span id="syncStatus" class="sync-badge sync-offline">A ligar...</span>
@@ -465,7 +463,6 @@
             <div class="admin-actions">
                 <button onclick="openTaskModal()" class="gold">+ Criar Demanda</button>
                 <button onclick="openUserModal()" class="secondary">+ Add Membro</button>
-                <button onclick="openCloudConfigModal()" class="secondary">⚙️ Código Nuvem</button>
                 <button onclick="openChangePinModal()" class="secondary">🔑 Alterar PIN</button>
             </div>
         </div>
@@ -489,20 +486,6 @@
             <div id="rankList" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
         </div>
     </main>
-
-    <!-- MODAL CONFIGURAR NUVEM (JSONBLOB) -->
-    <div id="modalCloud" class="modal-overlay">
-        <div class="modal-box">
-            <h3>🌐 Código de Sincronização em Nuvem</h3>
-            <p style="font-size:0.78rem; color:var(--text-muted)">Para conectar outros telemóveis à mesma lista, insira abaixo o mesmo Código de Sincronização:</p>
-            <div class="form-group">
-                <label>Código da Sua Nuvem (ID)</label>
-                <input type="text" id="cloudBlobId" placeholder="A gerar código automático...">
-            </div>
-            <button onclick="saveCloudConfig()" class="gold">Conectar a este Código</button>
-            <button onclick="closeModal('modalCloud')" class="secondary">Fechar</button>
-        </div>
-    </div>
 
     <!-- MODAL AUTH ADM -->
     <div id="modalAuth" class="modal-overlay">
@@ -544,7 +527,7 @@
                 </select>
             </div>
             <div class="form-group"><label>Prazo Limite</label><input type="datetime-local" id="taskDeadline"></div>
-            <button onclick="saveTask()" class="gold">Salvar na Nuvem</button>
+            <button onclick="saveTask()" class="gold">Salvar na Planilha</button>
             <button onclick="closeModal('modalTask')" class="secondary">Cancelar</button>
         </div>
     </div>
@@ -575,10 +558,9 @@
     </div>
 
     <script>
+        // URL da sua implantação do Google Apps Script
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbze7yLOHRoUWX6zJH5ChHsGEziSyO5GsI5fZVXJVDH5IMo9ktXnKKxzTuW4fEOP0IQj/exec";
         const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // PIN: 1234
-        const BLOB_BASE_URL = "https://jsonblob.com/api/jsonBlob";
-
-        let blobId = localStorage.getItem('express_blob_id') || '';
 
         let state = {
             users: [
@@ -599,78 +581,42 @@
             return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // CRIA OU BUSCA O BANCO DE DADOS NA NUVEM SEM PRECISAR DE API KEY CORTADA
-        async function initCloudStorage() {
-            if (!blobId) {
-                updateSyncBadge(true, 'A criar Nuvem...');
-                try {
-                    const res = await fetch(BLOB_BASE_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify({
-                            users: state.users,
-                            tasks: state.tasks,
-                            adminPinHash: state.adminPinHash
-                        })
-                    });
-                    
-                    const locationHeader = res.headers.get('Location');
-                    if (locationHeader) {
-                        blobId = locationHeader.split('/').pop();
-                        localStorage.setItem('express_blob_id', blobId);
-                        updateSyncBadge(true, 'Sincronizado');
-                    }
-                } catch (e) {
-                    updateSyncBadge(false, 'Erro Inicializar');
-                }
-            } else {
-                fetchCloudData();
-            }
-        }
-
-        async function fetchCloudData() {
-            if (!blobId) return;
-
+        async function fetchGoogleSheetsData() {
+            updateSyncBadge(true, 'A sincronizar...');
             try {
-                const res = await fetch(`${BLOB_BASE_URL}/${blobId}`, {
-                    headers: { 'Accept': 'application/json' }
-                });
+                const res = await fetch(GOOGLE_SCRIPT_URL);
                 if (res.ok) {
-                    const data = await res.json();
-                    state.users = data.users || state.users;
-                    state.tasks = data.tasks || state.tasks;
-                    if (data.adminPinHash) state.adminPinHash = data.adminPinHash;
-                    updateSyncBadge(true, 'Sincronizado');
-                    renderApp();
+                    const tasksFromSheet = await res.json();
+                    if (Array.isArray(tasksFromSheet)) {
+                        state.tasks = tasksFromSheet.filter(t => t.id && t.id !== '');
+                        updateSyncBadge(true, 'Google Sheets OK');
+                        renderApp();
+                    }
                 } else {
-                    updateSyncBadge(false, 'Código Inválido');
+                    updateSyncBadge(false, 'Erro na Planilha');
                 }
             } catch (e) {
+                console.error(e);
                 updateSyncBadge(false, 'Erro Conexão');
             }
         }
 
-        async function syncToCloud() {
-            if (!blobId) return;
-
+        async function syncToGoogleSheets() {
             updateSyncBadge(true, 'A Salvar...');
             try {
-                const res = await fetch(`${BLOB_BASE_URL}/${blobId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        users: state.users,
-                        tasks: state.tasks,
-                        adminPinHash: state.adminPinHash
+                        action: "CLEAR_AND_WRITE",
+                        tasks: state.tasks
                     })
                 });
-                if (res.ok) {
-                    updateSyncBadge(true, 'Sincronizado');
-                } else {
-                    updateSyncBadge(false, 'Erro ao Salvar');
-                }
+                updateSyncBadge(true, 'Google Sheets OK');
             } catch (e) {
-                updateSyncBadge(false, 'Erro Conexão');
+                console.error(e);
+                updateSyncBadge(false, 'Erro ao Salvar');
             }
         }
 
@@ -678,21 +624,6 @@
             const el = document.getElementById('syncStatus');
             el.innerText = text;
             el.className = `sync-badge ${online ? 'sync-online' : 'sync-offline'}`;
-        }
-
-        function openCloudConfigModal() {
-            document.getElementById('cloudBlobId').value = blobId;
-            openModal('modalCloud');
-        }
-
-        function saveCloudConfig() {
-            const inputVal = document.getElementById('cloudBlobId').value.trim();
-            if (inputVal) {
-                blobId = inputVal;
-                localStorage.setItem('express_blob_id', blobId);
-                closeModal('modalCloud');
-                fetchCloudData();
-            }
         }
 
         function renderApp() {
@@ -760,7 +691,7 @@
             });
 
             if (list.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px;">Nenhuma demanda encontrada.</div>`;
+                container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px;">Nenhuma demanda cadastrada.</div>`;
                 return;
             }
 
@@ -783,7 +714,7 @@
                         ${t.devolutiva ? `<div style="background:#fff8f0; padding:6px; font-size:0.75rem; border-left:3px solid var(--yellow-main)">💬 ${t.devolutiva}</div>` : ''}
                         <div class="task-actions">
                             ${canComplete ? `<button onclick="openCompleteModal('${t.id}')" class="gold">✅ Finalizar Tarefa</button>` : ''}
-                            ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑️ Apagar</button>` : ''}
+                            ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑️️ Apagar</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -818,11 +749,11 @@
             state.tasks.unshift({
                 id: 't_' + Date.now(),
                 assigneeId, desc, priority, xp: xpMap[priority],
-                deadline, status: 'PENDENTE'
+                deadline, status: 'PENDENTE', devolutiva: ''
             });
 
             closeModal('modalTask');
-            syncToCloud();
+            syncToGoogleSheets();
             renderApp();
         }
 
@@ -841,19 +772,19 @@
             task.status = 'CONCLUÍDO';
             task.devolutiva = comment;
             if (user) {
-                user.xp = (user.xp || 0) + task.xp;
+                user.xp = (user.xp || 0) + Number(task.xp);
                 user.streak = (user.streak || 0) + 1;
             }
 
             closeModal('modalComplete');
-            syncToCloud();
+            syncToGoogleSheets();
             renderApp();
         }
 
         function deleteTask(id) {
             if (!confirm('Remover esta demanda?')) return;
             state.tasks = state.tasks.filter(t => t.id !== id);
-            syncToCloud();
+            syncToGoogleSheets();
             renderApp();
         }
 
@@ -866,7 +797,6 @@
 
             state.users.push({ id: 'u_' + Date.now(), name, role, xp: 0, streak: 0 });
             closeModal('modalUser');
-            syncToCloud();
             renderApp();
         }
 
@@ -900,7 +830,6 @@
             state.adminPinHash = await hashString(newP);
             localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
             closeModal('modalChangePin');
-            syncToCloud();
             alert('PIN atualizado com sucesso!');
         }
 
@@ -921,10 +850,11 @@
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        setInterval(fetchCloudData, 4000);
+        // Sincroniza periodicamente a cada 5 segundos
+        setInterval(fetchGoogleSheetsData, 5000);
 
         window.onload = () => {
-            initCloudStorage();
+            fetchGoogleSheetsData();
             renderApp();
         };
     </script>
