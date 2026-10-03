@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#991b1b">
     <meta name="description" content="Demandas Express - Gestão Integrada Multidispositivo em Nuvem">
-    <title>Demandas Express — Edição Integrada em Nuvem</title>
+    <title>Demandas Express — Sincronização em Nuvem</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap');
@@ -15,22 +15,15 @@
             --red-dark: #680d11;
             --red-main: #b91c1c;
             --red-bright: #ef4444;
-            --red-light: #fef2f2;
-            
             --yellow-main: #f59e0b;
             --yellow-bright: #fbbf24;
-            --yellow-glow: #fef08a;
-            --yellow-soft: #fffbebf0;
             --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
-            
             --surface: #ffffff;
             --surface-card: #fffdf9;
-            --surface-dark: #3f0a0e;
             --text-dark: #1f0507;
             --text-muted: #78353a;
             --border: #fcd34d;
             --border-subtle: #fef3c7;
-            
             --radius-lg: 20px;
             --radius-md: 14px;
             --radius-sm: 8px;
@@ -81,7 +74,6 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
-            letter-spacing: -0.02em;
         }
 
         .brand-mark {
@@ -92,7 +84,6 @@
             color: #2a080c;
             background: var(--gold-gradient);
             border-radius: 12px;
-            box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
             font-size: 1.2rem;
             font-weight: 900;
         }
@@ -121,7 +112,6 @@
             background: var(--surface);
             color: var(--text-dark);
             outline: none;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         button {
@@ -135,20 +125,17 @@
             justify-content: center;
             gap: 0.4rem;
             min-height: 42px;
-            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
         }
 
         button.gold {
             background: var(--gold-gradient);
             color: #2a080c;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
         }
 
         button.secondary {
             background: rgba(255, 255, 255, 0.1);
             color: var(--yellow-bright);
             border: 1px solid rgba(251, 191, 36, 0.3);
-            box-shadow: none;
         }
 
         button.danger {
@@ -164,7 +151,6 @@
             margin: 0 auto;
             padding: 1rem 1rem max(3rem, env(safe-area-inset-bottom));
             background: linear-gradient(180deg, #fffcf5 0%, #fef3c7 100%);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
             min-height: calc(100vh - 60px);
         }
 
@@ -174,9 +160,6 @@
             border-radius: var(--radius-lg);
             padding: 1.25rem;
             color: white;
-            box-shadow: var(--shadow-glow), var(--shadow-card);
-            position: relative;
-            overflow: hidden;
             margin-bottom: 1.2rem;
         }
 
@@ -379,7 +362,6 @@
         }
 
         .tag.prio { background: #fef3c7; color: #92400e; }
-        .tag.done { background: #d1fae5; color: #065f46; }
 
         .task-desc {
             font-size: 0.92rem;
@@ -449,7 +431,7 @@
             <span>DEMANDAS<span style="color: var(--yellow-bright)">EXPRESS</span></span>
         </div>
         <div class="user-controls">
-            <span id="syncStatus" class="sync-badge sync-offline">Conectando...</span>
+            <span id="syncStatus" class="sync-badge sync-offline">A ligar...</span>
             <select id="userSelect" onchange="switchUser(this.value)"></select>
             <button id="adminBtn" onclick="openAdminAuthModal()" class="secondary">
                 <span>🔐 PIN</span>
@@ -483,7 +465,7 @@
             <div class="admin-actions">
                 <button onclick="openTaskModal()" class="gold">+ Criar Demanda</button>
                 <button onclick="openUserModal()" class="secondary">+ Add Membro</button>
-                <button onclick="openCloudConfigModal()" class="secondary">⚙️ Chaves Nuvem</button>
+                <button onclick="openCloudConfigModal()" class="secondary">⚙️ Código Nuvem</button>
                 <button onclick="openChangePinModal()" class="secondary">🔑 Alterar PIN</button>
             </div>
         </div>
@@ -508,20 +490,16 @@
         </div>
     </main>
 
-    <!-- MODAL CONFIGURAR NUVEM (JSONBIN) -->
+    <!-- MODAL CONFIGURAR NUVEM (JSONBLOB) -->
     <div id="modalCloud" class="modal-overlay">
         <div class="modal-box">
-            <h3>🌐 Integrar Banco de Dados em Nuvem</h3>
-            <p style="font-size:0.78rem; color:var(--text-muted)">Sincronização em tempo real via JSONBin.io:</p>
+            <h3>🌐 Código de Sincronização em Nuvem</h3>
+            <p style="font-size:0.78rem; color:var(--text-muted)">Para conectar outros telemóveis à mesma lista, insira abaixo o mesmo Código de Sincronização:</p>
             <div class="form-group">
-                <label>Master Key (X-Master-Key)</label>
-                <input type="text" id="cloudMasterKey" readonly style="background:#f3f4f6; color:#6b7280; font-size:0.75rem;">
+                <label>Código da Sua Nuvem (ID)</label>
+                <input type="text" id="cloudBlobId" placeholder="A gerar código automático...">
             </div>
-            <div class="form-group">
-                <label>Bin ID</label>
-                <input type="text" id="cloudBinId" placeholder="Cole o Bin ID aqui">
-            </div>
-            <button onclick="saveCloudConfig()" class="gold">Salvar e Sincronizar Tudo</button>
+            <button onclick="saveCloudConfig()" class="gold">Conectar a este Código</button>
             <button onclick="closeModal('modalCloud')" class="secondary">Fechar</button>
         </div>
     </div>
@@ -553,8 +531,7 @@
     <!-- MODAL TAREFA -->
     <div id="modalTask" class="modal-overlay">
         <div class="modal-box">
-            <h3 id="modalTaskTitle">🚀 Criar Demanda</h3>
-            <input type="hidden" id="taskIdEdit">
+            <h3>🚀 Criar Demanda</h3>
             <div class="form-group"><label>Atribuir a</label><select id="taskAssignee"></select></div>
             <div class="form-group"><label>Descrição</label><textarea id="taskDesc" rows="3"></textarea></div>
             <div class="form-group">
@@ -598,14 +575,10 @@
     </div>
 
     <script>
-        const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // PIN padrão: 1234
-        const HARDCODED_MASTER_KEY = "$2a$10$.3YPOy3ggh2Gtp6tcxz6lesIbatq8BUDOMQ0uDUalcx.7hJkBLi1";
-        const DEFAULT_BIN_ID = "6ac115b2ffd5d160534967b8";
+        const INITIAL_PIN_HASH = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // PIN: 1234
+        const BLOB_BASE_URL = "https://jsonblob.com/api/jsonBlob";
 
-        let config = {
-            masterKey: HARDCODED_MASTER_KEY,
-            binId: localStorage.getItem('express_bin_id') || DEFAULT_BIN_ID
-        };
+        let blobId = localStorage.getItem('express_blob_id') || '';
 
         let state = {
             users: [
@@ -626,47 +599,65 @@
             return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        async function fetchCloudData() {
-            if (!config.binId) {
-                updateSyncBadge(false, 'Informe o Bin ID');
-                return;
+        // CRIA OU BUSCA O BANCO DE DADOS NA NUVEM SEM PRECISAR DE API KEY CORTADA
+        async function initCloudStorage() {
+            if (!blobId) {
+                updateSyncBadge(true, 'A criar Nuvem...');
+                try {
+                    const res = await fetch(BLOB_BASE_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify({
+                            users: state.users,
+                            tasks: state.tasks,
+                            adminPinHash: state.adminPinHash
+                        })
+                    });
+                    
+                    const locationHeader = res.headers.get('Location');
+                    if (locationHeader) {
+                        blobId = locationHeader.split('/').pop();
+                        localStorage.setItem('express_blob_id', blobId);
+                        updateSyncBadge(true, 'Sincronizado');
+                    }
+                } catch (e) {
+                    updateSyncBadge(false, 'Erro Inicializar');
+                }
+            } else {
+                fetchCloudData();
             }
+        }
+
+        async function fetchCloudData() {
+            if (!blobId) return;
 
             try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}/latest`, {
-                    headers: { 'X-Master-Key': config.masterKey }
+                const res = await fetch(`${BLOB_BASE_URL}/${blobId}`, {
+                    headers: { 'Accept': 'application/json' }
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.record) {
-                        state.users = data.record.users || state.users;
-                        state.tasks = data.record.tasks || state.tasks;
-                        if (data.record.adminPinHash) state.adminPinHash = data.record.adminPinHash;
-                        updateSyncBadge(true, 'Sincronizado');
-                        renderApp();
-                    }
+                    state.users = data.users || state.users;
+                    state.tasks = data.tasks || state.tasks;
+                    if (data.adminPinHash) state.adminPinHash = data.adminPinHash;
+                    updateSyncBadge(true, 'Sincronizado');
+                    renderApp();
                 } else {
-                    updateSyncBadge(false, 'Bin ID Inválido');
+                    updateSyncBadge(false, 'Código Inválido');
                 }
             } catch (e) {
-                updateSyncBadge(false, 'Sem Conexão');
+                updateSyncBadge(false, 'Erro Conexão');
             }
         }
 
         async function syncToCloud() {
-            if (!config.binId) {
-                openCloudConfigModal();
-                return;
-            }
+            if (!blobId) return;
 
-            updateSyncBadge(true, 'Salvando...');
+            updateSyncBadge(true, 'A Salvar...');
             try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${config.binId}`, {
+                const res = await fetch(`${BLOB_BASE_URL}/${blobId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': config.masterKey
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({
                         users: state.users,
                         tasks: state.tasks,
@@ -676,11 +667,10 @@
                 if (res.ok) {
                     updateSyncBadge(true, 'Sincronizado');
                 } else {
-                    alert('Erro ao salvar na nuvem. Verifique o seu Bin ID.');
                     updateSyncBadge(false, 'Erro ao Salvar');
                 }
             } catch (e) {
-                updateSyncBadge(false, 'Erro de Rede');
+                updateSyncBadge(false, 'Erro Conexão');
             }
         }
 
@@ -691,16 +681,18 @@
         }
 
         function openCloudConfigModal() {
-            document.getElementById('cloudMasterKey').value = config.masterKey;
-            document.getElementById('cloudBinId').value = config.binId;
+            document.getElementById('cloudBlobId').value = blobId;
             openModal('modalCloud');
         }
 
         function saveCloudConfig() {
-            config.binId = document.getElementById('cloudBinId').value.trim();
-            localStorage.setItem('express_bin_id', config.binId);
-            closeModal('modalCloud');
-            fetchCloudData();
+            const inputVal = document.getElementById('cloudBlobId').value.trim();
+            if (inputVal) {
+                blobId = inputVal;
+                localStorage.setItem('express_blob_id', blobId);
+                closeModal('modalCloud');
+                fetchCloudData();
+            }
         }
 
         function renderApp() {
@@ -819,7 +811,7 @@
             const priority = document.getElementById('taskPriority').value;
             const deadline = document.getElementById('taskDeadline').value;
 
-            if (!desc || !deadline) return alert('Preencha os campos obrigatórios.');
+            if (!desc || !deadline) return alert('Preencha todos os campos.');
 
             const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
 
@@ -929,16 +921,10 @@
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        // AUTO REFRESH A CADA 5 SEGUNDOS
-        setInterval(fetchCloudData, 5000);
+        setInterval(fetchCloudData, 4000);
 
         window.onload = () => {
-            // Garante que se o localStorage estiver limpo ou com valor inválido antigo, assume o novo ID
-            if (!localStorage.getItem('express_bin_id') || localStorage.getItem('express_bin_id') === '6ac11432ac6210605a0fbe9f') {
-                localStorage.setItem('express_bin_id', DEFAULT_BIN_ID);
-                config.binId = DEFAULT_BIN_ID;
-            }
-            fetchCloudData();
+            initCloudStorage();
             renderApp();
         };
     </script>
