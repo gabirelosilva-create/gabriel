@@ -2,310 +2,114 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#9f1d20">
-    <title>Demandas Express — Sistema Completo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>App Gamificado de Demandas</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
-        
         :root {
-            --primary: #b3262b;
-            --primary-hover: #8f171c;
-            --ink: #451416;
-            --bg: #fff8e7;
-            --surface: #fffdf7;
-            --text: #3f2521;
-            --text-muted: #80645d;
-            --border: #ead5b0;
-            --success: #2f7a3b;
-            --warning: #bd5d16;
-            --danger: #a9161d;
-            --yellow: #f3bd32;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e5e7eb;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: "DM Sans", sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #a3262b 0%, #5e0f13 100%);
-            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            display: flex;
-            flex-direction: column;
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding-bottom: 70px; /* Espaço para o bottom nav */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100%;
-            overflow: hidden;
-        }
-
+        /* --- Cabeçalho --- */
         header {
-            background: rgba(255,248,231,.95);
-            border-bottom: 2px solid var(--border);
-            padding: max(0.8rem, env(safe-area-inset-top)) 1rem 0.8rem;
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,.1);
-            z-index: 100;
         }
 
-        .logo {
-            font-family: "Manrope", sans-serif;
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--ink);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .user-badge {
-            background: var(--primary);
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 1rem;
-            padding-bottom: max(1rem, env(safe-area-inset-bottom));
-        }
-
-        .bottom-nav {
-            display: flex;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
-            background: rgba(255,248,231,.95);
-            border-top: 2px solid var(--border);
-            flex-shrink: 0;
-            overflow-x: auto;
-        }
-
-        .nav-btn {
-            flex: 0 0 auto;
-            padding: 0.6rem 0.8rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: white;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .nav-btn:active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.6);
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            padding: 1rem;
-        }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 16px 16px 0 0;
-            padding: 1.5rem;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 -20px 60px rgba(0,0,0,.3);
-        }
-
-        .modal-content h2 {
-            font-family: "Manrope", sans-serif;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: var(--text);
+        .user-info-header {
             font-size: 0.85rem;
+            font-weight: normal;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
         }
 
-        input, textarea, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            background: white;
-            color: var(--text);
-        }
-
-        button {
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            border: none;
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-
-        button:active {
-            transform: scale(0.98);
-            background: var(--primary-hover);
-        }
-
-        button.secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .form-actions button {
-            flex: 1;
-        }
-
-        .login-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #a3262b 0%, #5e0f13 100%);
+        /* --- Layout Principal --- */
+        #mainContent {
             padding: 1rem;
-            gap: 1.5rem;
+            max-width: 600px; /* Mantém o visual mobile mesmo no PC */
+            margin: 0 auto;
         }
 
-        .login-header {
-            text-align: center;
-            color: white;
-        }
-
-        .login-header h1 {
-            font-family: "Manrope";
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-users {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .user-btn {
-            background: white;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .user-btn:active {
-            transform: scale(0.98);
-            border-color: var(--primary);
-            background: var(--yellow-soft);
-        }
-
-        .user-btn-emoji {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .user-btn-name {
-            font-weight: 600;
-            color: var(--ink);
-        }
-
-        .admin-pin-input {
-            width: 100%;
-            max-width: 400px;
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr; /* Modo Retrato = 1 coluna */
             gap: 1rem;
         }
 
+        /* --- Cards --- */
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 12px;
-            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,.05);
-            transition: transform 0.2s;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
         }
 
-        .card:active {
-            transform: translateY(-2px);
+        .card-header {
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-weight: bold;
         }
 
         .card-image {
             width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            height: 150px;
+            background: #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
             overflow: hidden;
-            position: relative;
+            font-size: 3rem;
         }
 
         .card-image img {
@@ -320,289 +124,199 @@
         }
 
         .card-title {
-            font-family: "Manrope", sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
+            font-weight: bold;
             margin-bottom: 0.5rem;
-            color: var(--ink);
-        }
-
-        .card-meta {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
+            color: var(--text-main);
         }
 
         .card-desc {
-            font-size: 0.85rem;
-            color: var(--text);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
             line-height: 1.4;
-            margin-bottom: 0.8rem;
-        }
-
-        .badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-bottom: 1rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.3rem 0.7rem;
-            border-radius: 16px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .badge-pending {
-            background: var(--yellow);
-            color: #7c430b;
-        }
-
-        .badge-review {
-            background: var(--warning);
-            color: white;
-        }
-
-        .badge-done {
-            background: var(--success);
-            color: white;
-        }
-
-        .badge-priority {
-            background: #f0f0f0;
-            color: var(--text);
         }
 
         .card-actions {
+            margin-top: 1rem;
             display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap;
         }
 
-        .card-actions button {
+        button {
             flex: 1;
-            min-width: 100px;
-            font-size: 0.8rem;
-            padding: 0.6rem;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        .stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
+        button:active { opacity: 0.8; }
+        button.btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
 
-        .stat-box {
-            background: white;
+        /* --- Badges & Status --- */
+        .badge {
+            padding: 4px 8px;
             border-radius: 12px;
-            border: 1px solid var(--border);
-            padding: 1.2rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,.05);
-        }
-
-        .stat-box .num {
-            font-family: "Manrope", sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        .stat-box .label {
             font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-top: 0.5rem;
+            color: white;
+        }
+        .badge.pendente { background: var(--text-muted); }
+        .badge.aguardando { background: var(--warning); }
+        .badge.concluido { background: var(--success); }
+        .badge.rejeitado { background: var(--danger); }
+
+        .xp-tag {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 0.9rem;
         }
 
-        .ranking-list {
-            list-style: none;
-        }
-
+        /* --- Ranking --- */
         .ranking-item {
+            display: flex;
+            align-items: center;
             background: white;
-            border-radius: 10px;
-            border-left: 4px solid var(--yellow);
             padding: 1rem;
-            margin-bottom: 0.8rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,.05);
-        }
-
-        .ranking-item.top1 {
-            border-left-color: #ffd700;
-            background: linear-gradient(to right, #fffaf0, white);
-        }
-
-        .ranking-item.top2 {
-            border-left-color: #c0c0c0;
-        }
-
-        .ranking-item.top3 {
-            border-left-color: #cd7f32;
-        }
-
-        .ranking-pos {
-            font-family: "Manrope", sans-serif;
-            font-weight: 800;
-            font-size: 1.1rem;
-            min-width: 30px;
-        }
-
-        .ranking-name {
-            flex: 1;
-            margin: 0 0.8rem;
-        }
-
-        .ranking-info {
-            text-align: right;
-        }
-
-        .ranking-xp {
-            font-family: "Manrope", sans-serif;
-            font-weight: 800;
-            font-size: 1rem;
-            color: var(--primary);
-        }
-
-        .ranking-level {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .level-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--yellow);
-            color: var(--ink);
-            font-family: "Manrope", sans-serif;
-            font-weight: 800;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.95);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            padding: 1rem;
-        }
-
-        .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox img {
-            max-width: 100%;
-            max-height: 90vh;
             border-radius: 12px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .ranking-pos { font-size: 1.5rem; font-weight: bold; margin-right: 1rem; width: 30px; text-align: center; }
+        .ranking-info { flex: 1; }
+        .ranking-name { font-weight: bold; font-size: 1.1rem; }
+        .ranking-xp { color: var(--primary); font-weight: bold; font-size: 1.2rem; }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 10;
         }
 
-        .section-title {
-            font-family: "Manrope", sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--ink);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 2rem 1rem;
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             color: var(--text-muted);
+            font-size: 0.75rem;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex: 1;
         }
 
-        @media (max-width: 480px) {
-            header {
-                padding: max(0.6rem, env(safe-area-inset-top)) 0.8rem 0.6rem;
-            }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        .nav-icon { font-size: 1.5rem; margin-bottom: 2px; }
 
-            .logo {
-                font-size: 0.9rem;
-            }
+        /* --- Modais --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal.active { display: flex; }
 
-            .content {
-                padding: 0.8rem;
-                padding-bottom: max(0.8rem, env(safe-area-inset-bottom));
-            }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
 
-            .card-image {
-                height: 180px;
-            }
+        .modal-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 0.5rem; color: var(--text-muted); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem;
+        }
+        
+        .empty-state { text-align: center; padding: 2rem; color: var(--text-muted); font-style: italic; }
+
+        /* Lightbox */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; align-items: center; justify-content: center; }
+        #lightbox.active { display: flex; }
+        #lightbox img { max-width: 95%; max-height: 95%; border-radius: 8px; }
+        #lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; }
+        
+        /* Floating Action Button (FAB) */
+        .fab {
+            position: fixed; bottom: 80px; right: 20px;
+            width: 56px; height: 56px; border-radius: 50%;
+            background: var(--primary); color: white;
+            font-size: 2rem; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
+            cursor: pointer; z-index: 5;
         }
     </style>
 </head>
 <body>
-    <div id="app" class="app-container hidden">
-        <header>
-            <div class="logo">
-                <span>⚡</span>
-                <span>Demandas</span>
-            </div>
-            <div class="user-badge" id="userBadge">Usuário</div>
-        </header>
 
-        <div class="content" id="mainContent">
-            <!-- Conteúdo dinâmico -->
+    <header>
+        <div id="headerTitle">App Demandas</div>
+        <div id="headerUserInfo" class="user-info-header" style="display: none;"></div>
+    </header>
+
+    <div id="mainContent">
+        <!-- O conteúdo será renderizado aqui dinamicamente pelo JS -->
+    </div>
+
+    <!-- Navegação Inferior (Bottom Nav) -->
+    <div id="bottomNav" class="bottom-nav" style="display: none;">
+        <div class="nav-item" id="nav-demandas" onclick="showView(isAdmin ? 'todas-demandas' : 'minhas-demandas')">
+            <span class="nav-icon">📋</span>
+            <span>Demandas</span>
         </div>
-
-        <div class="bottom-nav" id="bottomNav">
-            <!-- Botões de navegação -->
+        <div class="nav-item" id="nav-admin" onclick="showView('admin')" style="display: none;">
+            <span class="nav-icon">🛡️</span>
+            <span>Aprovar</span>
+        </div>
+        <div class="nav-item" id="nav-ranking" onclick="showView('ranking')">
+            <span class="nav-icon">🏆</span>
+            <span>Ranking</span>
+        </div>
+        <div class="nav-item" onclick="logout()">
+            <span class="nav-icon">🚪</span>
+            <span>Sair</span>
         </div>
     </div>
 
-    <div id="loginScreen" class="login-screen">
-        <div class="login-header">
-            <h1>⚡ Demandas Express</h1>
-            <p style="color: #f7d9d2; font-size: 0.9rem;">Sistema de Demandas e XP</p>
-        </div>
-        <div class="login-users" id="userList"></div>
-        <button onclick="showAdminLogin()" class="secondary" style="max-width: 400px; width: 100%;">🔐 Acesso ADM</button>
-    </div>
+    <!-- Botão Flutuante (Apenas Admin) -->
+    <div id="fabAdd" class="fab" onclick="openModal('criarDemandaModal')" style="display: none;">+</div>
 
-    <!-- Modal Admin Login -->
-    <div id="adminLoginModal" class="modal">
-        <div class="modal-content">
-            <h2>Acesso Administrador</h2>
-            <div class="form-group">
-                <label>Senha PIN</label>
-                <input type="password" id="adminPin" placeholder="Digite a senha">
-            </div>
-            <div class="form-actions">
-                <button onclick="closeModal('adminLoginModal')" class="secondary">Voltar</button>
-                <button onclick="loginAdmin()">Entrar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Criar Demanda -->
+    <!-- Modais -->
+    <!-- Modal Criar Demanda (Admin) -->
     <div id="criarDemandaModal" class="modal">
         <div class="modal-content">
-            <h2>Criar Nova Demanda</h2>
+            <div class="modal-title">Nova Demanda</div>
             <div class="form-group">
-                <label>Atribuído para</label>
+                <label>Atribuir para:</label>
                 <select id="demandaAssignedTo"></select>
             </div>
             <div class="form-group">
-                <label>Descrição</label>
-                <textarea id="demandaDesc" rows="4" placeholder="Descreva a demanda..."></textarea>
+                <label>Descrição:</label>
+                <textarea id="demandaDesc" rows="3" placeholder="O que precisa ser feito?"></textarea>
             </div>
             <div class="form-group">
-                <label>Prioridade</label>
+                <label>Prioridade (XP Base):</label>
                 <select id="demandaPriority">
                     <option value="BAIXA">Baixa (60 XP)</option>
                     <option value="NORMAL" selected>Normal (100 XP)</option>
@@ -611,288 +325,280 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Foto da Instrução</label>
+                <label>Foto de Referência (Opcional):</label>
                 <input type="file" id="demandaPhoto" accept="image/*">
             </div>
-            <div class="form-actions">
-                <button onclick="closeModal('criarDemandaModal')" class="secondary">Cancelar</button>
+            <div class="card-actions">
+                <button class="btn-outline" onclick="closeModal('criarDemandaModal')">Cancelar</button>
                 <button onclick="saveDemanda()">Criar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Entregar -->
+    <!-- Modal Entregar Tarefa (Usuário) -->
     <div id="entregarModal" class="modal">
         <div class="modal-content">
-            <h2>Enviar Resultado</h2>
+            <div class="modal-title">Entregar Demanda</div>
+            <input type="hidden" id="entregarTaskId">
             <div class="form-group">
-                <label>Demanda</label>
-                <select id="entregarTaskId"></select>
+                <label>Foto da Conclusão (Obrigatório):</label>
+                <input type="file" id="entregarPhoto" accept="image/*" capture="environment">
             </div>
             <div class="form-group">
-                <label>Notas</label>
-                <textarea id="entregarNotas" rows="3" placeholder="Descreva o que foi feito..."></textarea>
+                <label>Observações:</label>
+                <textarea id="entregarNotas" rows="2" placeholder="Algo a adicionar?"></textarea>
             </div>
-            <div class="form-group">
-                <label>Foto do Resultado</label>
-                <input type="file" id="entregarPhoto" accept="image/*">
-            </div>
-            <div class="form-actions">
-                <button onclick="closeModal('entregarModal')" class="secondary">Cancelar</button>
-                <button onclick="submitEntrega()">Entregar</button>
+            <div class="card-actions">
+                <button class="btn-outline" onclick="closeModal('entregarModal')">Cancelar</button>
+                <button onclick="submitEntrega()">Enviar para Aprovação</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Aprovação -->
+    <!-- Modal Aprovar Entrega (Admin) -->
     <div id="aprovaModal" class="modal">
         <div class="modal-content">
-            <h2>Aprovar Entrega</h2>
+            <div class="modal-title">Avaliar Entrega</div>
             <div id="aprovaContent"></div>
             <div class="form-group">
-                <label>Observação</label>
-                <textarea id="aprovaObs" rows="2" placeholder="Deixe um comentário..."></textarea>
+                <label>Feedback (Opcional):</label>
+                <textarea id="aprovaObs" rows="2" placeholder="Ex: Faltou limpar o canto..."></textarea>
             </div>
-            <div class="form-actions">
-                <button onclick="rejectEntrega()" class="secondary">Rejeitar</button>
-                <button onclick="approveEntrega()" style="background: var(--success);">Aprovar</button>
+            <div class="card-actions">
+                <button style="background: var(--danger);" onclick="rejectEntrega()">Rejeitar</button>
+                <button style="background: var(--success);" onclick="approveEntrega()">Aprovar & Dar XP</button>
             </div>
+            <button class="btn-outline" style="width: 100%; margin-top: 0.5rem;" onclick="closeModal('aprovaModal')">Fechar</button>
         </div>
     </div>
 
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <!-- Lightbox para Imagens -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <span id="lightbox-close">&times;</span>
         <img id="lightboxImg" src="">
     </div>
 
     <script>
-        const ADMIN_PIN = "1234";
-        const API_URL = "https://gabriel-backend.herokuapp.com/api"; // Será atualizado após deploy
-
-        let currentUser = null;
-        let isAdmin = false;
+        // --- Estrutura de Dados e Mock ---
         let users = [];
         let tasks = [];
         let deliveries = [];
-        let currentView = 'minhas-demandas';
+        let currentUser = null;
+        let isAdmin = false;
         let selectedDeliveryId = null;
 
-        // Dados locais como fallback
-        const LOCAL_DB = {
-            load() {
-                const stored = localStorage.getItem('demandas-db');
-                if (stored) {
-                    try {
-                        return JSON.parse(stored);
-                    } catch (e) {
-                        return this.defaults();
-                    }
-                }
-                return this.defaults();
-            },
-            defaults() {
-                return {
-                    users: [
-                        { id: '1', name: 'Gabriel', active: true },
-                        { id: '2', name: 'Maria', active: true },
-                        { id: '3', name: 'João', active: true }
-                    ],
-                    tasks: [],
-                    deliveries: []
-                };
-            },
-            save(data) {
-                localStorage.setItem('demandas-db', JSON.stringify(data));
-            }
-        };
+        const XP_MAP = { 'BAIXA': 60, 'NORMAL': 100, 'ALTA': 140, 'URGENTE': 200 };
 
-        async function init() {
-            // Tentar carregar do backend, fallback para local
-            try {
-                const response = await fetch(`${API_URL}/data`);
-                if (response.ok) {
-                    const data = await response.json();
-                    users = data.users || [];
-                    tasks = data.tasks || [];
-                    deliveries = data.deliveries || [];
-                } else {
-                    loadLocalData();
-                }
-            } catch (e) {
-                console.log('Usando dados locais');
-                loadLocalData();
+        function init() {
+            // Carregar dados locais
+            const localUsers = localStorage.getItem('appUsers');
+            const localTasks = localStorage.getItem('appTasks');
+            const localDeliveries = localStorage.getItem('appDeliveries');
+
+            if (localUsers) users = JSON.parse(localUsers);
+            if (localTasks) tasks = JSON.parse(localTasks);
+            if (localDeliveries) deliveries = JSON.parse(localDeliveries);
+
+            // Popula dados mockados na primeira vez (apenas para funcionar standalone)
+            if (users.length === 0) {
+                users = [
+                    { id: 'u1', name: 'Gestor (Admin)', role: 'ADMIN' },
+                    { id: 'u2', name: 'João Silva', role: 'USER' },
+                    { id: 'u3', name: 'Maria Souza', role: 'USER' }
+                ];
+                tasks = [
+                    { id: 't1', description: 'Limpar e organizar a recepção principal', priority: 'NORMAL', assignedTo: 'u2', createdBy: 'u1', status: 'PENDENTE', photo: null, createdAt: new Date().toISOString() },
+                    { id: 't2', description: 'Manutenção no ar condicionado da sala 3', priority: 'ALTA', assignedTo: 'u3', createdBy: 'u1', status: 'PENDENTE', photo: null, createdAt: new Date().toISOString() }
+                ];
+                saveLocalData();
             }
 
-            if (currentUser) {
-                showApp();
-            } else {
-                showLogin();
-            }
-        }
+            // Atualiza select de usuários no modal de criação
+            const select = document.getElementById('demandaAssignedTo');
+            select.innerHTML = users.filter(u => u.role !== 'ADMIN')
+                                    .map(u => `<option value="${u.id}">${u.name}</option>`).join('');
 
-        function loadLocalData() {
-            const data = LOCAL_DB.load();
-            users = data.users;
-            tasks = data.tasks;
-            deliveries = data.deliveries;
+            renderLogin();
         }
 
         function saveLocalData() {
-            LOCAL_DB.save({ users, tasks, deliveries });
+            localStorage.setItem('appUsers', JSON.stringify(users));
+            localStorage.setItem('appTasks', JSON.stringify(tasks));
+            localStorage.setItem('appDeliveries', JSON.stringify(deliveries));
         }
 
-        function showLogin() {
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('app').classList.add('hidden');
-            renderLoginUsers();
-        }
-
-        function showApp() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('app').classList.remove('hidden');
-            updateUI();
-            renderNav();
-            showView('minhas-demandas');
-        }
-
-        function renderLoginUsers() {
-            const html = users.map(u => `
-                <div class="user-btn" onclick="loginUser('${u.id}')">
-                    <div class="user-btn-emoji">👤</div>
-                    <div class="user-btn-name">${u.name}</div>
-                </div>
-            `).join('');
-            document.getElementById('userList').innerHTML = html;
-        }
-
-        function loginUser(userId) {
+        // --- Navegação e Views ---
+        function login(userId) {
             currentUser = users.find(u => u.id === userId);
-            isAdmin = false;
-            showApp();
-        }
+            isAdmin = currentUser.role === 'ADMIN';
+            
+            document.getElementById('headerUserInfo').innerText = currentUser.name;
+            document.getElementById('headerUserInfo').style.display = 'block';
+            document.getElementById('bottomNav').style.display = 'flex';
+            
+            document.getElementById('nav-admin').style.display = isAdmin ? 'flex' : 'none';
+            document.getElementById('fabAdd').style.display = isAdmin ? 'flex' : 'none';
 
-        function showAdminLogin() {
-            openModal('adminLoginModal');
-        }
-
-        function loginAdmin() {
-            const pin = document.getElementById('adminPin').value;
-            if (pin === ADMIN_PIN) {
-                isAdmin = true;
-                currentUser = { id: 'admin', name: 'Administrador' };
-                closeModal('adminLoginModal');
-                showApp();
-            } else {
-                alert('PIN incorreto!');
-            }
+            showView(isAdmin ? 'todas-demandas' : 'minhas-demandas');
         }
 
         function logout() {
             currentUser = null;
             isAdmin = false;
-            showLogin();
-        }
-
-        function updateUI() {
-            document.getElementById('userBadge').textContent = currentUser.name;
-        }
-
-        function renderNav() {
-            const buttons = isAdmin ? [
-                { view: 'admin', label: '⚙️ ADM' },
-                { view: 'todas-demandas', label: '📊 Demandas' },
-                { view: 'ranking', label: '🏆 Ranking' },
-                { view: 'sair', label: '🚪 Sair' }
-            ] : [
-                { view: 'minhas-demandas', label: '📋 Minhas' },
-                { view: 'criar-demanda', label: '➕ Criar' },
-                { view: 'entregar', label: '✅ Entregar' },
-                { view: 'ranking', label: '🏆 Ranking' },
-                { view: 'sair', label: '🚪 Sair' }
-            ];
-
-            const html = buttons.map(b => `
-                <button class="nav-btn" onclick="handleNav('${b.view}')">${b.label}</button>
-            `).join('');
-            document.getElementById('bottomNav').innerHTML = html;
-        }
-
-        function handleNav(view) {
-            if (view === 'sair') {
-                logout();
-                showLogin();
-            } else {
-                showView(view);
-            }
+            document.getElementById('headerUserInfo').style.display = 'none';
+            document.getElementById('bottomNav').style.display = 'none';
+            document.getElementById('fabAdd').style.display = 'none';
+            renderLogin();
         }
 
         function showView(view) {
-            currentView = view;
+            // Atualizar UI da bottom nav
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(view === 'todas-demandas' || view === 'minhas-demandas') document.getElementById('nav-demandas').classList.add('active');
+            if(view === 'admin') document.getElementById('nav-admin').classList.add('active');
+            if(view === 'ranking') document.getElementById('nav-ranking').classList.add('active');
 
-            switch(view) {
-                case 'minhas-demandas':
-                    renderMinhasDemandas();
-                    break;
-                case 'criar-demanda':
-                    renderCriarDemanda();
-                    break;
-                case 'todas-demandas':
-                    renderTodasDemandas();
-                    break;
-                case 'ranking':
-                    renderRanking();
-                    break;
-                case 'entregar':
-                    renderEntregar();
-                    break;
-                case 'admin':
-                    renderAdmin();
-                    break;
-            }
+            const container = document.getElementById('mainContent');
+            container.innerHTML = ''; // Limpa a tela
+
+            if (view === 'minhas-demandas') renderMinhasDemandas();
+            else if (view === 'todas-demandas') renderTodasDemandas();
+            else if (view === 'admin') renderAdmin();
+            else if (view === 'ranking') renderRanking();
         }
 
-        function renderMinhasDemandas() {
-            document.getElementById('pageTitle') ? null : null;
-            const minhas = tasks.filter(t => t.assignedTo === currentUser.id);
-            const pendentes = minhas.filter(t => t.status === 'PENDENTE').length;
-            const html = `
-                <div class="section-title">📋 Minhas Demandas</div>
-                <div class="stat-grid">
-                    <div class="stat-box">
-                        <div class="num">${pendentes}</div>
-                        <div class="label">Pendentes</div>
+        // --- Renderização de Telas ---
+        function renderLogin() {
+            let html = `
+                <div style="text-align:center; padding-top: 3rem;">
+                    <h2 style="margin-bottom: 1rem; color: var(--primary);">Bem-vindo!</h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-muted);">Selecione um usuário para testar o sistema.</p>
+                    <div class="grid">
+                        ${users.map(u => `
+                            <button onclick="login('${u.id}')" style="background: ${u.role === 'ADMIN' ? 'var(--text-main)' : 'var(--primary)'}; font-size: 1.1rem; padding: 1rem;">
+                                Entrar como ${u.name}${u.role === 'ADMIN' ? '🛡️' : '👤'}
+                            </button>
+                        `).join('')}
                     </div>
-                    <div class="stat-box">
-                        <div class="num">${minhas.filter(t => t.status === 'CONCLUÍDO').length}</div>
-                        <div class="label">Concluídas</div>
-                    </div>
-                </div>
-                <div class="grid">
-                    ${minhas.length > 0 ? minhas.map(task => renderTaskCard(task)).join('') : '<div class="empty-state">Nenhuma demanda atribuída</div>'}
                 </div>
             `;
             document.getElementById('mainContent').innerHTML = html;
         }
 
-        function renderTaskCard(task) {
-            const creator = users.find(u => u.id === task.createdBy);
-            const statusBadge = task.status === 'PENDENTE' ? 'badge-pending' : task.status === 'AGUARDANDO_APROVACAO' ? 'badge-review' : 'badge-done';
-            const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 140, URGENTE: 200 };
+        function renderMinhasDemandas() {
+            const minhasTasks = tasks.filter(t => t.assignedTo === currentUser.id);
+            const pendentes = minhasTasks.filter(t => t.status === 'PENDENTE' || t.status === 'REJEITADO');
+            const outras = minhasTasks.filter(t => t.status !== 'PENDENTE' && t.status !== 'REJEITADO');
+
+            let html = `<div class="section-title">Minhas Demandas Pendentes</div><div class="grid">`;
+            
+            if (pendentes.length > 0) {
+                html += pendentes.map(t => renderTaskCard(t, true)).join('');
+            } else {
+                html += `<div class="empty-state">Nenhuma demanda pendente! 🎉</div>`;
+            }
+
+            if (outras.length > 0) {
+                html += `</div><div class="section-title" style="margin-top: 2rem;">Aguardando / Concluídas</div><div class="grid">`;
+                html += outras.map(t => renderTaskCard(t, true)).join('');
+            }
+
+            html += `</div>`;
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        function renderTodasDemandas() {
+            let html = `<div class="section-title">Todas as Demandas (Visão Geral)</div><div class="grid">`;
+            if (tasks.length > 0) {
+                html += tasks.map(t => renderTaskCard(t, false)).join('');
+            } else {
+                html += `<div class="empty-state">Nenhuma demanda criada.</div>`;
+            }
+            html += `</div>`;
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        function renderAdmin() {
+            const pendingDeliveries = deliveries.filter(d => d.status === 'AGUARDANDO');
+            
+            let html = `
+                <div class="section-title">Painel de Aprovações</div>
+                <div class="grid">
+                    ${pendingDeliveries.length > 0 ? pendingDeliveries.map(d => renderAprovacaoCard(d)).join('') : '<div class="empty-state">Nenhuma entrega aguardando aprovação no momento. ✅</div>'}
+                </div>
+            `;
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        function renderRanking() {
+            // Calcular XP dos usuários comuns
+            const rankingData = users.filter(u => u.role !== 'ADMIN').map(user => {
+                const userDeliveries = deliveries.filter(d => d.userId === user.id && d.status === 'APROVADO');
+                const totalXp = userDeliveries.reduce((sum, d) => sum + (d.xp || 0), 0);
+                return { ...user, xp: totalXp };
+            }).sort((a, b) => b.xp - a.xp);
+
+            const medals = ['🥇', '🥈', '🥉'];
+
+            let html = `
+                <div class="section-title">Ranking da Equipe 🏆</div>
+                <div style="margin-top: 1rem;">
+                    ${rankingData.map((user, index) => `
+                        <div class="ranking-item">
+                            <div class="ranking-pos">${medals[index] || (index + 1 + 'º')}</div>
+                            <div class="ranking-info">
+                                <div class="ranking-name">${user.name}</div>
+                            </div>
+                            <div class="ranking-xp">${user.xp} XP</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('mainContent').innerHTML = html;
+        }
+
+        // --- Componentes HTML Internos ---
+        function getStatusBadge(status) {
+            const map = {
+                'PENDENTE': '<span class="badge pendente">Pendente</span>',
+                'AGUARDANDO_APROVACAO': '<span class="badge aguardando">Aguardando Avaliação</span>',
+                'CONCLUÍDO': '<span class="badge concluido">Concluído</span>',
+                'REJEITADO': '<span class="badge rejeitado">Rejeitado (Refazer)</span>'
+            };
+            return map[status] || `<span class="badge">${status}</span>`;
+        }
+
+        function renderTaskCard(task, isUserView) {
+            const user = users.find(u => u.id === task.assignedTo);
+            const xp = XP_MAP[task.priority];
+            
+            // Checar se há nota de rejeição
+            const lastDelivery = deliveries.slice().reverse().find(d => d.taskId === task.id && d.status === 'REJEITADO');
+
             return `
                 <div class="card">
-                    <div class="card-image">
-                        ${task.photo ? `<img src="${task.photo}" onclick="openLightbox('${task.photo}')">` : '📄'}
+                    <div class="card-header">
+                        ${getStatusBadge(task.status)}
+                        <span class="xp-tag">⚡ ${xp} XP</span>
                     </div>
-                    <div class="card-content">
-                        <div class="card-title">${task.description.substring(0, 40)}...</div>
-                        <div class="card-meta">De: ${creator ? creator.name : 'Desconhecido'}</div>
-                        <div class="badges">
-                            <span class="badge ${statusBadge}">${task.status}</span>
-                            <span class="badge badge-priority">${task.priority} • ${xpMap[task.priority]} XP</span>
+                    ${task.photo ? `
+                        <div class="card-image">
+                            <img src="${task.photo}" onclick="openLightbox('${task.photo}')" alt="Ref">
                         </div>
-                        ${task.status === 'PENDENTE' ? `
+                    ` : ''}
+                    <div class="card-content">
+                        ${!isUserView ? `<div style="font-size: 0.8rem; color: var(--primary); font-weight: bold; margin-bottom: 5px;">👤 ${user ? user.name : 'Desconhecido'}</div>` : ''}
+                        <div class="card-title">${task.description}</div>
+                        
+                        ${lastDelivery && task.status === 'REJEITADO' ? `
+                            <div style="background: #fee2e2; border-left: 3px solid var(--danger); padding: 8px; font-size: 0.85rem; margin-top: 10px; border-radius: 4px;">
+                                <strong>Motivo da recusa:</strong> ${lastDelivery.adminObs}
+                            </div>
+                        ` : ''}
+
+                        ${isUserView && (task.status === 'PENDENTE' || task.status === 'REJEITADO') ? `
                             <div class="card-actions">
-                                <button onclick="openEntregarModal('${task.id}')" style="background: var(--success);">✅ Entregar</button>
+                                <button onclick="openEntregarModal('${task.id}')">Entregar Tarefa 📷</button>
                             </div>
                         ` : ''}
                     </div>
@@ -900,302 +606,156 @@
             `;
         }
 
-        function renderCriarDemanda() {
-            const select = document.getElementById('demandaAssignedTo');
-            select.innerHTML = users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-            openModal('criarDemandaModal');
-        }
+        function renderAprovacaoCard(delivery) {
+            const task = tasks.find(t => t.id === delivery.taskId);
+            const user = users.find(u => u.id === delivery.userId);
+            const xp = XP_MAP[task.priority];
 
-        function renderTodasDemandas() {
-            const html = `
-                <div class="section-title">📊 Todas as Demandas</div>
-                <div class="stat-grid">
-                    <div class="stat-box">
-                        <div class="num">${tasks.filter(t => t.status === 'PENDENTE').length}</div>
-                        <div class="label">Pendentes</div>
+            return `
+                <div class="card">
+                    <div class="card-header">
+                        <span class="badge aguardando">Revisão Pendente</span>
+                        <span class="xp-tag">Vale ⚡ ${xp} XP</span>
                     </div>
-                    <div class="stat-box">
-                        <div class="num">${tasks.filter(t => t.status === 'CONCLUÍDO').length}</div>
-                        <div class="label">Concluídas</div>
+                    ${delivery.photo ? `
+                        <div class="card-image">
+                            <img src="${delivery.photo}" onclick="openLightbox('${delivery.photo}')" alt="Entrega">
+                        </div>
+                    ` : '<div class="card-image" style="font-size: 2rem; color: #94a3b8;">Sem Imagem</div>'}
+                    <div class="card-content">
+                        <div style="font-size: 0.8rem; color: var(--primary); font-weight: bold; margin-bottom: 5px;">👤 ${user ? user.name : 'Desconhecido'}</div>
+                        <div class="card-desc"><strong>Tarefa:</strong> ${task ? task.description : ''}</div>
+                        ${delivery.notes ? `<div class="card-desc"><strong>Nota do Usuário:</strong> "${delivery.notes}"</div>` : ''}
+                        <div class="card-actions">
+                            <button onclick="openAprovaModal('${delivery.id}')">Avaliar Entrega ✅</button>
+                        </div>
                     </div>
-                </div>
-                <div class="grid">
-                    ${tasks.length > 0 ? tasks.map(task => renderTaskCard(task)).join('') : '<div class="empty-state">Nenhuma demanda</div>'}
                 </div>
             `;
-            document.getElementById('mainContent').innerHTML = html;
         }
 
-        function renderEntregar() {
-            const minhas = tasks.filter(t => t.assignedTo === currentUser.id && (t.status === 'PENDENTE' || t.status === 'AGUARDANDO_APROVACAO'));
-            const select = document.getElementById('entregarTaskId');
-            select.innerHTML = minhas.map(t => `<option value="${t.id}">${t.description.substring(0, 40)}</option>`).join('');
-            if (minhas.length > 0) {
-                openModal('entregarModal');
-            } else {
-                alert('Nenhuma demanda pendente para você!');
-            }
+        // --- Funções de Ação e Modais ---
+        const getBase64 = (file) => new Promise((resolve, reject) => {
+            if (!file) return resolve(null);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+        
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
         }
-
-        function renderRanking() {
-            const userXp = {};
-            const userLevels = {};
-            
-            deliveries.filter(d => d.status === 'APROVADO').forEach(d => {
-                userXp[d.userId] = (userXp[d.userId] || 0) + (d.xp || 0);
-            });
-
-            users.forEach(u => {
-                const xp = userXp[u.id] || 0;
-                userLevels[u.id] = calculateLevel(xp);
-            });
-
-            const ranking = users.map(u => ({
-                user: u,
-                xp: userXp[u.id] || 0,
-                level: userLevels[u.id]
-            })).sort((a, b) => b.xp - a.xp);
-
-            const html = `
-                <div class="section-title">🏆 Ranking XP</div>
-                <ul class="ranking-list">
-                    ${ranking.map((r, i) => `
-                        <li class="ranking-item top${i + 1}">
-                            <span class="ranking-pos">${i + 1}º</span>
-                            <span class="ranking-name">${r.user.name}</span>
-                            <span class="ranking-info">
-                                <div class="level-badge">Nv${r.level.level}</div>
-                                <div class="ranking-xp">${r.xp} XP</div>
-                                <div class="ranking-level">${r.level.title}</div>
-                            </span>
-                        </li>
-                    `).join('')}
-                </ul>
-            `;
-            document.getElementById('mainContent').innerHTML = html;
-        }
-
-        function calculateLevel(xp) {
-            const LEVEL_TITLES = ['Novato', 'Aprendiz', 'Ágil', 'Confiável', 'Veterano', 'Expert', 'Mestre', 'Elite', 'Lenda'];
-            const xpForLevel = level => 50 * level * (level - 1);
-            
-            let level = 1;
-            while (xp >= xpForLevel(level + 1)) level++;
-            
-            return {
-                level,
-                xp,
-                title: LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)]
-            };
-        }
-
-        function renderAdmin() {
-            const pendingDeliveries = deliveries.filter(d => d.status === 'AGUARDANDO');
-            const html = `
-                <div class="section-title">⚙️ Painel Administrativo</div>
-                <div class="stat-grid">
-                    <div class="stat-box">
-                        <div class="num">${tasks.length}</div>
-                        <div class="label">Demandas</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="num">${pendingDeliveries.length}</div>
-                        <div class="label">Pendentes</div>
-                    </div>
-                </div>
-                <button onclick="openModal('criarDemandaModal')" style="width: 100%; margin-bottom: 1rem;">➕ Criar Demanda</button>
-                <div class="section-title">Aguardando Aprovação</div>
-                <div class="grid">
-                    ${pendingDeliveries.length > 0 ? pendingDeliveries.map(d => {
-                        const task = tasks.find(t => t.id === d.taskId);
-                        const user = users.find(u => u.id === d.userId);
-                        return `
-                            <div class="card">
-                                <div class="card-image">
-                                    ${d.photo ? `<img src="${d.photo}" onclick="openLightbox('${d.photo}')">` : '📄'}
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-title">De: ${user ? user.name : 'Desconhecido'}</div>
-                                    <div class="card-meta">${task ? task.description.substring(0, 40) : 'N/A'}...</div>
-                                    <div class="card-desc">${d.notes}</div>
-                                    <div class="card-actions">
-                                        <button onclick="openAprovaModal('${d.id}')" style="background: var(--success);">✅ Aprovar</button>
-                                        <button onclick="rejectEntregaDirect('${d.id}')" class="secondary">❌ Rejeitar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('') : '<div class="empty-state">Nenhuma entrega aguardando</div>'}
-                </div>
-            `;
-            document.getElementById('mainContent').innerHTML = html;
-        }
+        function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); }
 
         function openEntregarModal(taskId) {
-            selectedDeliveryId = null;
             document.getElementById('entregarTaskId').value = taskId;
+            document.getElementById('entregarPhoto').value = '';
+            document.getElementById('entregarNotas').value = '';
             openModal('entregarModal');
+        }
+
+        async function saveDemanda() {
+            const assignedTo = document.getElementById('demandaAssignedTo').value;
+            const description = document.getElementById('demandaDesc').value;
+            const priority = document.getElementById('demandaPriority').value;
+            const photoFile = document.getElementById('demandaPhoto').files[0];
+
+            if (!description || !assignedTo) return alert('Preencha a descrição e escolha um usuário!');
+
+            const photoBase64 = await getBase64(photoFile);
+
+            tasks.push({
+                id: 't' + Date.now(),
+                description, priority, assignedTo,
+                createdBy: currentUser.id,
+                status: 'PENDENTE',
+                photo: photoBase64,
+                createdAt: new Date().toISOString()
+            });
+
+            saveLocalData();
+            closeModal('criarDemandaModal');
+            document.getElementById('demandaDesc').value = '';
+            document.getElementById('demandaPhoto').value = '';
+            showView('todas-demandas');
+        }
+
+        async function submitEntrega() {
+            const taskId = document.getElementById('entregarTaskId').value;
+            const notes = document.getElementById('entregarNotas').value;
+            const photoFile = document.getElementById('entregarPhoto').files[0];
+
+            if (!photoFile) return alert('A foto da conclusão é obrigatória para ganhar XP!');
+
+            const task = tasks.find(t => t.id === taskId);
+            const photoBase64 = await getBase64(photoFile);
+
+            deliveries.push({
+                id: 'd' + Date.now(),
+                taskId, userId: currentUser.id,
+                notes, photo: photoBase64,
+                status: 'AGUARDANDO',
+                createdAt: new Date().toISOString()
+            });
+
+            task.status = 'AGUARDANDO_APROVACAO';
+            saveLocalData();
+            closeModal('entregarModal');
+            showView('minhas-demandas');
         }
 
         function openAprovaModal(deliveryId) {
             selectedDeliveryId = deliveryId;
             const delivery = deliveries.find(d => d.id === deliveryId);
             const task = tasks.find(t => t.id === delivery.taskId);
-            const user = users.find(u => u.id === delivery.userId);
+            
             document.getElementById('aprovaContent').innerHTML = `
-                <p><strong>Usuário:</strong> ${user.name}</p>
-                <p><strong>Tarefa:</strong> ${task.description}</p>
-                <p><strong>Notas:</strong> ${delivery.notes}</p>
-                ${delivery.photo ? `<p><a href="#" onclick="openLightbox('${delivery.photo}'); return false;">Ver Foto ▶</a></p>` : ''}
+                <div style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">
+                    <strong>Tarefa:</strong> ${task.description}<br>
+                    <strong>XP em jogo:</strong> ⚡ ${XP_MAP[task.priority]} XP
+                </div>
             `;
+            document.getElementById('aprovaObs').value = '';
             openModal('aprovaModal');
         }
 
-        function saveDemanda() {
-            const assignedTo = document.getElementById('demandaAssignedTo').value;
-            const desc = document.getElementById('demandaDesc').value;
-            const priority = document.getElementById('demandaPriority').value;
-            const photoInput = document.getElementById('demandaPhoto');
-
-            if (!assignedTo || !desc) {
-                alert('Preencha todos os campos');
-                return;
-            }
-
-            const processFile = (photo) => {
-                tasks.push({
-                    id: Date.now().toString(),
-                    createdBy: currentUser.id,
-                    assignedTo,
-                    description: desc,
-                    priority,
-                    photo,
-                    status: 'PENDENTE',
-                    createdAt: new Date().toISOString()
-                });
-                saveLocalData();
-                closeModal('criarDemandaModal');
-                document.getElementById('demandaDesc').value = '';
-                document.getElementById('demandaPhoto').value = '';
-                showView('todas-demandas');
-            };
-
-            if (photoInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => processFile(e.target.result);
-                reader.readAsDataURL(photoInput.files[0]);
-            } else {
-                processFile(null);
-            }
-        }
-
-        function submitEntrega() {
-            const taskId = document.getElementById('entregarTaskId').value;
-            const notes = document.getElementById('entregarNotas').value;
-            const photoInput = document.getElementById('entregarPhoto');
-
-            if (!taskId || !notes) {
-                alert('Preencha todos os campos');
-                return;
-            }
-
-            const processFile = (photo) => {
-                deliveries.push({
-                    id: Date.now().toString(),
-                    taskId,
-                    userId: currentUser.id,
-                    notes,
-                    photo,
-                    status: 'AGUARDANDO',
-                    submittedAt: new Date().toISOString()
-                });
-
-                const task = tasks.find(t => t.id === taskId);
-                if (task) task.status = 'AGUARDANDO_APROVACAO';
-
-                saveLocalData();
-                closeModal('entregarModal');
-                document.getElementById('entregarNotas').value = '';
-                document.getElementById('entregarPhoto').value = '';
-                alert('Entrega enviada para aprovação!');
-                showView('minhas-demandas');
-            };
-
-            if (photoInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => processFile(e.target.result);
-                reader.readAsDataURL(photoInput.files[0]);
-            } else {
-                processFile(null);
-            }
-        }
-
         function approveEntrega() {
-            const obs = document.getElementById('aprovaObs').value;
             const delivery = deliveries.find(d => d.id === selectedDeliveryId);
             const task = tasks.find(t => t.id === delivery.taskId);
-
+            
             delivery.status = 'APROVADO';
-            delivery.approvedAt = new Date().toISOString();
-            delivery.approverObs = obs;
-
-            if (task) {
-                task.status = 'CONCLUÍDO';
-                const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 140, URGENTE: 200 };
-                delivery.xp = xpMap[task.priority] || 100;
-            }
+            delivery.adminObs = document.getElementById('aprovaObs').value;
+            delivery.xp = XP_MAP[task.priority];
+            task.status = 'CONCLUÍDO';
 
             saveLocalData();
             closeModal('aprovaModal');
-            document.getElementById('aprovaObs').value = '';
-            alert('Entrega aprovada com sucesso!');
             showView('admin');
         }
 
         function rejectEntrega() {
-            const obs = document.getElementById('aprovaObs').value;
             const delivery = deliveries.find(d => d.id === selectedDeliveryId);
             const task = tasks.find(t => t.id === delivery.taskId);
+            const obs = document.getElementById('aprovaObs').value;
+
+            if(!obs) return alert('Por favor, informe no feedback por que está rejeitando para que o usuário possa corrigir.');
 
             delivery.status = 'REJEITADO';
-            delivery.rejecterObs = obs;
-
-            if (task) task.status = 'PENDENTE';
+            delivery.adminObs = obs;
+            task.status = 'REJEITADO'; // Volta para a tela do usuário para refazer
 
             saveLocalData();
             closeModal('aprovaModal');
-            document.getElementById('aprovaObs').value = '';
-            alert('Entrega rejeitada!');
             showView('admin');
         }
 
-        function rejectEntregaD irect(deliveryId) {
-            selectedDeliveryId = deliveryId;
-            const delivery = deliveries.find(d => d.id === deliveryId);
-            delivery.status = 'REJEITADO';
-            saveLocalData();
-            showView('admin');
-        }
-
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
-        function openLightbox(src) {
-            document.getElementById('lightboxImg').src = src;
-            document.getElementById('lightbox').classList.add('active');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-        }
-
-        // Inicializar
-        init();
+        // Inicializar aplicação ao carregar
+        window.onload = init;
     </script>
 </body>
 </html>
