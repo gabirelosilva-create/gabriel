@@ -3,82 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#9f1d20">
-    <meta name="description" content="Acompanhe, distribua e conclua as demandas da equipe em um só lugar.">
-    <title>Demandas Express — Painel de Operações</title>
+    <meta name="theme-color" content="#991b1b">
+    <meta name="description" content="Demandas Express - Sistema Gamificado de Gestão de Tarefas com Ranking, XP, Níveis e Recompensas">
+    <title>Demandas Express — Edição Gamificada</title>
 
-    <!-- Manifest PWA para permitir instalar no celular -->
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Demandas%20Express%22%2C%22short_name%22%3A%22Demandas%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait-primary%22%2C%22background_color%22%3A%22%23fff8e7%22%2C%22theme_color%22%3A%22%239f1d20%22%7D">
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Demandas%20Express%20Gamificado%22%2C%22short_name%22%3A%22Demandas%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait-primary%22%2C%22background_color%22%3A%22%232a080c%22%2C%22theme_color%22%3A%22%23991b1b%22%7D">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap');
 
         :root {
-            --primary: #b3262b;
-            --primary-hover: #8f171c;
-            --ink: #451416;
-            --bg: #fff8e7;
-            --surface: #fffdf7;
-            --text: #3f2521;
-            --text-muted: #80645d;
-            --border: #ead5b0;
-            --success: #9f1d20;
-            --warning: #bd5d16;
-            --danger: #a9161d;
-            --yellow: #f3bd32;
-            --yellow-soft: #fff0b8;
-            --radius: 18px;
-            --shadow: 0 18px 42px rgba(118, 31, 25, .11);
+            --red-deep: #2e080a;
+            --red-dark: #680d11;
+            --red-main: #b91c1c;
+            --red-bright: #ef4444;
+            --red-light: #fef2f2;
+            
+            --yellow-main: #f59e0b;
+            --yellow-bright: #fbbf24;
+            --yellow-glow: #fef08a;
+            --yellow-soft: #fffbebf0;
+            --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+            
+            --surface: #ffffff;
+            --surface-card: #fffdf9;
+            --surface-dark: #3f0a0e;
+            --text-dark: #1f0507;
+            --text-muted: #78353a;
+            --border: #fcd34d;
+            --border-subtle: #fef3c7;
+            
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+            --shadow-glow: 0 0 25px rgba(245, 158, 11, 0.35);
+            --shadow-card: 0 12px 30px rgba(104, 13, 17, 0.08);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: "DM Sans", sans-serif;
+            font-family: "Plus Jakarta Sans", sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: radial-gradient(circle at 15% 0%, #a3262b 0, transparent 40rem), radial-gradient(circle at 90% 100%, #5e0f13 0, transparent 35rem), #80171b;
+            background: radial-gradient(circle at 50% 0%, #7f1d1d 0%, #450a0a 50%, #1a0304 100%);
             background-attachment: fixed;
-            color: var(--text);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-bottom: 0;
             align-items: center;
             overflow-x: hidden;
         }
 
+        /* HEADER & TOP BAR */
         header {
-            background: rgba(255,248,231,.94);
+            background: rgba(42, 8, 12, 0.92);
             backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            padding: max(1rem, env(safe-area-inset-top)) 1rem 1rem;
+            border-bottom: 2px solid var(--yellow-main);
+            padding: max(0.8rem, env(safe-area-inset-top)) 1rem 0.8rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 10;
-            box-shadow: 0 8px 24px rgba(69,20,22,.06);
+            z-index: 50;
             width: 100%;
-            max-width: 520px;
+            max-width: 560px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
         .logo {
-            font-family: "Manrope", sans-serif;
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--ink);
+            font-family: "Outfit", sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #ffffff;
             display: flex;
             align-items: center;
-            gap: .65rem;
-            letter-spacing: -.03em;
+            gap: 0.6rem;
+            letter-spacing: -0.02em;
         }
 
-        .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; color: var(--ink); background: var(--yellow); border-radius: 12px 12px 12px 3px; box-shadow: 0 5px 0 #d49412; }
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            color: #2a080c;
+            background: var(--gold-gradient);
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
 
         .user-controls {
             display: flex;
@@ -88,233 +109,655 @@
 
         select, button, input, textarea {
             font-size: 0.9rem;
-            padding: 0.6rem 0.8rem;
-            border-radius: 11px;
+            padding: 0.65rem 0.85rem;
+            border-radius: var(--radius-md);
             border: 1px solid var(--border);
             background: var(--surface);
-            color: var(--text);
+            color: var(--text-dark);
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         select:focus, input:focus, textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(179,38,43,.15);
+            border-color: var(--yellow-main);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
         }
 
         button {
-            background-color: var(--primary);
-            color: #fffdf7;
+            background: var(--red-main);
+            color: #ffffff;
             border: none;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.4rem;
-            min-height: 44px;
-            box-shadow: 0 6px 14px rgba(143,23,28,.18);
+            min-height: 42px;
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
         }
 
-        button:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        button:active { transform: scale(0.98); }
-        button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid rgba(243,189,50,.65); outline-offset: 2px; }
-        button:disabled { opacity: .55; cursor: wait; }
+        button:hover {
+            background: var(--red-bright);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        button.gold {
+            background: var(--gold-gradient);
+            color: #2a080c;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        button.gold:hover {
+            filter: brightness(1.1);
+        }
 
         button.secondary {
-            background-color: transparent;
-            color: var(--text-muted);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--yellow-bright);
+            border: 1px solid rgba(251, 191, 36, 0.3);
             box-shadow: none;
         }
-        button.secondary:hover { color: var(--ink); background: var(--yellow-soft); }
+
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
 
         button.danger {
-            background-color: #f9d9d5;
-            color: var(--danger);
-            border: none;
+            background: #fee2e2;
+            color: var(--red-main);
+            border: 1px solid #fca5a5;
+            box-shadow: none;
         }
 
+        /* CONTAINER PRINCIPAL */
         main {
             flex: 1;
-            max-width: 520px;
+            max-width: 560px;
             width: 100%;
             margin: 0 auto;
-            padding: 0 1rem max(3rem, env(safe-area-inset-bottom));
-            background: radial-gradient(circle at 105% 2%, rgba(243,189,50,.38), transparent 17rem), linear-gradient(rgba(179,38,43,.035) 1px, transparent 1px), var(--bg);
-            background-size: auto, 24px 24px, auto;
-            box-shadow: 0 0 70px rgba(61,8,11,.28);
+            padding: 1rem 1rem max(3rem, env(safe-area-inset-bottom));
+            background: linear-gradient(180deg, #fffcf5 0%, #fef3c7 100%);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            min-height: calc(100vh - 60px);
         }
 
-        .intro { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 2.6rem 0 1.7rem; }
-        .eyebrow { color: var(--primary); font-size: .72rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .75rem; }
-        .intro h1 { font-family: "Manrope",sans-serif; font-size: clamp(2.65rem,12.5vw,4rem); line-height: .95; letter-spacing: -.075em; color: var(--ink); max-width: 460px; }
-        .intro-copy { color: var(--text-muted); line-height: 1.6; max-width: 390px; padding-bottom: .4rem; }
-        .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin: 2.4rem 0 1rem; }
-        .section-heading h2 { font-family: "Manrope",sans-serif; font-size: 1.35rem; letter-spacing: -.04em; }
-        .section-heading p { font-size: .82rem; color: var(--text-muted); }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: .65rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            padding: 1.2rem 1.3rem;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            text-align: left;
-            border-bottom: 4px solid var(--yellow);
-        }
-        .stat-card { box-shadow: 0 8px 20px rgba(118,31,25,.06); }
-        .stat-card.hero { grid-column: 1 / -1; background: linear-gradient(135deg, #b3262b 0%, #8f171c 70%, #6f1216 100%); border: none; color: white; position: relative; overflow: hidden; border-bottom: 4px solid var(--yellow); padding: 1.3rem 1.3rem 1.2rem; }
-        .stat-card.hero::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, rgba(243,189,50,.45), transparent 70%); }
-        .stat-card.hero .num, .stat-card.hero .label { color: white; }
-        .hero-top { display: flex; align-items: center; gap: .9rem; position: relative; z-index: 1; }
-        .hero-top .label { color: #f7d9d2 !important; }
-        .hero-title { font-family: "Manrope",sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -.04em; line-height: 1.1; }
-        .hero-sub { font-size: .78rem; color: #f7d9d2; margin-top: .2rem; }
-        .xp-track { position: relative; z-index: 1; height: 10px; background: rgba(255,255,255,.18); border-radius: 99px; overflow: hidden; margin-top: 1rem; }
-        .xp-track > div { height: 100%; background: linear-gradient(90deg, #f3bd32, #ffe08a); border-radius: 99px; transition: width .6s ease; }
-        .xp-foot { position: relative; z-index: 1; display: flex; justify-content: space-between; font-size: .72rem; color: #f7d9d2; margin-top: .45rem; font-weight: 600; }
-
-        .lv { flex: 0 0 auto; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 16px; background: var(--yellow); color: var(--ink); font-family: "Manrope",sans-serif; font-weight: 800; box-shadow: 0 5px 0 #d49412; line-height: 1; text-align: center; }
-        .lv small { display: block; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; }
-        .lv b { font-size: 1.35rem; }
-        .lv-chip { display: inline-flex; align-items: center; gap: .2rem; font-size: .66rem; font-weight: 800; background: var(--yellow-soft); color: #7c430b; border-radius: 99px; padding: .12rem .45rem; vertical-align: middle; white-space: nowrap; }
-        .xp-chip { font-size: .7rem; font-weight: 800; color: #2f7a3b; background: #e2f2df; border-radius: 99px; padding: .15rem .5rem; }
-
-        .ranking { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; }
-        .ranking .filters { margin-bottom: .9rem; }
-        .podium { display: grid; grid-template-columns: 1fr 1.12fr 1fr; align-items: end; gap: .5rem; margin-bottom: .9rem; }
-        .podium-spot { text-align: center; display: flex; flex-direction: column; align-items: center; gap: .3rem; min-width: 0; }
-        .podium-spot .avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-family: "Manrope",sans-serif; font-weight: 800; color: var(--ink); background: #f6e9c9; border: 3px solid #e0c48f; }
-        .podium-spot.p1 .avatar { width: 58px; height: 58px; background: var(--yellow); border-color: #d49412; font-size: 1.1rem; }
-        .podium-spot .pname { font-weight: 700; font-size: .8rem; color: var(--ink); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .podium-spot .pxp { font-size: .7rem; color: var(--text-muted); font-weight: 700; }
-        .podium-base { width: 100%; border-radius: 12px 12px 4px 4px; display: grid; place-items: center; font-family: "Manrope",sans-serif; font-weight: 800; color: white; font-size: 1.2rem; }
-        .p1 .podium-base { height: 74px; background: linear-gradient(#b3262b, #8f171c); color: var(--yellow); }
-        .p2 .podium-base { height: 54px; background: #c9a56a; }
-        .p3 .podium-base { height: 40px; background: #d9b98a; }
-        .rank-list { display: flex; flex-direction: column; gap: .4rem; }
-        .rank-row { display: grid; grid-template-columns: 30px 1fr auto; gap: .6rem; align-items: center; padding: .6rem .7rem; border-radius: 12px; background: white; border: 1px solid #f1e4c8; cursor: pointer; transition: background .2s ease; }
-        .rank-row:hover { background: var(--yellow-soft); }
-        .rank-row.me { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(179,38,43,.12); }
-        .rank-pos { font-family: "Manrope",sans-serif; font-weight: 800; color: var(--text-muted); text-align: center; }
-        .rank-name { min-width: 0; }
-        .rank-name strong { font-size: .88rem; color: var(--ink); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .rank-name span { font-size: .7rem; color: var(--text-muted); }
-        .rank-xp { text-align: right; font-family: "Manrope",sans-serif; font-weight: 800; color: var(--ink); font-size: .95rem; }
-        .rank-xp small { display: block; font-family: "DM Sans",sans-serif; font-size: .64rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-        .xp-rules { font-size: .72rem; color: var(--text-muted); margin-top: .8rem; line-height: 1.5; }
-
-        .stat-card .num {
-            font-family: "Manrope", sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--ink);
-            letter-spacing: -.06em;
-        }
-
-        .stat-card .label {
-            font-size: .72rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            font-weight: 700;
-        }
-
-        .admin-panel {
-            background: var(--primary);
-            color: var(--surface);
-            border: 1px solid var(--primary);
-            border-radius: var(--radius);
-            padding: 1rem;
-            margin: 1.5rem 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .admin-panel strong { color: var(--yellow) !important; }
-        .admin-panel p { color: #f7d9d2 !important; }
-        .admin-panel button { background: var(--yellow); color: var(--ink); box-shadow: none; }
-        .admin-panel button:hover { background: #ffd866; }
-        .admin-panel button.secondary { border-color: rgba(255,255,255,.42); color: white; background: transparent; }
-        .admin-panel button.secondary:hover { background: rgba(255,255,255,.12); }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            padding: .65rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
+        /* HERO STATS & USER GAMIFICATION CARD */
+        .hero-card {
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+            border: 2px solid var(--yellow-main);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            color: white;
+            box-shadow: var(--shadow-glow), var(--shadow-card);
+            position: relative;
             overflow: hidden;
-            transition: transform .25s ease, box-shadow .25s ease;
+            margin-bottom: 1.2rem;
         }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(31,39,33,.13); }
-        .card { border-top: 4px solid var(--yellow); }
-        .card.is-done { border-top-color: #2f7a3b; }
-        .card.is-late { border-top-color: var(--danger); }
-        .card-header, .card > p, .card > div:not(.card-header) { margin: .45rem .55rem; }
 
-        .card-header {
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.25) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .user-profile-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
         }
 
-        .badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 0.2rem 0.5rem;
-            border-radius: 9999px;
-            text-transform: uppercase;
+        .avatar-frame {
+            position: relative;
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+            background: var(--gold-gradient);
+            padding: 3px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
         }
 
-        .badge-pending { background: var(--yellow-soft); color: #7c430b; }
-        .badge-done { background: #f4d7d4; color: var(--success); }
-
-        .img-container {
+        .avatar-inner {
             width: 100%;
-            height: auto;
-            aspect-ratio: 4 / 3;
-            border-radius: calc(var(--radius) - 4px);
-            overflow: hidden;
-            background-color: #f6e9c9;
+            height: 100%;
+            background: #450a0a;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            font-family: "Outfit", sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--yellow-bright);
+        }
+
+        .level-badge-floating {
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            background: var(--red-main);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 2px solid var(--yellow-bright);
+            text-transform: uppercase;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-family: "Outfit", sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .user-title {
+            font-size: 0.78rem;
+            color: var(--yellow-bright);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .xp-container {
+            margin-top: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .xp-bar-bg {
+            height: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 99px;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            overflow: hidden;
             position: relative;
         }
 
-        .img-container img {
-            width: 100%;
+        .xp-bar-fill {
             height: 100%;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform .35s ease;
+            background: var(--gold-gradient);
+            border-radius: 99px;
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
         }
-        .img-container:hover img { transform: scale(1.035); }
 
-        .modal {
+        .xp-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #fef3c7;
+            margin-top: 0.4rem;
+            font-weight: 600;
+        }
+
+        /* QUICK METRICS GRID */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .metric-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(104, 13, 17, 0.05);
+            border-bottom: 3px solid var(--red-main);
+        }
+
+        .metric-card.gold {
+            border-bottom-color: var(--yellow-main);
+            background: #fffdf0;
+        }
+
+        .metric-val {
+            font-family: "Outfit", sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--red-dark);
+            line-height: 1;
+        }
+
+        .metric-card.gold .metric-val {
+            color: #b45309;
+        }
+
+        .metric-lbl {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.3rem;
+        }
+
+        /* ADMIN BAR & CONTROLS */
+        .admin-bar {
+            background: var(--red-dark);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1rem;
+            margin-bottom: 1.2rem;
+            border: 2px solid var(--yellow-main);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .admin-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-badge {
+            background: var(--yellow-main);
+            color: #2a080c;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            text-transform: uppercase;
+        }
+
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        /* TABS DE GAMIFICAÇÃO */
+        .nav-tabs {
+            display: flex;
+            gap: 0.4rem;
+            background: rgba(127, 29, 29, 0.1);
+            padding: 0.3rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.55rem 0.2rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            box-shadow: none;
+            min-height: 36px;
+        }
+
+        .tab-btn.active {
+            background: var(--red-main);
+            color: white;
+            box-shadow: 0 2px 8px rgba(185, 28, 28, 0.3);
+        }
+
+        /* SECTION TILES & RANKING */
+        .sec-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .sec-title h2 {
+            font-family: "Outfit", sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--red-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* RANK PODIUM */
+        .podium-container {
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.2rem 1rem 0.8rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .podium-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr 1fr;
+            align-items: end;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .podium-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .podium-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--red-light);
+            border: 2px solid var(--yellow-main);
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--red-dark);
+            margin-bottom: 0.3rem;
+            position: relative;
+        }
+
+        .podium-slot.p1 .podium-avatar {
+            width: 58px;
+            height: 58px;
+            border-width: 3px;
+            border-color: var(--yellow-bright);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+            font-size: 1.2rem;
+        }
+
+        .podium-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .podium-xp {
+            font-size: 0.68rem;
+            color: #b45309;
+            font-weight: 800;
+        }
+
+        .podium-block {
+            width: 100%;
+            border-radius: 10px 10px 4px 4px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-weight: 900;
+            font-family: "Outfit", sans-serif;
+            margin-top: 0.4rem;
+        }
+
+        .p1 .podium-block { height: 75px; background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%); font-size: 1.4rem; }
+        .p2 .podium-block { height: 55px; background: linear-gradient(180deg, #94a3b8 0%, #475569 100%); font-size: 1.1rem; }
+        .p3 .podium-block { height: 40px; background: linear-gradient(180deg, #d97706 0%, #78350f 100%); font-size: 1rem; }
+
+        .rank-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.8rem;
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            transition: transform 0.15s ease;
+        }
+
+        .rank-item.is-me {
+            border-color: var(--yellow-main);
+            background: var(--yellow-soft);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .rank-pos {
+            font-family: "Outfit", sans-serif;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--red-dark);
+            width: 24px;
+        }
+
+        .rank-details {
+            flex: 1;
+        }
+
+        .rank-user {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+        }
+
+        .rank-sub {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .rank-score {
+            font-family: "Outfit", sans-serif;
+            font-weight: 800;
+            color: #b45309;
+            font-size: 0.95rem;
+        }
+
+        /* CARDS DE DEMANDA */
+        .filter-scroll {
+            display: flex;
+            gap: 0.4rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            scrollbar-width: none;
+        }
+
+        .filter-scroll::-webkit-scrollbar { display: none; }
+
+        .chip {
+            padding: 0.4rem 0.8rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+            background: var(--surface-card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .chip.active {
+            background: var(--red-main);
+            color: white;
+            border-color: var(--red-main);
+        }
+
+        .task-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .task-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            border-left: 6px solid var(--yellow-main);
+            transition: all 0.2s ease;
+        }
+
+        .task-card.URGENTE { border-left-color: var(--red-bright); }
+        .task-card.ALTA { border-left-color: #f97316; }
+        .task-card.is-done { border-left-color: #10b981; opacity: 0.9; }
+        .task-card.is-late { border-left-color: #991b1b; background: #fff5f5; }
+
+        .task-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-badges {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .tag.prio { background: #fef3c7; color: #92400e; }
+        .tag.URGENTE { background: #fee2e2; color: #991b1b; }
+        .tag.done { background: #d1fae5; color: #065f46; }
+        .tag.late { background: #7f1d1d; color: #fff; }
+
+        .task-xp-value {
+            font-family: "Outfit", sans-serif;
+            font-weight: 800;
+            color: #b45309;
+            font-size: 0.85rem;
+            background: var(--yellow-soft);
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .task-desc {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.4;
+            margin-bottom: 0.6rem;
+        }
+
+        .task-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+
+        .task-img-thumb {
+            width: 100%;
+            max-height: 160px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            margin: 0.5rem 0;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+
+        .task-devolutiva {
+            background: #fff8f0;
+            border-left: 3px solid var(--yellow-main);
+            padding: 0.5rem 0.7rem;
+            font-size: 0.78rem;
+            border-radius: 4px;
+            margin-top: 0.4rem;
+            color: #451a03;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.8rem;
+            padding-top: 0.6rem;
+            border-top: 1px dashed var(--border-subtle);
+        }
+
+        .task-actions button {
+            flex: 1;
+            padding: 0.4rem;
+            font-size: 0.78rem;
+            min-height: 36px;
+        }
+
+        /* RECOMPENSAS / LOJA GAMIFICADA */
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .reward-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.8rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            position: relative;
+        }
+
+        .reward-icon {
+            font-size: 2rem;
+        }
+
+        .reward-title {
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--text-dark);
+        }
+
+        .reward-cost {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #b45309;
+            background: var(--yellow-soft);
+            padding: 0.15rem 0.5rem;
+            border-radius: 99px;
+        }
+
+        /* MODAIS */
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(69,20,22,.82);
-            backdrop-filter: blur(10px);
+            background: rgba(26, 3, 4, 0.85);
+            backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -325,909 +768,936 @@
             padding: 1rem;
         }
 
-        .modal.active {
+        .modal-overlay.active {
             opacity: 1;
             pointer-events: all;
         }
 
-        .modal-content {
-            background: var(--surface);
-            border-radius: var(--radius);
+        .modal-box {
+            background: var(--surface-card);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--yellow-main);
             width: 100%;
-            max-width: 480px;
-            padding: 1.75rem;
-            box-shadow: var(--shadow);
+            max-width: 440px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-glow), 0 20px 40px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            transform: translateY(15px) scale(.98);
-            transition: transform .25s ease;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .modal.active .modal-content { transform: none; }
-        .modal-content h3 { font-family: "Manrope",sans-serif; font-size: 1.45rem; letter-spacing: -.04em; }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-family: "Outfit", sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--red-dark);
+        }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.3rem;
+            gap: 0.35rem;
         }
 
         .form-group label {
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.78rem;
+            font-weight: 700;
             color: var(--text-muted);
         }
 
-        .lightbox {
+        /* CONFETTI CANVAS */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        /* LIGHTBOX */
+        .lightbox-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 200;
+            z-index: 300;
             padding: 1rem;
         }
 
-        .lightbox img {
+        .lightbox-overlay img {
             max-width: 100%;
             max-height: 90vh;
-            border-radius: var(--radius);
-            object-fit: contain;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--yellow-main);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--border);
+        }
+
+        .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
 
         .hidden { display: none !important; }
-
-        .badge-overdue { background: var(--danger); color: white; }
-        .badge-prio { background: #fbe3c9; color: #8a3b0c; }
-        .badge-prio.URGENTE { background: var(--ink); color: var(--yellow); }
-        .badge-prio.BAIXA { background: #efe7d6; color: var(--text-muted); }
-        .card-meta { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; font-size: .74rem; color: var(--text-muted); }
-        .admin-note { font-size: .8rem; background: #fde4df; border-left: 3px solid var(--primary); padding: .45rem .55rem; border-radius: 6px; }
-        .card-actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; }
-        .card-actions button { flex: 1 1 auto; padding-inline: .7rem; }
-
-        .filters { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
-        .filters button { background: var(--surface); color: var(--text); border: 1px solid var(--border); box-shadow: none; font-size: .8rem; padding: .45rem .85rem; }
-        .filters button.on { background: var(--ink); color: var(--yellow); border-color: var(--ink); }
-
-        .dashboard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.1rem; margin-top: 1rem; }
-        .dash-top { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem; }
-        .dash-top h2 { font-family: "Manrope",sans-serif; font-size: 1.35rem; letter-spacing: -.04em; color: var(--ink); }
-        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .6rem; margin-bottom: 1.1rem; }
-        .kpi { background: var(--yellow-soft); border-radius: 14px; padding: .8rem .9rem; }
-        .kpi strong { display: block; font-family: "Manrope",sans-serif; font-size: 1.5rem; color: var(--ink); letter-spacing: -.04em; }
-        .kpi span { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
-        .perf-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .75rem; }
-        .perf-card { border: 1px solid var(--border); border-radius: 14px; padding: .9rem; background: white; display: flex; flex-direction: column; gap: .55rem; }
-        .perf-card header { all: unset; display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
-        .perf-card h4 { font-family: "Manrope",sans-serif; font-size: 1rem; color: var(--ink); }
-        .rank { font-size: .7rem; font-weight: 800; background: var(--ink); color: var(--yellow); border-radius: 99px; padding: .15rem .5rem; }
-        .meter { height: 9px; background: #f1e4c8; border-radius: 99px; overflow: hidden; }
-        .meter > div { height: 100%; background: var(--primary); border-radius: 99px; }
-        .perf-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; font-size: .72rem; color: var(--text-muted); }
-        .perf-stats b { display: block; font-size: 1rem; color: var(--text); }
-        .delivery-table { width: 100%; border-collapse: collapse; font-size: .8rem; margin-top: .5rem; }
-        .delivery-table th { text-align: left; font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); padding: .45rem; border-bottom: 1px solid var(--border); }
-        .delivery-table td { padding: .5rem .45rem; border-bottom: 1px solid #f3e6cc; vertical-align: top; }
-        .table-wrap { overflow-x: auto; }
-        .ok { color: #2f7a3b; font-weight: 700; }
-        .late { color: var(--danger); font-weight: 700; }
-        .team-row { display: grid; grid-template-columns: 1fr auto; gap: .45rem; align-items: center; padding: .5rem 0; border-bottom: 1px solid var(--border); }
-        .team-row.inactive input { opacity: .55; }
-        .team-row div { display: flex; gap: .35rem; }
-        .modal-content .team-list { max-height: 50vh; overflow-y: auto; }
-
-        .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; border: 1px dashed #d49b34; border-radius: var(--radius); background: rgba(255,240,184,.42); }
-        .empty-state svg { width: 42px; color: var(--primary); margin-bottom: 1rem; }
-        .empty-state strong { display: block; font-family: "Manrope",sans-serif; font-size: 1.15rem; margin-bottom: .35rem; }
-        .empty-state p { color: var(--text-muted); font-size: .88rem; }
-
-        @media (prefers-reduced-motion: no-preference) {
-            .intro > *, .stats-grid > *, .admin-panel, .card, .ranking, .rank-row { animation: reveal .5s both; }
-            .intro-copy { animation-delay: .08s; }
-            .stats-grid > :nth-child(2) { animation-delay: .07s; }
-            .stats-grid > :nth-child(3) { animation-delay: .14s; }
-            @keyframes reveal { from { opacity: 0; transform: translateY(14px); } }
-        }
-
-        @media (max-width: 700px) {
-            header { align-items: center; gap: .55rem; padding-inline: .75rem; }
-            .logo { flex: 0 0 auto; }
-            .logo span:last-child { display: none; }
-            .user-controls { flex: 1; justify-content: flex-end; min-width: 0; }
-            .user-controls select { min-width: 0; width: 100%; max-width: 210px; min-height: 44px; }
-            main { padding-inline: .75rem; }
-            .intro { padding: 1.8rem 0 1.25rem; }
-            .intro h1 { font-size: clamp(2.35rem,12vw,3.35rem); overflow-wrap: anywhere; }
-            .intro-copy { font-size: .92rem; }
-            .stat-card { padding: 1rem; }
-            .stat-card .num { font-size: 1.6rem; }
-            .admin-panel { align-items: stretch; flex-direction: column; }
-            .admin-panel > div:last-child { display: grid !important; grid-template-columns: 1fr 1fr; }
-            .admin-panel > div:last-child button:last-child { grid-column: 1 / -1; }
-            .modal { align-items: flex-end; padding: .6rem; }
-            .modal-content { max-width: none; border-radius: 22px; padding: 1.3rem; max-height: 92dvh; overflow-y: auto; }
-            .section-heading { align-items: flex-start; }
-            .section-heading > p { display: none; }
-            .card { padding: .5rem; box-shadow: 0 10px 28px rgba(118,31,25,.1); }
-            .card:hover { transform: none; }
-            .card-header { gap: .65rem; }
-            .badge { flex: 0 0 auto; }
-            .img-container { aspect-ratio: 16 / 11; }
-            input, select, textarea { width: 100%; font-size: 16px; }
-            .empty-state { padding: 2.8rem 1rem; }
-        }
-
-        @media (max-width: 360px) {
-            .brand-mark { width: 34px; height: 34px; }
-            .user-controls { gap: .35rem; }
-            .user-controls select { max-width: 160px; }
-            #adminBtn { padding-inline: .6rem; }
-            .stats-grid { gap: .45rem; }
-            .stat-card { padding: .8rem; }
-            .intro h1 { font-size: 2.2rem; }
-        }
-
-        @media (orientation: landscape) and (max-height: 520px) {
-            .intro { padding-top: 1.5rem; }
-            .intro h1 { font-size: 2.55rem; }
-        }
     </style>
 </head>
 <body>
 
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- HEADER TOP -->
     <header>
-        <div class="logo"><span class="brand-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13H11l-1 9 8.5-12H12l1-8Z" fill="currentColor"/></svg></span><span>Demandas Express</span></div>
+        <div class="logo">
+            <span class="brand-mark">⚡</span>
+            <span>DEMANDAS<span style="color: var(--yellow-bright)">EXPRESS</span></span>
+        </div>
         <div class="user-controls">
             <select id="userSelect" onchange="switchUser(this.value)"></select>
-            <button id="adminBtn" onclick="openModal('modalAuth')" class="secondary" aria-label="Acessar painel administrativo">ADM</button>
+            <button id="adminBtn" onclick="openAdminAuthModal()" class="secondary">
+                <span>🔐 PIN ADM</span>
+            </button>
         </div>
     </header>
 
     <main>
-        <section class="intro" aria-labelledby="pageTitle">
-            <div><p class="eyebrow">Central de operações</p><h1 id="pageTitle">Trabalho claro.<br>Entrega visível.</h1></div>
-            <p class="intro-copy">Acompanhe o que precisa ser feito, registre cada entrega e mantenha a equipe alinhada em um único painel.</p>
-        </section>
-        <!-- Métricas -->
-        <div class="stats-grid">
-            <div class="stat-card hero" id="heroCard"></div>
-            <div class="stat-card">
-                <div class="num" id="statPending" style="color: var(--warning);">0</div>
-                <div class="label">Pendentes</div>
+        <!-- CARDS DE GAMIFICAÇÃO & NÍVEL DO USUÁRIO -->
+        <div class="hero-card" id="heroCard">
+            <!-- Renderizado via JS -->
+        </div>
+
+        <!-- METRICAS DA OPERAÇÃO -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-val" id="metricPending">0</div>
+                <div class="metric-lbl">Pendentes</div>
             </div>
-            <div class="stat-card">
-                <div class="num" id="statDone" style="color: var(--success);">0</div>
-                <div class="label">Entregas no histórico</div>
+            <div class="metric-card gold">
+                <div class="metric-val" id="metricDone">0</div>
+                <div class="metric-lbl">Entregues</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-val" id="metricStreak">0🔥</div>
+                <div class="metric-lbl">Sequência</div>
             </div>
         </div>
 
-        <!-- Painel ADM -->
-        <div id="adminPanel" class="admin-panel hidden">
-            <div>
-                <strong style="color: var(--primary);">Painel do Administrador</strong>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">Crie demandas e gerencie a equipe.</p>
+        <!-- BARRA DO ADMINISTRADOR (SÓ APARECE COM SENHA VERIFICADA) -->
+        <div id="adminPanel" class="admin-bar hidden">
+            <div class="admin-bar-header">
+                <div>
+                    <span class="admin-badge">Painel ADM Ativo</span>
+                    <span style="font-size: 0.78rem; font-weight: 600; margin-left: 0.4rem;">Ações de Gestão</span>
+                </div>
+                <button onclick="logoutAdmin()" class="secondary" style="min-height:28px; padding: 2px 8px; font-size:0.7rem;">Sair ADM</button>
             </div>
-            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                <button onclick="openModal('modalUser')">+ Menor</button>
-                <button onclick="openTaskModal()">+ Demanda</button>
-                <button onclick="openTeamModal()">Equipe</button>
-                <button id="dashToggle" onclick="toggleDashboard()">Rendimento</button>
-                <button onclick="logoutAdmin()" class="secondary">Sair</button>
+            <div class="admin-actions">
+                <button onclick="openTaskModal()" class="gold">+ Criar Demanda</button>
+                <button onclick="openUserModal()" class="secondary">+ Add Membro</button>
+                <button onclick="openTeamModal()" class="secondary">Gerenciar Equipe</button>
+                <button onclick="openChangePinModal()" class="secondary">Alterar PIN</button>
             </div>
         </div>
 
-        <!-- Dashboard de rendimento (ADM) -->
-        <section id="dashboardSection" class="dashboard hidden" aria-labelledby="dashTitle">
-            <div class="dash-top">
-                <div><p class="eyebrow">Painel ADM</p><h2 id="dashTitle">Rendimento da equipe</h2></div>
-                <select id="dashPeriod" onchange="renderDashboard()" aria-label="Período">
-                    <option value="7">Últimos 7 dias</option>
-                    <option value="30" selected>Últimos 30 dias</option>
-                    <option value="90">Últimos 90 dias</option>
-                    <option value="0">Todo o período</option>
-                </select>
-            </div>
-            <div id="dashKpis" class="kpis"></div>
-            <div id="dashPerf" class="perf-list"></div>
-            <div class="section-heading" style="margin-top: 1.6rem;"><div><p class="eyebrow">Histórico</p><h2>Entregas</h2></div></div>
-            <div class="table-wrap"><table class="delivery-table"><thead><tr><th>Menor</th><th>Demanda</th><th>Criada</th><th>Entregue</th><th>Tempo</th><th>Prazo</th><th>XP</th></tr></thead><tbody id="dashDeliveries"></tbody></table></div>
-        </section>
-
-        <!-- Ranking por XP (público) -->
-        <div class="section-heading"><div><p class="eyebrow">Gamificação</p><h2>Ranking da equipe</h2></div><p>XP por entrega</p></div>
-        <section class="ranking" aria-label="Ranking por XP">
-            <div class="filters" id="rankFilters">
-                <button data-period="7" onclick="setRankPeriod(7)">7 dias</button>
-                <button data-period="30" class="on" onclick="setRankPeriod(30)">30 dias</button>
-                <button data-period="0" onclick="setRankPeriod(0)">Geral</button>
-            </div>
-            <div id="podium" class="podium"></div>
-            <div id="rankList" class="rank-list"></div>
-            <p class="xp-rules">Cada entrega vale XP: Baixa 60 · Normal 100 · Alta 140 · Urgente 200. No prazo: +50 XP. Atrasada: metade. O nível usa o XP total acumulado; entregas reabertas pelo ADM deixam de contar.</p>
-        </section>
-
-        <div class="section-heading"><div><p class="eyebrow">Fluxo de trabalho</p><h2>Demandas recentes</h2></div><p>Atualizado neste dispositivo</p></div>
-        <div class="filters" id="statusFilters">
-            <button data-filter="ALL" class="on" onclick="setFilter('ALL')">Todas</button>
-            <button data-filter="PENDENTE" onclick="setFilter('PENDENTE')">Pendentes</button>
-            <button data-filter="ATRASADA" onclick="setFilter('ATRASADA')">Atrasadas</button>
-            <button data-filter="CONCLUÍDO" onclick="setFilter('CONCLUÍDO')">Entregues</button>
+        <!-- TABS PRINCIPAIS -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('tasks')" id="tabTasksBtn">📋 Demandas</button>
+            <button class="tab-btn" onclick="switchTab('ranking')" id="tabRankingBtn">🏆 Ranking XP</button>
+            <button class="tab-btn" onclick="switchTab('rewards')" id="tabRewardsBtn">🎁 Recompensas</button>
         </div>
-        <div id="tasksGrid" class="grid" aria-live="polite"></div>
+
+        <!-- CONTEÚDO TABA 1: DEMANDAS -->
+        <div id="tabTasks">
+            <div class="sec-title">
+                <h2><span>🔥</span> Fila de Trabalho</h2>
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight:700;" id="taskCountLbl">0 itens</span>
+            </div>
+
+            <!-- FILTROS -->
+            <div class="filter-scroll" id="statusFilters">
+                <div class="chip active" onclick="setFilter('ALL', this)">Todas</div>
+                <div class="chip" onclick="setFilter('PENDENTE', this)">Pendentes</div>
+                <div class="chip" onclick="setFilter('MINHAS', this)">Minhas Tarefas</div>
+                <div class="chip" onclick="setFilter('ATRASADA', this)">Atrasadas</div>
+                <div class="chip" onclick="setFilter('CONCLUÍDO', this)">Concluídas</div>
+            </div>
+
+            <!-- GRID DE TAREFAS -->
+            <div id="tasksGrid" class="task-grid"></div>
+        </div>
+
+        <!-- CONTEÚDO TABA 2: RANKING -->
+        <div id="tabRanking" class="hidden">
+            <div class="sec-title">
+                <h2><span>🏆</span> Pódio da Produtividade</h2>
+            </div>
+            <div class="podium-container">
+                <div class="podium-grid" id="podiumGrid"></div>
+                <div class="rank-list" id="rankList"></div>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO TABA 3: RECOMPENSAS / UNLOCKS -->
+        <div id="tabRewards" class="hidden">
+            <div class="sec-title">
+                <h2><span>🎖️</span> Loja de Recompensas</h2>
+                <span style="font-size: 0.75rem; color: #b45309; font-weight:800;">Resgate com Nível</span>
+            </div>
+            <div class="rewards-grid" id="rewardsGrid"></div>
+        </div>
     </main>
 
-    <!-- Modais -->
-    <div id="modalAuth" class="modal">
-        <div class="modal-content">
-            <h3>Acesso Restrito ADM</h3>
-            <div class="form-group">
-                <label for="adminPasswordInput">Senha de acesso (PIN)</label>
-                <input type="password" id="adminPasswordInput" placeholder="Digite a senha">
+    <!-- MODAL AUTH ADM (EXIGE SENHA OBRIGATÓRIA) -->
+    <div id="modalAuth" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>🔐 Autenticação de Gestor</h3>
+                <button onclick="closeModal('modalAuth')" class="secondary" style="min-height:30px;">✕</button>
             </div>
-            <button onclick="authenticateAdmin()">Entrar</button>
-            <button onclick="closeModal('modalAuth')" class="secondary">Cancelar</button>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">Digite o PIN de segurança para liberar as funções de Administrador.</p>
+            <div class="form-group">
+                <label for="adminPinInput">PIN de Acesso</label>
+                <input type="password" id="adminPinInput" placeholder="PIN padrão: 1234" maxlength="8" style="text-align: center; font-size: 1.4rem; letter-spacing: 0.3em;">
+            </div>
+            <button onclick="verifyAdminPin()" class="gold">Desbloquear ADM</button>
         </div>
     </div>
 
-    <div id="modalUser" class="modal">
-        <div class="modal-content">
-            <h3>Novo Menor</h3>
-            <div class="form-group">
-                <label for="newUserName">Nome completo</label>
-                <input type="text" id="newUserName" placeholder="Ex: Gabriel Souza">
+    <!-- MODAL ALTERAR PIN ADM -->
+    <div id="modalChangePin" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>🔑 Alterar PIN do ADM</h3>
+                <button onclick="closeModal('modalChangePin')" class="secondary">✕</button>
             </div>
-            <button onclick="addUser()">Salvar</button>
-            <button onclick="closeModal('modalUser')" class="secondary">Cancelar</button>
+            <div class="form-group">
+                <label>PIN Atual</label>
+                <input type="password" id="pinCurrentInput" maxlength="8">
+            </div>
+            <div class="form-group">
+                <label>Novo PIN</label>
+                <input type="password" id="pinNewInput" maxlength="8">
+            </div>
+            <button onclick="changeAdminPin()" class="gold">Atualizar PIN</button>
         </div>
     </div>
 
-    <div id="modalTask" class="modal">
-        <div class="modal-content">
-            <h3 id="taskModalTitle">Criar Nova Demanda</h3>
-            <div class="form-group">
-                <label for="taskAssignedTo">Direcionado para</label>
-                <select id="taskAssignedTo"></select>
+    <!-- MODAL CRIAR TAREFA -->
+    <div id="modalTask" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>🚀 Nova Demanda Gamificada</h3>
+                <button onclick="closeModal('modalTask')" class="secondary">✕</button>
             </div>
             <div class="form-group">
-                <label for="taskDescription">Descrição / instrução</label>
-                <textarea id="taskDescription" rows="3" placeholder="Escreva os detalhes da tarefa..."></textarea>
+                <label for="taskAssignee">Atribuir a</label>
+                <select id="taskAssignee"></select>
             </div>
             <div class="form-group">
-                <label for="taskPriority">Prioridade</label>
+                <label for="taskDesc">Instrução / Detalhes da Tarefa</label>
+                <textarea id="taskDesc" rows="3" placeholder="O que precisa ser feito? Ex: Arrumar prateleiras do setor A"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="taskPriority">Prioridade (XP da Recompensa)</label>
                 <select id="taskPriority">
-                    <option value="BAIXA">Baixa</option>
-                    <option value="NORMAL" selected>Normal</option>
-                    <option value="ALTA">Alta</option>
-                    <option value="URGENTE">Urgente</option>
+                    <option value="BAIXA">🟢 Baixa (60 XP)</option>
+                    <option value="NORMAL" selected>🟡 Normal (100 XP)</option>
+                    <option value="ALTA">🟠 Alta (150 XP)</option>
+                    <option value="URGENTE">🔴 Urgente (220 XP)</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="taskDueAt">Prazo de entrega (opcional)</label>
-                <input type="datetime-local" id="taskDueAt">
+                <label for="taskDueDate">Prazo Final (Bônus +50 XP se no prazo)</label>
+                <input type="datetime-local" id="taskDueDate">
             </div>
-            <div class="form-group" id="taskImageGroup">
-                <label for="taskImageInput">Foto do trabalho / instrução</label>
+            <div class="form-group">
+                <label for="taskImageInput">Foto da Instrução (Opcional)</label>
                 <input type="file" id="taskImageInput" accept="image/*" capture="environment">
             </div>
-            <button id="btnCreateTask" onclick="createTask()">Enviar Demanda</button>
-            <button onclick="closeModal('modalTask')" class="secondary">Cancelar</button>
+            <button onclick="saveTask()" class="gold">Publicar Demanda</button>
         </div>
     </div>
 
-    <div id="modalResponse" class="modal">
-        <div class="modal-content">
-            <h3>Enviar Devolutiva</h3>
-            <div class="form-group">
-                <label for="responseNotes">Observação (opcional)</label>
-                <textarea id="responseNotes" rows="2" placeholder="Ex: Concluído conforme solicitado."></textarea>
+    <!-- MODAL CONCLUIR TAREFA -->
+    <div id="modalComplete" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>✅ Concluir e Resgatar XP</h3>
+                <button onclick="closeModal('modalComplete')" class="secondary">✕</button>
             </div>
             <div class="form-group">
-                <label for="responseImageInput">Foto do resultado</label>
-                <input type="file" id="responseImageInput" accept="image/*" capture="environment">
+                <label for="devolutivaNotes">Comentário / Devolutiva de Conclusão</label>
+                <textarea id="devolutivaNotes" rows="3" placeholder="Descreva como a demanda foi realizada..."></textarea>
             </div>
-            <button id="btnSubmitResponse" onclick="submitResponse()">Concluir Tarefa</button>
-            <button onclick="closeModal('modalResponse')" class="secondary">Cancelar</button>
-        </div>
-    </div>
-
-    <div id="modalTeam" class="modal">
-        <div class="modal-content">
-            <h3>Gerenciar Equipe</h3>
-            <p style="font-size: .8rem; color: var(--text-muted);">Renomeie ou desative menores. Desativar mantém o histórico de demandas e entregas.</p>
-            <div id="teamList" class="team-list"></div>
-            <button onclick="closeModal('modalTeam')" class="secondary">Fechar</button>
-        </div>
-    </div>
-
-    <div id="modalFeedback" class="modal">
-        <div class="modal-content">
-            <h3 id="feedbackTitle">Retorno do ADM</h3>
             <div class="form-group">
-                <label for="feedbackText">Comentário para o menor</label>
-                <textarea id="feedbackText" rows="3" placeholder="Ex: Refazer a foto mostrando o resultado completo."></textarea>
+                <label for="devolutivaPhoto">Foto de Comprovante (Opcional)</label>
+                <input type="file" id="devolutivaPhoto" accept="image/*" capture="environment">
             </div>
-            <button id="btnFeedback" onclick="submitFeedback()">Salvar</button>
-            <button onclick="closeModal('modalFeedback')" class="secondary">Cancelar</button>
+            <button onclick="submitTaskCompletion()" class="gold">Enviar e Receber XP ⚡</button>
         </div>
     </div>
 
-    <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
-        <img id="lightboxImg" src="" alt="Ampliação">
+    <!-- MODAL NOVO MEMBRO DA EQUIPE -->
+    <div id="modalUser" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>👤 Cadastrar Membro</h3>
+                <button onclick="closeModal('modalUser')" class="secondary">✕</button>
+            </div>
+            <div class="form-group">
+                <label for="newUserName">Nome do Operador</label>
+                <input type="text" id="newUserName" placeholder="Ex: Carlos Oliveira">
+            </div>
+            <button onclick="saveUser()" class="gold">Salvar Membro</button>
+        </div>
+    </div>
+
+    <!-- MODAL GERENCIAR EQUIPE -->
+    <div id="modalTeam" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>👥 Gerenciar Membros</h3>
+                <button onclick="closeModal('modalTeam')" class="secondary">✕</button>
+            </div>
+            <div id="teamListContainer" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX FOTO -->
+    <div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+        <img id="lightboxImg" src="" alt="Imagem ampliada">
     </div>
 
     <script>
-        // CONFIGURAÇÕES
-        const ADMIN_PIN = "1234"; // Senha para abrir o painel ADM
-        let isAdmin = false;
-        let activeUserId = null;
-        let currentTaskIdForResponse = null;
-        let editingTaskId = null;
-        let feedbackTaskId = null;
-        let feedbackMode = 'feedback';
-        let statusFilter = 'ALL';
-        let showDashboard = false;
-        let users = [];
-        let tasks = [];
-        let deliveries = [];
-        let rankPeriod = 30;
+        /* ==========================================================================
+           1. ESTADO E DADOS INICIAIS
+           ========================================================================== */
+        const STORAGE_USERS = 'express_gamified_users_v2';
+        const STORAGE_TASKS = 'express_gamified_tasks_v2';
+        const STORAGE_ADMIN = 'express_gamified_admin_v2';
+        const STORAGE_PIN   = 'express_gamified_pin_v2';
 
-        async function apiRequest(options = {}) {
-            const response = await fetch('/api/data', options);
-            if (!response.ok) {
-                const body = await response.json().catch(() => ({}));
-                throw new Error(body.error || 'Não foi possível carregar os dados.');
+        const DEFAULT_USERS = [
+            { id: 'u1', name: 'Gabriel Souza', active: true, streak: 3 },
+            { id: 'u2', name: 'Ana Costa', active: true, streak: 5 },
+            { id: 'u3', name: 'Lucas Lima', active: true, streak: 1 }
+        ];
+
+        const REWARDS_LIST = [
+            { id: 'r1', title: 'Certificado de Destaque', cost: 'Nível 2', reqLevel: 2, icon: '📜' },
+            { id: 'r2', title: 'Prioridade na Escolha de Turno', cost: 'Nível 3', reqLevel: 3, icon: '⏰' },
+            { id: 'r3', title: 'Vale Lanche Especial', cost: 'Nível 5', reqLevel: 5, icon: '🍔' },
+            { id: 'r4', title: 'Folga de Tarde/Turno', cost: 'Nível 8', reqLevel: 8, icon: '🏖️' },
+            { id: 'r5', title: 'Troféu Operador Lendário', cost: 'Nível 10', reqLevel: 10, icon: '🏆' }
+        ];
+
+        let users = JSON.parse(localStorage.getItem(STORAGE_USERS)) || DEFAULT_USERS;
+        let tasks = JSON.parse(localStorage.getItem(STORAGE_TASKS)) || [];
+        let isAdmin = JSON.parse(localStorage.getItem(STORAGE_ADMIN)) || false;
+        let adminPin = localStorage.getItem(STORAGE_PIN) || '1234';
+        let currentUser = users[0]?.id || '';
+        let currentFilter = 'ALL';
+        let activeTaskId = null;
+
+        /* ==========================================================================
+           2. INICIALIZAÇÃO DO APP
+           ========================================================================== */
+        document.addEventListener('DOMContentLoaded', () => {
+            saveData();
+            populateUserSelect();
+            updateAdminUI();
+            renderAll();
+        });
+
+        function saveData() {
+            localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+            localStorage.setItem(STORAGE_TASKS, JSON.stringify(tasks));
+            localStorage.setItem(STORAGE_ADMIN, JSON.stringify(isAdmin));
+            localStorage.setItem(STORAGE_PIN, adminPin);
+        }
+
+        /* ==========================================================================
+           3. SISTEMA DE AUDIO SINTÉTICO (EFEITOS SONOROS GAMIFICADOS)
+           ========================================================================== */
+        function playGamifiedSound(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'complete') {
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else if (type === 'admin') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.setValueAtTime(440, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.2);
+                }
+            } catch (e) {
+                // AudioContext desativado ou não suportado
             }
-            return response.status === 204 ? null : response.json();
         }
 
-        async function loadData() {
-            const data = await apiRequest();
-            users = data.users;
-            tasks = data.tasks;
-            deliveries = data.deliveries || [];
-        }
-
-        // NÍVEIS: XP necessário para atingir o nível L = 50 * L * (L - 1)
-        const LEVEL_TITLES = ['Novato', 'Aprendiz', 'Ágil', 'Confiável', 'Veterano', 'Expert', 'Mestre', 'Elite', 'Lenda'];
-        const xpForLevel = level => 50 * level * (level - 1);
-        function levelInfo(xp) {
-            let level = 1;
-            while (xp >= xpForLevel(level + 1)) level++;
-            const floor = xpForLevel(level), next = xpForLevel(level + 1);
-            return {
-                level, xp, floor, next,
-                title: LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)],
-                progress: Math.round(((xp - floor) / (next - floor)) * 100),
-            };
-        }
-        const userXp = (id, list = deliveries) => list.filter(d => d.userId === id).reduce((sum, d) => sum + d.xp, 0);
-        const sinceDays = days => days ? Date.now() - days * 86400000 : 0;
-        const deliveriesSince = since => deliveries.filter(d => new Date(d.deliveredAt).getTime() >= since);
-        const initials = name => name.split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
-
-        // COMPRESSÃO AUTOMÁTICA DA FOTO (Não trava o celular)
-        function compressImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > MAX_WIDTH) {
-                            height = Math.round((height * MAX_WIDTH) / width);
-                            width = MAX_WIDTH;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        canvas.toBlob(resolve, 'image/jpeg', 0.72);
-                    };
-                };
-            });
-        }
-
-        // AÇÕES DO SISTEMA
-        function authenticateAdmin() {
-            const pin = document.getElementById('adminPasswordInput').value;
-            if (pin === ADMIN_PIN) {
-                isAdmin = true;
-                document.getElementById('adminPanel').classList.remove('hidden');
-                document.getElementById('adminBtn').classList.add('hidden');
-                closeModal('modalAuth');
-                document.getElementById('adminPasswordInput').value = '';
-                render();
+        /* ==========================================================================
+           4. AUTENTICAÇÃO ADM & CONTROLE DE ACESSO
+           ========================================================================== */
+        function openAdminAuthModal() {
+            if (isAdmin) {
+                logoutAdmin();
             } else {
-                alert('PIN Incorreto!');
+                document.getElementById('adminPinInput').value = '';
+                openModal('modalAuth');
+            }
+        }
+
+        function verifyAdminPin() {
+            const pinEntered = document.getElementById('adminPinInput').value;
+            if (pinEntered === adminPin) {
+                isAdmin = true;
+                saveData();
+                updateAdminUI();
+                closeModal('modalAuth');
+                playGamifiedSound('admin');
+                triggerConfetti();
+            } else {
+                alert('⚠️ PIN incorreto! Verifique e tente novamente.');
             }
         }
 
         function logoutAdmin() {
             isAdmin = false;
-            showDashboard = false;
-            document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('adminBtn').classList.remove('hidden');
-            render();
+            saveData();
+            updateAdminUI();
         }
 
-        function switchUser(val) {
-            activeUserId = val === 'ALL' ? null : val;
-            render();
+        function updateAdminUI() {
+            const adminPanel = document.getElementById('adminPanel');
+            const adminBtn = document.getElementById('adminBtn');
+            if (isAdmin) {
+                adminPanel.classList.remove('hidden');
+                adminBtn.innerHTML = '<span>🔓 ADM ON</span>';
+                adminBtn.classList.add('gold');
+            } else {
+                adminPanel.classList.add('hidden');
+                adminBtn.innerHTML = '<span>🔐 PIN ADM</span>';
+                adminBtn.classList.remove('gold');
+            }
+            renderTasks();
         }
 
-        async function addUser() {
-            const input = document.getElementById('newUserName');
-            if (!input.value.trim()) return;
-            try {
-                const form = new FormData();
-                form.append('action', 'user');
-                form.append('name', input.value.trim());
-                await apiRequest({ method: 'POST', body: form });
-                input.value = '';
-                closeModal('modalUser');
-                await refresh();
-            } catch (error) { alert(error.message); }
+        function openChangePinModal() {
+            openModal('modalChangePin');
         }
 
-        function toLocalInput(iso) {
-            if (!iso) return '';
-            const d = new Date(iso);
-            const pad = n => String(n).padStart(2, '0');
-            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        }
-
-        function openTaskModal(taskId = null) {
-            editingTaskId = taskId;
-            const task = tasks.find(t => t.id === taskId);
-            render();
-            document.getElementById('taskModalTitle').textContent = task ? 'Editar Demanda' : 'Criar Nova Demanda';
-            document.getElementById('btnCreateTask').textContent = task ? 'Salvar Alterações' : 'Enviar Demanda';
-            document.getElementById('taskImageGroup').classList.toggle('hidden', !!task);
-            document.getElementById('taskDescription').value = task ? task.description : '';
-            document.getElementById('taskPriority').value = task ? task.priority : 'NORMAL';
-            document.getElementById('taskDueAt').value = task ? toLocalInput(task.dueAt) : '';
-            if (task) document.getElementById('taskAssignedTo').value = task.assignedTo;
-            openModal('modalTask');
-        }
-
-        async function createTask() {
-            const assignedTo = document.getElementById('taskAssignedTo').value;
-            const description = document.getElementById('taskDescription').value;
-            const fileInput = document.getElementById('taskImageInput').files[0];
-            const dueValue = document.getElementById('taskDueAt').value;
-
-            if (!assignedTo || !description.trim() || (!editingTaskId && !fileInput)) {
-                alert(editingTaskId ? 'Preencha a descrição e o responsável.' : 'Preencha a descrição e selecione uma foto.');
+        function changeAdminPin() {
+            const curr = document.getElementById('pinCurrentInput').value;
+            const next = document.getElementById('pinNewInput').value;
+            if (curr !== adminPin) {
+                alert('PIN atual incorreto.');
                 return;
             }
-
-            const btn = document.getElementById('btnCreateTask');
-            btn.disabled = true;
-            btn.textContent = 'Processando...';
-
-            try {
-                const form = new FormData();
-                form.append('action', editingTaskId ? 'updateTask' : 'task');
-                if (editingTaskId) form.append('id', editingTaskId);
-                form.append('assignedTo', assignedTo);
-                form.append('description', description.trim());
-                form.append('priority', document.getElementById('taskPriority').value);
-                form.append('dueAt', dueValue ? new Date(dueValue).toISOString() : '');
-                if (!editingTaskId) form.append('image', await compressImage(fileInput), 'demanda.jpg');
-                await apiRequest({ method: 'POST', body: form });
-                closeModal('modalTask');
-                document.getElementById('taskDescription').value = '';
-                document.getElementById('taskImageInput').value = '';
-                document.getElementById('taskDueAt').value = '';
-                editingTaskId = null;
-                await refresh();
-            } catch (error) { alert(error.message); }
-            finally {
-                btn.disabled = false;
-                btn.textContent = editingTaskId ? 'Salvar Alterações' : 'Enviar Demanda';
+            if (!next || next.length < 4) {
+                alert('O novo PIN deve ter pelo menos 4 caracteres.');
+                return;
             }
+            adminPin = next;
+            saveData();
+            closeModal('modalChangePin');
+            alert('✅ PIN alterado com sucesso!');
         }
 
-        function openFeedbackModal(taskId, mode) {
-            feedbackTaskId = taskId;
-            feedbackMode = mode;
-            const task = tasks.find(t => t.id === taskId);
-            document.getElementById('feedbackTitle').textContent = mode === 'reopen' ? 'Reabrir Demanda' : 'Retorno do ADM';
-            document.getElementById('btnFeedback').textContent = mode === 'reopen' ? 'Reabrir e Enviar' : 'Salvar';
-            document.getElementById('feedbackText').value = task ? task.adminFeedback : '';
-            openModal('modalFeedback');
+        /* ==========================================================================
+           5. LÓGICA DE XP, NÍVEL E CONQUISTAS
+           ========================================================================== */
+        function calculateTaskXP(task) {
+            if (task.status !== 'CONCLUÍDO') return 0;
+            const baseMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 220 };
+            let total = baseMap[task.priority] || 100;
+
+            if (task.dueDate && task.completedAt) {
+                if (new Date(task.completedAt) <= new Date(task.dueDate)) {
+                    total += 50; // Bônus de pontualidade
+                } else {
+                    total = Math.floor(total * 0.5); // Penalidade atraso
+                }
+            }
+            return total;
         }
 
-        async function submitFeedback() {
-            const btn = document.getElementById('btnFeedback');
-            btn.disabled = true;
-            try {
-                const form = new FormData();
-                form.append('action', feedbackMode);
-                form.append('id', feedbackTaskId);
-                form.append('feedback', document.getElementById('feedbackText').value.trim());
-                await apiRequest({ method: 'POST', body: form });
-                closeModal('modalFeedback');
-                await refresh();
-            } catch (error) { alert(error.message); }
-            finally { btn.disabled = false; }
+        function getUserXP(userId) {
+            return tasks
+                .filter(t => t.assignee === userId && t.status === 'CONCLUÍDO')
+                .reduce((acc, t) => acc + calculateTaskXP(t), 0);
         }
 
-        function openTeamModal() {
-            renderTeam();
-            openModal('modalTeam');
+        function getLevelData(xp) {
+            const level = Math.floor(xp / 250) + 1;
+            const currentLevelXP = xp % 250;
+            const progress = Math.min(100, Math.floor((currentLevelXP / 250) * 100));
+            
+            const titles = [
+                'Iniciante', 'Aprendiz', 'Operador Agil', 'Especialista', 
+                'Mestre das Entregas', 'Lenda da Equipe', 'Titã da Produtividade'
+            ];
+            const title = titles[Math.min(level - 1, titles.length - 1)];
+
+            return { level, currentLevelXP, progress, title };
         }
 
-        function renderTeam() {
-            document.getElementById('teamList').innerHTML = users.map(u => `
-                <div class="team-row ${u.active ? '' : 'inactive'}">
-                    <input type="text" id="name-${u.id}" value="${escapeHtml(u.name)}" aria-label="Nome">
-                    <div>
-                        <button onclick="saveUser('${u.id}', ${u.active})">Salvar</button>
-                        <button class="secondary" onclick="saveUser('${u.id}', ${!u.active})">${u.active ? 'Desativar' : 'Reativar'}</button>
-                    </div>
-                </div>`).join('') || '<p>Nenhum menor cadastrado.</p>';
-        }
-
-        async function saveUser(id, active) {
-            const name = document.getElementById(`name-${id}`).value.trim();
-            if (!name) return alert('Informe o nome.');
-            const pending = tasks.filter(t => t.assignedTo === id && t.status === 'PENDENTE').length;
-            if (!active && pending && !confirm(`Este menor tem ${pending} demanda(s) pendente(s). Elas continuarão ativas. Desativar mesmo assim?`)) return;
-            try {
-                const form = new FormData();
-                form.append('action', 'updateUser');
-                form.append('id', id);
-                form.append('name', name);
-                form.append('active', String(active));
-                await apiRequest({ method: 'POST', body: form });
-                await refresh();
-                renderTeam();
-            } catch (error) { alert(error.message); }
-        }
-
-        function setFilter(value) {
-            statusFilter = value;
-            document.querySelectorAll('#statusFilters button').forEach(b => b.classList.toggle('on', b.dataset.filter === value));
-            render();
-        }
-
-        function toggleDashboard() {
-            showDashboard = !showDashboard;
-            render();
-            if (showDashboard) document.getElementById('dashboardSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function isOverdue(task) {
-            return task.status === 'PENDENTE' && task.dueAt && new Date(task.dueAt) < new Date();
-        }
-
-        function formatDuration(ms) {
-            if (ms == null || Number.isNaN(ms)) return '—';
-            const minutes = Math.max(0, Math.round(ms / 60000));
-            if (minutes < 60) return `${minutes} min`;
-            const hours = minutes / 60;
-            if (hours < 24) return `${hours.toFixed(1).replace('.', ',')} h`;
-            return `${(hours / 24).toFixed(1).replace('.', ',')} d`;
-        }
-
-        const fmtDate = iso => iso ? new Date(iso).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '—';
-        const pct = (a, b) => b ? Math.round((a / b) * 100) : 0;
-
-        // Entregas vêm do histórico permanente; pendências vêm das demandas atuais.
-        function computeStats(doneList, openTasks) {
-            const withDue = doneList.filter(d => d.onTime !== null);
-            const onTime = withDue.filter(d => d.onTime);
-            const avg = doneList.length ? doneList.reduce((s, d) => s + (new Date(d.deliveredAt) - new Date(d.taskCreatedAt)), 0) / doneList.length : null;
-            const last = doneList.map(d => d.deliveredAt).sort().pop() || null;
-            const pending = openTasks.filter(t => t.status === 'PENDENTE').length;
-            return {
-                total: doneList.length + pending, done: doneList.length, pending,
-                overdue: openTasks.filter(isOverdue).length,
-                rate: pct(doneList.length, doneList.length + pending),
-                onTimeRate: withDue.length ? pct(onTime.length, withDue.length) : null,
-                xp: doneList.reduce((s, d) => s + d.xp, 0),
-                avg, last,
-            };
-        }
-
-        function renderDashboard() {
-            const since = sinceDays(Number(document.getElementById('dashPeriod').value));
-            const doneInPeriod = deliveriesSince(since);
-            const openTasks = tasks.filter(t => t.status === 'PENDENTE');
-            const overall = computeStats(doneInPeriod, openTasks);
-
-            document.getElementById('dashKpis').innerHTML = [
-                [overall.total, 'Demandas'],
-                [overall.done, 'Entregues'],
-                [`${overall.rate}%`, 'Conclusão'],
-                [formatDuration(overall.avg), 'Tempo médio'],
-                [overall.onTimeRate == null ? '—' : `${overall.onTimeRate}%`, 'No prazo'],
-                [overall.overdue, 'Atrasadas'],
-                [overall.xp, 'XP gerado'],
-            ].map(([v, l]) => `<div class="kpi"><strong>${v}</strong><span>${l}</span></div>`).join('');
-
-            const ranking = users
-                .map(u => ({ user: u, lv: levelInfo(userXp(u.id)), s: computeStats(doneInPeriod.filter(d => d.userId === u.id), openTasks.filter(t => t.assignedTo === u.id)) }))
-                .filter(r => r.user.active || r.s.total)
-                .sort((a, b) => b.s.xp - a.s.xp || b.s.done - a.s.done || b.s.rate - a.s.rate);
-
-            document.getElementById('dashPerf').innerHTML = ranking.map((r, i) => `
-                <div class="perf-card">
-                    <header><h4>${escapeHtml(r.user.name)} <span class="lv-chip">Nv ${r.lv.level}</span>${r.user.active ? '' : ' <small style="color: var(--text-muted);">(inativo)</small>'}</h4><span class="rank">#${i + 1} · ${r.s.xp} XP</span></header>
-                    <div style="display: flex; justify-content: space-between; font-size: .75rem; color: var(--text-muted);"><span>Conclusão</span><b style="color: var(--ink);">${r.s.rate}%</b></div>
-                    <div class="meter" role="img" aria-label="${r.s.rate}% concluído"><div style="width: ${r.s.rate}%;"></div></div>
-                    <div class="perf-stats">
-                        <div><b>${r.s.done}</b>Entregues</div>
-                        <div><b>${r.s.pending}</b>Pendentes</div>
-                        <div><b class="${r.s.overdue ? 'late' : ''}">${r.s.overdue}</b>Atrasadas</div>
-                        <div><b>${formatDuration(r.s.avg)}</b>Tempo médio</div>
-                        <div><b>${r.s.onTimeRate == null ? '—' : r.s.onTimeRate + '%'}</b>No prazo</div>
-                        <div><b style="font-size: .8rem;">${r.s.last ? new Date(r.s.last).toLocaleDateString('pt-BR') : '—'}</b>Última entrega</div>
-                    </div>
-                    <button class="secondary" onclick="viewUser('${r.user.id}')">Ver demandas</button>
-                </div>`).join('') || '<div class="empty-state"><strong>Sem dados no período</strong></div>';
-
-            document.getElementById('dashDeliveries').innerHTML = doneInPeriod.map(d => {
-                const user = users.find(u => u.id === d.userId);
-                const deadline = d.onTime === null ? '<span style="color: var(--text-muted);">—</span>'
-                    : d.onTime ? '<span class="ok">No prazo</span>' : '<span class="late">Atrasada</span>';
-                const desc = d.description.length > 60 ? d.description.slice(0, 60) + '…' : d.description;
-                return `<tr><td>${user ? escapeHtml(user.name) : '—'}</td><td>${escapeHtml(desc)}</td><td>${fmtDate(d.taskCreatedAt)}</td><td>${fmtDate(d.deliveredAt)}</td><td>${formatDuration(new Date(d.deliveredAt) - new Date(d.taskCreatedAt))}</td><td>${deadline}</td><td><span class="xp-chip">+${d.xp}</span></td></tr>`;
-            }).join('') || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Nenhuma entrega no período.</td></tr>';
-        }
-
-        function setRankPeriod(days) {
-            rankPeriod = days;
-            document.querySelectorAll('#rankFilters button').forEach(b => b.classList.toggle('on', Number(b.dataset.period) === days));
+        /* ==========================================================================
+           6. RENDERIZAÇÃO DA INTERFACE
+           ========================================================================== */
+        function renderAll() {
+            renderHeroCard();
+            renderMetrics();
             renderRanking();
+            renderTasks();
+            renderRewards();
+        }
+
+        function renderHeroCard() {
+            const user = users.find(u => u.id === currentUser);
+            if (!user) return;
+
+            const totalXP = getUserXP(user.id);
+            const { level, currentLevelXP, progress, title } = getLevelData(totalXP);
+
+            document.getElementById('heroCard').innerHTML = `
+                <div class="user-profile-header">
+                    <div class="avatar-frame">
+                        <div class="avatar-inner">${user.name.charAt(0)}</div>
+                        <div class="level-badge-floating">LVL ${level}</div>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">
+                            ${user.name}
+                            ${isAdmin ? '<span style="font-size:0.65rem; background:var(--yellow-bright); color:#2a080c; padding:1px 5px; border-radius:4px; font-weight:800;">ADM</span>' : ''}
+                        </div>
+                        <div class="user-title">⚡ ${title} • ${totalXP} XP Total</div>
+                    </div>
+                </div>
+                <div class="xp-container">
+                    <div class="xp-bar-bg">
+                        <div class="xp-bar-fill" style="width: ${progress}%;"></div>
+                    </div>
+                    <div class="xp-stats">
+                        <span>Progresso Nível ${level + 1}</span>
+                        <span>${currentLevelXP} / 250 XP (${progress}%)</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMetrics() {
+            const pending = tasks.filter(t => t.status === 'PENDENTE').length;
+            const done = tasks.filter(t => t.status === 'CONCLUÍDO').length;
+            const user = users.find(u => u.id === currentUser);
+
+            document.getElementById('metricPending').textContent = pending;
+            document.getElementById('metricDone').textContent = done;
+            document.getElementById('metricStreak').textContent = `${user?.streak || 0}🔥`;
         }
 
         function renderRanking() {
-            const list = deliveriesSince(sinceDays(rankPeriod));
-            const ranking = users
-                .map(u => {
-                    const mine = list.filter(d => d.userId === u.id);
-                    const timed = mine.filter(d => d.onTime !== null);
-                    return { user: u, xp: userXp(u.id, list), count: mine.length, lv: levelInfo(userXp(u.id)),
-                        onTime: timed.length ? pct(timed.filter(d => d.onTime).length, timed.length) : null };
-                })
-                .filter(r => r.user.active || r.count)
-                .sort((a, b) => b.xp - a.xp || b.count - a.count || b.lv.xp - a.lv.xp || a.user.name.localeCompare(b.user.name));
+            const activeUsers = users.filter(u => u.active);
+            const ranked = activeUsers.map(u => ({
+                ...u,
+                xp: getUserXP(u.id),
+                doneCount: tasks.filter(t => t.assignee === u.id && t.status === 'CONCLUÍDO').length
+            })).sort((a, b) => b.xp - a.xp);
 
-            const podium = document.getElementById('podium');
-            const top = ranking.slice(0, 3).filter(r => r.xp > 0);
-            podium.classList.toggle('hidden', top.length === 0);
-            podium.innerHTML = [top[1], top[0], top[2]].map((r, i) => {
-                if (!r) return '<div></div>';
-                const place = [2, 1, 3][i];
-                return `<div class="podium-spot p${place}" onclick="viewUser('${r.user.id}')" style="cursor: pointer;">
-                    <div class="avatar">${escapeHtml(initials(r.user.name))}</div>
-                    <div class="pname">${escapeHtml(r.user.name.split(' ')[0])}</div>
-                    <div class="pxp">${r.xp} XP</div>
-                    <div class="podium-base">${place}</div>
-                </div>`;
+            const p1 = ranked[0], p2 = ranked[1], p3 = ranked[2];
+
+            document.getElementById('podiumGrid').innerHTML = `
+                <div class="podium-slot p2">
+                    ${p2 ? `<div class="podium-avatar">${p2.name.charAt(0)}</div><div class="podium-name">${p2.name}</div><div class="podium-xp">${p2.xp} XP</div><div class="podium-block">2</div>` : ''}
+                </div>
+                <div class="podium-slot p1">
+                    ${p1 ? `<div class="podium-avatar">${p1.name.charAt(0)}</div><div class="podium-name">${p1.name}</div><div class="podium-xp">${p1.xp} XP</div><div class="podium-block">1</div>` : ''}
+                </div>
+                <div class="podium-slot p3">
+                    ${p3 ? `<div class="podium-avatar">${p3.name.charAt(0)}</div><div class="podium-name">${p3.name}</div><div class="podium-xp">${p3.xp} XP</div><div class="podium-block">3</div>` : ''}
+                </div>
+            `;
+
+            document.getElementById('rankList').innerHTML = ranked.map((u, i) => `
+                <div class="rank-item ${u.id === currentUser ? 'is-me' : ''}">
+                    <div class="rank-pos">#${i + 1}</div>
+                    <div class="rank-details">
+                        <div class="rank-user">${u.name} ${u.id === currentUser ? '(Você)' : ''}</div>
+                        <div class="rank-sub">${u.doneCount} entregas realizadas</div>
+                    </div>
+                    <div class="rank-score">${u.xp} XP</div>
+                </div>
+            `).join('');
+        }
+
+        function renderTasks() {
+            const grid = document.getElementById('tasksGrid');
+            const now = new Date();
+
+            let list = tasks.filter(t => {
+                const isLate = t.status === 'PENDENTE' && t.dueDate && new Date(t.dueDate) < now;
+                if (currentFilter === 'PENDENTE') return t.status === 'PENDENTE' && !isLate;
+                if (currentFilter === 'MINHAS') return t.assignee === currentUser;
+                if (currentFilter === 'ATRASADA') return t.status === 'PENDENTE' && isLate;
+                if (currentFilter === 'CONCLUÍDO') return t.status === 'CONCLUÍDO';
+                return true;
+            });
+
+            document.getElementById('taskCountLbl').textContent = `${list.length} demandas`;
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎯</div>
+                        <strong style="color:var(--red-dark)">Nenhuma demanda encontrada</strong>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem">Tudo em dia ou nenhum item neste filtro.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = list.map(t => {
+                const assigneeUser = users.find(u => u.id === t.assignee)?.name || 'Sem atribuição';
+                const isDone = t.status === 'CONCLUÍDO';
+                const isLate = !isDone && t.dueDate && new Date(t.dueDate) < now;
+                const xpValue = isDone ? calculateTaskXP(t) : (calculateTaskXP({ ...t, status: 'CONCLUÍDO', completedAt: t.dueDate || now.toISOString() }));
+
+                return `
+                    <div class="task-card ${t.priority} ${isDone ? 'is-done' : ''} ${isLate ? 'is-late' : ''}">
+                        <div class="task-top">
+                            <div class="task-badges">
+                                <span class="tag prio ${t.priority}">${t.priority}</span>
+                                ${isLate ? '<span class="tag late">Atrasada</span>' : ''}
+                                ${isDone ? '<span class="tag done">Entregue</span>' : ''}
+                            </div>
+                            <div class="task-xp-value">+${xpValue} XP</div>
+                        </div>
+                        <div class="task-desc">${t.description}</div>
+                        ${t.image ? `<img src="${t.image}" class="task-img-thumb" onclick="openLightbox('${t.image}')" alt="Instrução">` : ''}
+                        <div class="task-meta">
+                            <span>👤 ${assigneeUser}</span>
+                            ${t.dueDate ? `<span>📅 Prazo: ${new Date(t.dueDate).toLocaleString('pt-BR', { dateStyle:'short', timeStyle:'short' })}</span>` : ''}
+                        </div>
+                        ${t.devolutivaNotes ? `<div class="task-devolutiva"><b>Devolutiva:</b> ${t.devolutivaNotes}</div>` : ''}
+                        ${t.devolutivaPhoto ? `<img src="${t.devolutivaPhoto}" class="task-img-thumb" onclick="openLightbox('${t.devolutivaPhoto}')" alt="Comprovante">` : ''}
+                        
+                        <div class="task-actions">
+                            ${!isDone && (t.assignee === currentUser || isAdmin) ? `
+                                <button onclick="openCompleteModal('${t.id}')" class="gold">Concluir Entrega ⚡</button>
+                            ` : ''}
+                            ${isAdmin ? `
+                                ${isDone ? `<button onclick="reopenTask('${t.id}')" class="secondary">Reabrir</button>` : ''}
+                                <button onclick="deleteTask('${t.id}')" class="danger">Excluir</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
             }).join('');
-
-            document.getElementById('rankList').innerHTML = ranking.map((r, i) => `
-                <div class="rank-row ${activeUserId === r.user.id ? 'me' : ''}" onclick="viewUser('${r.user.id}')">
-                    <div class="rank-pos">${i < 3 && r.xp > 0 ? ['🥇', '🥈', '🥉'][i] : i + 1}</div>
-                    <div class="rank-name">
-                        <strong>${escapeHtml(r.user.name)}</strong>
-                        <span><span class="lv-chip">Nv ${r.lv.level} · ${r.lv.title}</span> ${r.count} entrega${r.count === 1 ? '' : 's'}${r.onTime == null ? '' : ` · ${r.onTime}% no prazo`}</span>
-                    </div>
-                    <div class="rank-xp">${r.xp}<small>XP</small></div>
-                </div>`).join('') || '<div class="empty-state"><strong>Ranking vazio</strong><p>Cadastre menores para começar.</p></div>';
         }
 
-        function renderHero() {
-            const hero = document.getElementById('heroCard');
-            const user = users.find(u => u.id === activeUserId);
-            if (user) {
-                const lv = levelInfo(userXp(user.id));
-                hero.innerHTML = `
-                    <div class="hero-top">
-                        <div class="lv"><div><small>Nível</small><b>${lv.level}</b></div></div>
-                        <div><div class="label">${escapeHtml(user.name)}</div><div class="hero-title">${lv.title}</div><div class="hero-sub">${lv.xp} XP acumulados</div></div>
+        function renderRewards() {
+            const user = users.find(u => u.id === currentUser);
+            const totalXP = getUserXP(user?.id || '');
+            const { level } = getLevelData(totalXP);
+
+            document.getElementById('rewardsGrid').innerHTML = REWARDS_LIST.map(r => {
+                const unlocked = level >= r.reqLevel;
+                return `
+                    <div class="reward-card" style="${unlocked ? 'border-color:var(--yellow-main); background:#fffdf0;' : 'opacity:0.65;'}">
+                        <div class="reward-icon">${r.icon}</div>
+                        <div class="reward-title">${r.title}</div>
+                        <div class="reward-cost">${r.cost}</div>
+                        <button class="${unlocked ? 'gold' : 'secondary'}" style="min-height:30px; font-size:0.72rem; width:100%; margin-top:0.3rem;" ${unlocked ? '' : 'disabled'}>
+                            ${unlocked ? '🔓 Desbloqueado' : '🔒 Requer Nível ' + r.reqLevel}
+                        </button>
                     </div>
-                    <div class="xp-track" role="img" aria-label="${lv.progress}% para o próximo nível"><div style="width: ${lv.progress}%;"></div></div>
-                    <div class="xp-foot"><span>Nv ${lv.level}</span><span>Faltam ${lv.next - lv.xp} XP</span><span>Nv ${lv.level + 1}</span></div>`;
+                `;
+            }).join('');
+        }
+
+        /* ==========================================================================
+           7. OPERAÇÕES DE DEMANDA & CRUD
+           ========================================================================== */
+        function populateUserSelect() {
+            const select = document.getElementById('userSelect');
+            select.innerHTML = users.filter(u => u.active).map(u => 
+                `<option value="${u.id}" ${u.id === currentUser ? 'selected' : ''}>${u.name}</option>`
+            ).join('');
+        }
+
+        function switchUser(userId) {
+            currentUser = userId;
+            renderAll();
+        }
+
+        function setFilter(filter, el) {
+            currentFilter = filter;
+            document.querySelectorAll('#statusFilters .chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            renderTasks();
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tabTasks').classList.add('hidden');
+            document.getElementById('tabRanking').classList.add('hidden');
+            document.getElementById('tabRewards').classList.add('hidden');
+
+            document.getElementById('tabTasksBtn').classList.remove('active');
+            document.getElementById('tabRankingBtn').classList.remove('active');
+            document.getElementById('tabRewardsBtn').classList.remove('active');
+
+            if (tab === 'tasks') {
+                document.getElementById('tabTasks').classList.remove('hidden');
+                document.getElementById('tabTasksBtn').classList.add('active');
+            } else if (tab === 'ranking') {
+                document.getElementById('tabRanking').classList.remove('hidden');
+                document.getElementById('tabRankingBtn').classList.add('active');
+            } else if (tab === 'rewards') {
+                document.getElementById('tabRewards').classList.remove('hidden');
+                document.getElementById('tabRewardsBtn').classList.add('active');
+            }
+        }
+
+        function openTaskModal() {
+            const select = document.getElementById('taskAssignee');
+            select.innerHTML = users.filter(u => u.active).map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+            document.getElementById('taskDesc').value = '';
+            document.getElementById('taskDueDate').value = '';
+            document.getElementById('taskImageInput').value = '';
+            openModal('modalTask');
+        }
+
+        async function saveTask() {
+            const assignee = document.getElementById('taskAssignee').value;
+            const description = document.getElementById('taskDesc').value.trim();
+            const priority = document.getElementById('taskPriority').value;
+            const dueDate = document.getElementById('taskDueDate').value;
+            const imgInput = document.getElementById('taskImageInput');
+
+            if (!description) {
+                alert('Informe a descrição da demanda.');
                 return;
             }
-            const totalXp = deliveries.reduce((s, d) => s + d.xp, 0);
-            const weekly = deliveriesSince(sinceDays(7));
-            const leader = users.map(u => ({ u, xp: userXp(u.id, weekly) })).sort((a, b) => b.xp - a.xp)[0];
-            hero.innerHTML = `
-                <div class="hero-top">
-                    <div class="lv"><div><small>Equipe</small><b>${users.filter(u => u.active).length}</b></div></div>
-                    <div><div class="label">Visão geral</div><div class="hero-title">${totalXp} XP conquistados</div>
-                    <div class="hero-sub">${leader && leader.xp ? `Destaque da semana: ${escapeHtml(leader.u.name)} (${leader.xp} XP)` : 'Selecione um menor para ver o nível dele'}</div></div>
-                </div>`;
-        }
 
-        function viewUser(id) {
-            activeUserId = id;
-            render();
-            document.getElementById('tasksGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function openResponseModal(taskId) {
-            currentTaskIdForResponse = taskId;
-            openModal('modalResponse');
-        }
-
-        async function submitResponse() {
-            const notes = document.getElementById('responseNotes').value;
-            const fileInput = document.getElementById('responseImageInput').files[0];
-
-            if (!fileInput) {
-                alert('Selecione uma foto da devolutiva.');
-                return;
+            let imageBase64 = null;
+            if (imgInput.files[0]) {
+                imageBase64 = await convertBase64(imgInput.files[0]);
             }
 
-            const btn = document.getElementById('btnSubmitResponse');
-            btn.disabled = true;
-            btn.textContent = 'Enviando...';
+            const newTask = {
+                id: 't_' + Date.now(),
+                assignee,
+                description,
+                priority,
+                dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+                image: imageBase64,
+                status: 'PENDENTE',
+                createdAt: new Date().toISOString()
+            };
 
-            try {
-                const image = await compressImage(fileInput);
-                const form = new FormData();
-                form.append('action', 'response');
-                form.append('id', currentTaskIdForResponse);
-                form.append('notes', notes.trim());
-                form.append('image', image, 'devolutiva.jpg');
-                await apiRequest({ method: 'POST', body: form });
-                closeModal('modalResponse');
-                document.getElementById('responseNotes').value = '';
-                document.getElementById('responseImageInput').value = '';
-                await refresh();
-            } catch (error) { alert(error.message); }
-            finally {
-                btn.disabled = false;
-                btn.textContent = 'Concluir Tarefa';
+            tasks.unshift(newTask);
+            saveData();
+            closeModal('modalTask');
+            renderAll();
+        }
+
+        function openCompleteModal(taskId) {
+            activeTaskId = taskId;
+            document.getElementById('devolutivaNotes').value = '';
+            document.getElementById('devolutivaPhoto').value = '';
+            openModal('modalComplete');
+        }
+
+        async function submitTaskCompletion() {
+            const task = tasks.find(t => t.id === activeTaskId);
+            if (!task) return;
+
+            const notes = document.getElementById('devolutivaNotes').value.trim();
+            const photoInput = document.getElementById('devolutivaPhoto');
+
+            let photoBase64 = null;
+            if (photoInput.files[0]) {
+                photoBase64 = await convertBase64(photoInput.files[0]);
+            }
+
+            task.status = 'CONCLUÍDO';
+            task.completedAt = new Date().toISOString();
+            task.devolutivaNotes = notes;
+            task.devolutivaPhoto = photoBase64;
+
+            // Incrementa streak do usuário
+            const user = users.find(u => u.id === task.assignee);
+            if (user) user.streak = (user.streak || 0) + 1;
+
+            saveData();
+            closeModal('modalComplete');
+            playGamifiedSound('complete');
+            triggerConfetti();
+            renderAll();
+        }
+
+        function reopenTask(taskId) {
+            if (confirm('Reabrir esta demanda? O XP acumulado será removido.')) {
+                const task = tasks.find(t => t.id === taskId);
+                if (task) {
+                    task.status = 'PENDENTE';
+                    delete task.completedAt;
+                    delete task.devolutivaNotes;
+                    delete task.devolutivaPhoto;
+                    saveData();
+                    renderAll();
+                }
             }
         }
 
-        async function deleteTask(id) {
-            if (confirm('Deseja excluir esta demanda?')) {
-                try {
-                    await apiRequest({ method: 'DELETE', headers: { 'X-Task-Id': id } });
-                    await refresh();
-                } catch (error) { alert(error.message); }
+        function deleteTask(taskId) {
+            if (confirm('Excluir esta demanda permanentemente?')) {
+                tasks = tasks.filter(t => t.id !== taskId);
+                saveData();
+                renderAll();
             }
         }
 
+        /* ==========================================================================
+           8. GERENCIAMENTO DE EQUIPE (MEMBROS)
+           ========================================================================== */
+        function openUserModal() {
+            document.getElementById('newUserName').value = '';
+            openModal('modalUser');
+        }
+
+        function saveUser() {
+            const name = document.getElementById('newUserName').value.trim();
+            if (!name) return;
+
+            const newUser = { id: 'u_' + Date.now(), name, active: true, streak: 0 };
+            users.push(newUser);
+            saveData();
+            populateUserSelect();
+            closeModal('modalUser');
+            renderAll();
+        }
+
+        function openTeamModal() {
+            const container = document.getElementById('teamListContainer');
+            container.innerHTML = users.map(u => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem; background:white; border-radius:8px; border:1px solid var(--border-subtle);">
+                    <strong>${u.name}</strong>
+                    <button onclick="toggleUserStatus('${u.id}')" class="${u.active ? 'secondary' : 'gold'}" style="min-height:30px; font-size:0.75rem;">
+                        ${u.active ? 'Desativar' : 'Ativar'}
+                    </button>
+                </div>
+            `).join('');
+            openModal('modalTeam');
+        }
+
+        function toggleUserStatus(userId) {
+            const u = users.find(x => x.id === userId);
+            if (u) {
+                u.active = !u.active;
+                saveData();
+                populateUserSelect();
+                openTeamModal();
+                renderAll();
+            }
+        }
+
+        /* ==========================================================================
+           9. EFEITOS DE CONFETTI E MODAIS
+           ========================================================================== */
         function openModal(id) { document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function showLightbox(src) {
+        function openLightbox(src) {
             document.getElementById('lightboxImg').src = src;
             document.getElementById('lightbox').style.display = 'flex';
         }
 
-        function escapeHtml(value) {
-            const node = document.createElement('div');
-            node.textContent = String(value ?? '');
-            return node.innerHTML;
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
         }
 
-        async function refresh() {
-            await loadData();
-            render();
-        }
-
-        // RENDERIZAÇÃO NA TELA
-        function render() {
-
-            const userSelect = document.getElementById('userSelect');
-            const taskAssignedTo = document.getElementById('taskAssignedTo');
-
-            userSelect.innerHTML = `<option value="ALL"> Visão Geral (Todos) </option>` + 
-                users.map(u => `<option value="${u.id}" ${activeUserId === u.id ? 'selected' : ''}>${escapeHtml(u.name)}</option>`).join('');
-
-            const editingTask = tasks.find(t => t.id === editingTaskId);
-            const selectedAssignee = taskAssignedTo.value;
-            taskAssignedTo.innerHTML = users.filter(u => u.active || (editingTask && editingTask.assignedTo === u.id))
-                .map(u => `<option value="${u.id}">${escapeHtml(u.name)}</option>`).join('');
-            if (selectedAssignee) taskAssignedTo.value = selectedAssignee;
-
-            document.getElementById('dashboardSection').classList.toggle('hidden', !(isAdmin && showDashboard));
-            document.getElementById('dashToggle').textContent = showDashboard ? 'Fechar Rendimento' : 'Rendimento';
-            if (isAdmin && showDashboard) renderDashboard();
-
-            const userTasks = tasks.filter(t => activeUserId === null || t.assignedTo === activeUserId);
-            const filteredTasks = userTasks.filter(t =>
-                statusFilter === 'ALL' ? true : statusFilter === 'ATRASADA' ? isOverdue(t) : t.status === statusFilter);
-
-            document.getElementById('statPending').textContent = userTasks.filter(t => t.status === 'PENDENTE').length;
-            document.getElementById('statDone').textContent = deliveries.filter(d => activeUserId === null || d.userId === activeUserId).length;
-            renderHero();
-            renderRanking();
-
-            const grid = document.getElementById('tasksGrid');
-            grid.innerHTML = '';
-
-            if (filteredTasks.length === 0) {
-                grid.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 12.5 10.5 15 16 9.5M5 3.5h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Tudo em ordem por aqui</strong><p>Nenhuma demanda encontrada para esta visualização.</p></div>`;
-                return;
-            }
-
-            filteredTasks.forEach(task => {
-                const user = users.find(u => u.id === task.assignedTo);
-                const isPending = task.status === 'PENDENTE';
-
-                const delivery = !isPending && deliveries.find(d => d.taskId === task.id);
-                const card = document.createElement('div');
-                card.className = `card ${isOverdue(task) ? 'is-late' : isPending ? '' : 'is-done'}`;
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div>
-                            <strong>${user ? escapeHtml(user.name) : 'Não Atribuído'}</strong> ${user ? `<span class="lv-chip">Nv ${levelInfo(userXp(user.id)).level}</span>` : ''}
-                            <div style="font-size: 0.7rem; color: var(--text-muted);">${new Date(task.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</div>
-                        </div>
-                        <span class="badge ${isOverdue(task) ? 'badge-overdue' : isPending ? 'badge-pending' : 'badge-done'}">${isOverdue(task) ? 'ATRASADA' : task.status}</span>
-                    </div>
-
-                    ${(task.priority && task.priority !== 'NORMAL') || task.dueAt || task.completedAt ? `<div class="card-meta">
-                        ${task.priority && task.priority !== 'NORMAL' ? `<span class="badge badge-prio ${task.priority}">${task.priority}</span>` : ''}
-                        ${task.dueAt ? `<span>Prazo: ${fmtDate(task.dueAt)}</span>` : ''}
-                        ${task.completedAt ? `<span>· Entregue: ${fmtDate(task.completedAt)}</span>` : ''}
-                        ${delivery ? `<span class="xp-chip">+${delivery.xp} XP</span>` : ''}
-                    </div>` : ''}
-
-                    <p style="font-size: 0.85rem;">${escapeHtml(task.description)}</p>
-
-                    <div>
-                        <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.2rem;">Demanda:</small>
-                        <div class="img-container">
-                            <img src="${task.taskImage}" onclick="showLightbox('${task.taskImage}')" alt="Demanda">
-                        </div>
-                    </div>
-
-                    ${task.responseImage ? `
-                        <div>
-                            <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.2rem;">Devolutiva:</small>
-                            <div class="img-container">
-                                <img src="${task.responseImage}" onclick="showLightbox('${task.responseImage}')" alt="Devolutiva">
-                            </div>
-                            ${task.responseNotes ? `<p style="font-size: 0.8rem; margin-top: 0.4rem; background: #fff0b8; padding: 0.4rem; border-radius: 6px;">"${escapeHtml(task.responseNotes)}"</p>` : ''}
-                        </div>
-                    ` : ''}
-
-                    ${task.adminFeedback ? `<p class="admin-note"><strong>Retorno do ADM:</strong> ${escapeHtml(task.adminFeedback)}</p>` : ''}
-
-                    <div class="card-actions">
-                        ${isPending ? `<button style="flex: 1;" onclick="openResponseModal('${task.id}')">Enviar Resposta</button>` : ''}
-                        ${isAdmin ? `<button class="secondary" onclick="openTaskModal('${task.id}')">Editar</button>` : ''}
-                        ${isAdmin && !isPending ? `<button class="secondary" onclick="openFeedbackModal('${task.id}', 'reopen')">Reabrir</button>` : ''}
-                        ${isAdmin ? `<button class="secondary" onclick="openFeedbackModal('${task.id}', 'feedback')">Comentar</button>` : ''}
-                        ${isAdmin ? `<button class="danger" onclick="deleteTask('${task.id}')">Excluir</button>` : ''}
-                    </div>
-                `;
-                grid.appendChild(card);
+        function convertBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = err => reject(err);
             });
         }
 
-        // INICIALIZAÇÃO
-        window.addEventListener('DOMContentLoaded', async () => {
-            try { await refresh(); }
-            catch (error) {
-                document.getElementById('tasksGrid').innerHTML = `<div class="empty-state"><strong>Não foi possível carregar</strong><p>${escapeHtml(error.message)}</p></div>`;
+        function triggerConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const pieces = [];
+            const colors = ['#f59e0b', '#fbbf24', '#ef4444', '#ffffff', '#b91c1c'];
+
+            for (let i = 0; i < 80; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 3 + 2,
+                    speedX: Math.random() * 2 - 1
+                });
             }
-        });
-        window.addEventListener('focus', () => refresh().catch(() => {}));
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') refresh().catch(() => {});
-        });
+
+            let frame = 0;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                });
+
+                if (frame++ < 120) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            animate();
+        }
     </script>
 </body>
 </html>
