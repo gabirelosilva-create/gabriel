@@ -2,17 +2,11 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#9f1d20">
-    <meta name="description" content="Acompanhe, distribua e conclua as demandas da equipe em um só lugar.">
-    <title>Demandas Express — Painel de Operações</title>
-
-    <!-- Manifest PWA para permitir instalar no celular -->
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22Demandas%20Express%22%2C%22short_name%22%3A%22Demandas%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait-primary%22%2C%22background_color%22%3A%22%23fff8e7%22%2C%22theme_color%22%3A%22%239f1d20%22%7D">
-
+    <title>Demandas Express</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
-
         :root {
             --primary: #b3262b;
             --primary-hover: #8f171c;
@@ -30,15 +24,7 @@
             --radius: 18px;
             --shadow: 0 18px 42px rgba(118, 31, 25, .11);
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: "DM Sans", sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "DM Sans"; }
         body {
             background: radial-gradient(circle at 15% 0%, #a3262b 0, transparent 40rem), radial-gradient(circle at 90% 100%, #5e0f13 0, transparent 35rem), #80171b;
             background-attachment: fixed;
@@ -46,27 +32,22 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-bottom: 0;
             align-items: center;
-            overflow-x: hidden;
         }
-
         header {
             background: rgba(255,248,231,.94);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
-            padding: max(1rem, env(safe-area-inset-top)) 1rem 1rem;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 10;
-            box-shadow: 0 8px 24px rgba(69,20,22,.06);
             width: 100%;
             max-width: 520px;
         }
-
         .logo {
             font-family: "Manrope", sans-serif;
             font-size: 1rem;
@@ -75,17 +56,9 @@
             display: flex;
             align-items: center;
             gap: .65rem;
-            letter-spacing: -.03em;
         }
-
-        .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; color: var(--ink); background: var(--yellow); border-radius: 12px 12px 12px 3px; box-shadow: 0 5px 0 #d49412; }
-
-        .user-controls {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
+        .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; color: var(--ink); background: var(--yellow); border-radius: 12px 12px 12px 3px; }
+        .user-controls { display: flex; gap: 0.5rem; align-items: center; }
         select, button, input, textarea {
             font-size: 0.9rem;
             padding: 0.6rem 0.8rem;
@@ -96,12 +69,6 @@
             outline: none;
             transition: all 0.2s ease;
         }
-
-        select:focus, input:focus, textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(179,38,43,.15);
-        }
-
         button {
             background-color: var(--primary);
             color: #fffdf7;
@@ -110,211 +77,73 @@
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 0.4rem;
             min-height: 44px;
-            box-shadow: 0 6px 14px rgba(143,23,28,.18);
         }
-
         button:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        button:active { transform: scale(0.98); }
-        button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid rgba(243,189,50,.65); outline-offset: 2px; }
-        button:disabled { opacity: .55; cursor: wait; }
-
         button.secondary {
             background-color: transparent;
             color: var(--text-muted);
             border: 1px solid var(--border);
-            box-shadow: none;
         }
         button.secondary:hover { color: var(--ink); background: var(--yellow-soft); }
-
-        button.danger {
-            background-color: #f9d9d5;
-            color: var(--danger);
-            border: none;
-        }
-
         main {
             flex: 1;
             max-width: 520px;
             width: 100%;
             margin: 0 auto;
-            padding: 0 1rem max(3rem, env(safe-area-inset-bottom));
-            background: radial-gradient(circle at 105% 2%, rgba(243,189,50,.38), transparent 17rem), linear-gradient(rgba(179,38,43,.035) 1px, transparent 1px), var(--bg);
-            background-size: auto, 24px 24px, auto;
-            box-shadow: 0 0 70px rgba(61,8,11,.28);
+            padding: 0 1rem 3rem;
+            background: var(--bg);
         }
-
-        .intro { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 2.6rem 0 1.7rem; }
+        .intro { padding: 2rem 0 1rem; }
         .eyebrow { color: var(--primary); font-size: .72rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .75rem; }
-        .intro h1 { font-family: "Manrope",sans-serif; font-size: clamp(2.65rem,12.5vw,4rem); line-height: .95; letter-spacing: -.075em; color: var(--ink); max-width: 460px; }
-        .intro-copy { color: var(--text-muted); line-height: 1.6; max-width: 390px; padding-bottom: .4rem; }
-        .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin: 2.4rem 0 1rem; }
-        .section-heading h2 { font-family: "Manrope",sans-serif; font-size: 1.35rem; letter-spacing: -.04em; }
-        .section-heading p { font-size: .82rem; color: var(--text-muted); }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: .65rem;
-            margin-bottom: 1.25rem;
-        }
-
+        .intro h1 { font-family: "Manrope",sans-serif; font-size: 2.5rem; color: var(--ink); }
+        .intro-copy { color: var(--text-muted); line-height: 1.6; margin-top: 0.5rem; }
+        .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin: 2rem 0 1rem; }
+        .section-heading h2 { font-family: "Manrope",sans-serif; font-size: 1.35rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .65rem; margin-bottom: 1.25rem; }
         .stat-card {
             background: var(--surface);
-            padding: 1.2rem 1.3rem;
+            padding: 1.2rem;
             border-radius: var(--radius);
             border: 1px solid var(--border);
-            text-align: left;
-            border-bottom: 4px solid var(--yellow);
+            box-shadow: 0 8px 20px rgba(118,31,25,.06);
         }
-        .stat-card { box-shadow: 0 8px 20px rgba(118,31,25,.06); }
-        .stat-card.hero { grid-column: 1 / -1; background: linear-gradient(135deg, #b3262b 0%, #8f171c 70%, #6f1216 100%); border: none; color: white; position: relative; overflow: hidden; border-bottom: 4px solid var(--yellow); padding: 1.3rem 1.3rem 1.2rem; }
-        .stat-card.hero::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, rgba(243,189,50,.45), transparent 70%); }
-        .stat-card.hero .num, .stat-card.hero .label { color: white; }
-        .hero-top { display: flex; align-items: center; gap: .9rem; position: relative; z-index: 1; }
-        .hero-top .label { color: #f7d9d2 !important; }
-        .hero-title { font-family: "Manrope",sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -.04em; line-height: 1.1; }
-        .hero-sub { font-size: .78rem; color: #f7d9d2; margin-top: .2rem; }
-        .xp-track { position: relative; z-index: 1; height: 10px; background: rgba(255,255,255,.18); border-radius: 99px; overflow: hidden; margin-top: 1rem; }
-        .xp-track > div { height: 100%; background: linear-gradient(90deg, #f3bd32, #ffe08a); border-radius: 99px; transition: width .6s ease; }
-        .xp-foot { position: relative; z-index: 1; display: flex; justify-content: space-between; font-size: .72rem; color: #f7d9d2; margin-top: .45rem; font-weight: 600; }
-
-        .lv { flex: 0 0 auto; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 16px; background: var(--yellow); color: var(--ink); font-family: "Manrope",sans-serif; font-weight: 800; box-shadow: 0 5px 0 #d49412; line-height: 1; text-align: center; }
-        .lv small { display: block; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; }
-        .lv b { font-size: 1.35rem; }
-        .lv-chip { display: inline-flex; align-items: center; gap: .2rem; font-size: .66rem; font-weight: 800; background: var(--yellow-soft); color: #7c430b; border-radius: 99px; padding: .12rem .45rem; vertical-align: middle; white-space: nowrap; }
-        .xp-chip { font-size: .7rem; font-weight: 800; color: #2f7a3b; background: #e2f2df; border-radius: 99px; padding: .15rem .5rem; }
-
-        .ranking { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; }
-        .ranking .filters { margin-bottom: .9rem; }
-        .podium { display: grid; grid-template-columns: 1fr 1.12fr 1fr; align-items: end; gap: .5rem; margin-bottom: .9rem; }
-        .podium-spot { text-align: center; display: flex; flex-direction: column; align-items: center; gap: .3rem; min-width: 0; }
-        .podium-spot .avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-family: "Manrope",sans-serif; font-weight: 800; color: var(--ink); background: #f6e9c9; border: 3px solid #e0c48f; }
-        .podium-spot.p1 .avatar { width: 58px; height: 58px; background: var(--yellow); border-color: #d49412; font-size: 1.1rem; }
-        .podium-spot .pname { font-weight: 700; font-size: .8rem; color: var(--ink); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .podium-spot .pxp { font-size: .7rem; color: var(--text-muted); font-weight: 700; }
-        .podium-base { width: 100%; border-radius: 12px 12px 4px 4px; display: grid; place-items: center; font-family: "Manrope",sans-serif; font-weight: 800; color: white; font-size: 1.2rem; }
-        .p1 .podium-base { height: 74px; background: linear-gradient(#b3262b, #8f171c); color: var(--yellow); }
-        .p2 .podium-base { height: 54px; background: #c9a56a; }
-        .p3 .podium-base { height: 40px; background: #d9b98a; }
-        .rank-list { display: flex; flex-direction: column; gap: .4rem; }
-        .rank-row { display: grid; grid-template-columns: 30px 1fr auto; gap: .6rem; align-items: center; padding: .6rem .7rem; border-radius: 12px; background: white; border: 1px solid #f1e4c8; cursor: pointer; transition: background .2s ease; }
-        .rank-row:hover { background: var(--yellow-soft); }
-        .rank-row.me { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(179,38,43,.12); }
-        .rank-pos { font-family: "Manrope",sans-serif; font-weight: 800; color: var(--text-muted); text-align: center; }
-        .rank-name { min-width: 0; }
-        .rank-name strong { font-size: .88rem; color: var(--ink); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .rank-name span { font-size: .7rem; color: var(--text-muted); }
-        .rank-xp { text-align: right; font-family: "Manrope",sans-serif; font-weight: 800; color: var(--ink); font-size: .95rem; }
-        .rank-xp small { display: block; font-family: "DM Sans",sans-serif; font-size: .64rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-        .xp-rules { font-size: .72rem; color: var(--text-muted); margin-top: .8rem; line-height: 1.5; }
-
-        .stat-card .num {
-            font-family: "Manrope", sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--ink);
-            letter-spacing: -.06em;
-        }
-
-        .stat-card .label {
-            font-size: .72rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            font-weight: 700;
-        }
-
+        .stat-card.hero { grid-column: 1 / -1; background: linear-gradient(135deg, #b3262b 0%, #8f171c 100%); color: white; }
+        .stat-card .num { font-family: "Manrope", sans-serif; font-size: 2rem; font-weight: 800; }
+        .stat-card .label { font-size: .72rem; text-transform: uppercase; margin-top: 0.5rem; }
         .admin-panel {
             background: var(--primary);
             color: var(--surface);
-            border: 1px solid var(--primary);
             border-radius: var(--radius);
             padding: 1rem;
             margin: 1.5rem 0;
             display: flex;
             flex-wrap: wrap;
             gap: 0.8rem;
-            align-items: center;
-            justify-content: space-between;
         }
-        .admin-panel strong { color: var(--yellow) !important; }
-        .admin-panel p { color: #f7d9d2 !important; }
-        .admin-panel button { background: var(--yellow); color: var(--ink); box-shadow: none; }
-        .admin-panel button:hover { background: #ffd866; }
-        .admin-panel button.secondary { border-color: rgba(255,255,255,.42); color: white; background: transparent; }
-        .admin-panel button.secondary:hover { background: rgba(255,255,255,.12); }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-
+        .admin-panel strong { color: var(--yellow); }
+        .admin-panel button { background: var(--yellow); color: var(--ink); }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
         .card {
             background: var(--surface);
             border-radius: var(--radius);
             border: 1px solid var(--border);
-            box-shadow: var(--shadow);
             padding: .65rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            overflow: hidden;
-            transition: transform .25s ease, box-shadow .25s ease;
+            border-top: 4px solid var(--yellow);
         }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(31,39,33,.13); }
-        .card { border-top: 4px solid var(--yellow); }
         .card.is-done { border-top-color: #2f7a3b; }
-        .card.is-late { border-top-color: var(--danger); }
-        .card-header, .card > p, .card > div:not(.card-header) { margin: .45rem .55rem; }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 0.2rem 0.5rem;
-            border-radius: 9999px;
-            text-transform: uppercase;
-        }
-
+        .card strong { display: block; margin: 0.5rem; }
+        .card .meta { font-size: .8rem; color: var(--text-muted); margin: 0.5rem; }
+        .card .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 99px; margin: 0.5rem; }
         .badge-pending { background: var(--yellow-soft); color: #7c430b; }
         .badge-done { background: #f4d7d4; color: var(--success); }
-
-        .img-container {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 4 / 3;
-            border-radius: calc(var(--radius) - 4px);
-            overflow: hidden;
-            background-color: #f6e9c9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform .35s ease;
-        }
-        .img-container:hover img { transform: scale(1.035); }
-
+        .card-actions { display: flex; gap: 0.4rem; margin: 0.5rem; flex-wrap: wrap; }
+        .card-actions button { flex: 1 1 100px; font-size: 0.8rem; padding: 0.4rem; }
         .modal {
             position: fixed;
             inset: 0;
             background: rgba(69,20,22,.82);
-            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -322,248 +151,89 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
-            padding: 1rem;
         }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
+        .modal.active { opacity: 1; pointer-events: all; }
         .modal-content {
             background: var(--surface);
             border-radius: var(--radius);
-            width: 100%;
+            width: 90%;
             max-width: 480px;
             padding: 1.75rem;
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            transform: translateY(15px) scale(.98);
-            transition: transform .25s ease;
         }
-        .modal.active .modal-content { transform: none; }
-        .modal-content h3 { font-family: "Manrope",sans-serif; font-size: 1.45rem; letter-spacing: -.04em; }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-        }
-
-        .form-group label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            padding: 1rem;
-        }
-
-        .lightbox img {
-            max-width: 100%;
-            max-height: 90vh;
-            border-radius: var(--radius);
-            object-fit: contain;
-        }
-
+        .modal-content h3 { font-family: "Manrope"; font-size: 1.45rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
         .hidden { display: none !important; }
-
-        .badge-overdue { background: var(--danger); color: white; }
-        .badge-prio { background: #fbe3c9; color: #8a3b0c; }
-        .badge-prio.URGENTE { background: var(--ink); color: var(--yellow); }
-        .badge-prio.BAIXA { background: #efe7d6; color: var(--text-muted); }
-        .card-meta { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; font-size: .74rem; color: var(--text-muted); }
-        .admin-note { font-size: .8rem; background: #fde4df; border-left: 3px solid var(--primary); padding: .45rem .55rem; border-radius: 6px; }
-        .card-actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; }
-        .card-actions button { flex: 1 1 auto; padding-inline: .7rem; }
-
         .filters { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
-        .filters button { background: var(--surface); color: var(--text); border: 1px solid var(--border); box-shadow: none; font-size: .8rem; padding: .45rem .85rem; }
+        .filters button { background: var(--surface); border: 1px solid var(--border); cursor: pointer; }
         .filters button.on { background: var(--ink); color: var(--yellow); border-color: var(--ink); }
-
-        .dashboard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.1rem; margin-top: 1rem; }
-        .dash-top { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem; }
-        .dash-top h2 { font-family: "Manrope",sans-serif; font-size: 1.35rem; letter-spacing: -.04em; color: var(--ink); }
-        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .6rem; margin-bottom: 1.1rem; }
-        .kpi { background: var(--yellow-soft); border-radius: 14px; padding: .8rem .9rem; }
-        .kpi strong { display: block; font-family: "Manrope",sans-serif; font-size: 1.5rem; color: var(--ink); letter-spacing: -.04em; }
-        .kpi span { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
-        .perf-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .75rem; }
-        .perf-card { border: 1px solid var(--border); border-radius: 14px; padding: .9rem; background: white; display: flex; flex-direction: column; gap: .55rem; }
-        .perf-card header { all: unset; display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
-        .perf-card h4 { font-family: "Manrope",sans-serif; font-size: 1rem; color: var(--ink); }
-        .rank { font-size: .7rem; font-weight: 800; background: var(--ink); color: var(--yellow); border-radius: 99px; padding: .15rem .5rem; }
-        .meter { height: 9px; background: #f1e4c8; border-radius: 99px; overflow: hidden; }
-        .meter > div { height: 100%; background: var(--primary); border-radius: 99px; }
-        .perf-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; font-size: .72rem; color: var(--text-muted); }
-        .perf-stats b { display: block; font-size: 1rem; color: var(--text); }
-        .delivery-table { width: 100%; border-collapse: collapse; font-size: .8rem; margin-top: .5rem; }
-        .delivery-table th { text-align: left; font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); padding: .45rem; border-bottom: 1px solid var(--border); }
-        .delivery-table td { padding: .5rem .45rem; border-bottom: 1px solid #f3e6cc; vertical-align: top; }
-        .table-wrap { overflow-x: auto; }
-        .ok { color: #2f7a3b; font-weight: 700; }
-        .late { color: var(--danger); font-weight: 700; }
-        .team-row { display: grid; grid-template-columns: 1fr auto; gap: .45rem; align-items: center; padding: .5rem 0; border-bottom: 1px solid var(--border); }
-        .team-row.inactive input { opacity: .55; }
-        .team-row div { display: flex; gap: .35rem; }
-        .modal-content .team-list { max-height: 50vh; overflow-y: auto; }
-
-        .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; border: 1px dashed #d49b34; border-radius: var(--radius); background: rgba(255,240,184,.42); }
-        .empty-state svg { width: 42px; color: var(--primary); margin-bottom: 1rem; }
-        .empty-state strong { display: block; font-family: "Manrope",sans-serif; font-size: 1.15rem; margin-bottom: .35rem; }
-        .empty-state p { color: var(--text-muted); font-size: .88rem; }
-
-        @media (prefers-reduced-motion: no-preference) {
-            .intro > *, .stats-grid > *, .admin-panel, .card, .ranking, .rank-row { animation: reveal .5s both; }
-            .intro-copy { animation-delay: .08s; }
-            .stats-grid > :nth-child(2) { animation-delay: .07s; }
-            .stats-grid > :nth-child(3) { animation-delay: .14s; }
-            @keyframes reveal { from { opacity: 0; transform: translateY(14px); } }
-        }
-
-        @media (max-width: 700px) {
-            header { align-items: center; gap: .55rem; padding-inline: .75rem; }
-            .logo { flex: 0 0 auto; }
-            .logo span:last-child { display: none; }
-            .user-controls { flex: 1; justify-content: flex-end; min-width: 0; }
-            .user-controls select { min-width: 0; width: 100%; max-width: 210px; min-height: 44px; }
-            main { padding-inline: .75rem; }
-            .intro { padding: 1.8rem 0 1.25rem; }
-            .intro h1 { font-size: clamp(2.35rem,12vw,3.35rem); overflow-wrap: anywhere; }
-            .intro-copy { font-size: .92rem; }
-            .stat-card { padding: 1rem; }
-            .stat-card .num { font-size: 1.6rem; }
-            .admin-panel { align-items: stretch; flex-direction: column; }
-            .admin-panel > div:last-child { display: grid !important; grid-template-columns: 1fr 1fr; }
-            .admin-panel > div:last-child button:last-child { grid-column: 1 / -1; }
-            .modal { align-items: flex-end; padding: .6rem; }
-            .modal-content { max-width: none; border-radius: 22px; padding: 1.3rem; max-height: 92dvh; overflow-y: auto; }
-            .section-heading { align-items: flex-start; }
-            .section-heading > p { display: none; }
-            .card { padding: .5rem; box-shadow: 0 10px 28px rgba(118,31,25,.1); }
-            .card:hover { transform: none; }
-            .card-header { gap: .65rem; }
-            .badge { flex: 0 0 auto; }
-            .img-container { aspect-ratio: 16 / 11; }
-            input, select, textarea { width: 100%; font-size: 16px; }
-            .empty-state { padding: 2.8rem 1rem; }
-        }
-
-        @media (max-width: 360px) {
-            .brand-mark { width: 34px; height: 34px; }
-            .user-controls { gap: .35rem; }
-            .user-controls select { max-width: 160px; }
-            #adminBtn { padding-inline: .6rem; }
-            .stats-grid { gap: .45rem; }
-            .stat-card { padding: .8rem; }
-            .intro h1 { font-size: 2.2rem; }
-        }
-
-        @media (orientation: landscape) and (max-height: 520px) {
-            .intro { padding-top: 1.5rem; }
-            .intro h1 { font-size: 2.55rem; }
-        }
+        .ranking { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+        .rank-row { display: grid; grid-template-columns: 30px 1fr auto; gap: .6rem; padding: .6rem; border-radius: 8px; align-items: center; }
+        .rank-row:hover { background: var(--yellow-soft); }
+        .rank-pos { font-family: "Manrope"; font-weight: 800; text-align: center; }
+        .rank-name strong { display: block; font-size: .88rem; }
+        .rank-xp { font-family: "Manrope"; font-weight: 800; text-align: right; }
+        .empty-state { text-align: center; padding: 2rem; border: 1px dashed #d49b34; border-radius: var(--radius); background: rgba(255,240,184,.42); }
     </style>
 </head>
 <body>
-
     <header>
-        <div class="logo"><span class="brand-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13H11l-1 9 8.5-12H12l1-8Z" fill="currentColor"/></svg></span><span>Demandas Express</span></div>
+        <div class="logo"><span class="brand-mark">⚡</span><span>Demandas</span></div>
         <div class="user-controls">
-            <select id="userSelect" onchange="switchUser(this.value)"></select>
-            <button id="adminBtn" onclick="openModal('modalAuth')" class="secondary" aria-label="Acessar painel administrativo">ADM</button>
+            <button id="adminBtn" onclick="openModal('modalAuth')" class="secondary">ADM</button>
         </div>
     </header>
 
     <main>
-        <section class="intro" aria-labelledby="pageTitle">
-            <div><p class="eyebrow">Central de operações</p><h1 id="pageTitle">Trabalho claro.<br>Entrega visível.</h1></div>
-            <p class="intro-copy">Acompanhe o que precisa ser feito, registre cada entrega e mantenha a equipe alinhada em um único painel.</p>
+        <section class="intro">
+            <p class="eyebrow">Central de operações</p>
+            <h1>Trabalho claro.<br>Entrega visível.</h1>
+            <p class="intro-copy">Acompanhe o que precisa ser feito e mantenha a equipe alinhada.</p>
         </section>
-        <!-- Métricas -->
+
         <div class="stats-grid">
-            <div class="stat-card hero" id="heroCard"></div>
             <div class="stat-card">
-                <div class="num" id="statPending" style="color: var(--warning);">0</div>
+                <div class="num" id="statPending">0</div>
                 <div class="label">Pendentes</div>
             </div>
             <div class="stat-card">
-                <div class="num" id="statDone" style="color: var(--success);">0</div>
-                <div class="label">Entregas no histórico</div>
+                <div class="num" id="statDone">0</div>
+                <div class="label">Entregues</div>
             </div>
         </div>
 
-        <!-- Painel ADM -->
         <div id="adminPanel" class="admin-panel hidden">
-            <div>
-                <strong style="color: var(--primary);">Painel do Administrador</strong>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">Crie demandas e gerencie a equipe.</p>
-            </div>
-            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-                <button onclick="openModal('modalUser')">+ Menor</button>
-                <button onclick="openTaskModal()">+ Demanda</button>
-                <button onclick="openTeamModal()">Equipe</button>
-                <button id="dashToggle" onclick="toggleDashboard()">Rendimento</button>
+            <strong>Painel ADM</strong>
+            <div style="width: 100%; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                <button onclick="openModal('modalUser')">+ Equipe</button>
+                <button onclick="openModal('modalTask')">+ Demanda</button>
                 <button onclick="logoutAdmin()" class="secondary">Sair</button>
             </div>
         </div>
 
-        <!-- Dashboard de rendimento (ADM) -->
-        <section id="dashboardSection" class="dashboard hidden" aria-labelledby="dashTitle">
-            <div class="dash-top">
-                <div><p class="eyebrow">Painel ADM</p><h2 id="dashTitle">Rendimento da equipe</h2></div>
-                <select id="dashPeriod" onchange="renderDashboard()" aria-label="Período">
-                    <option value="7">Últimos 7 dias</option>
-                    <option value="30" selected>Últimos 30 dias</option>
-                    <option value="90">Últimos 90 dias</option>
-                    <option value="0">Todo o período</option>
-                </select>
-            </div>
-            <div id="dashKpis" class="kpis"></div>
-            <div id="dashPerf" class="perf-list"></div>
-            <div class="section-heading" style="margin-top: 1.6rem;"><div><p class="eyebrow">Histórico</p><h2>Entregas</h2></div></div>
-            <div class="table-wrap"><table class="delivery-table"><thead><tr><th>Menor</th><th>Demanda</th><th>Criada</th><th>Entregue</th><th>Tempo</th><th>Prazo</th><th>XP</th></tr></thead><tbody id="dashDeliveries"></tbody></table></div>
-        </section>
-
-        <!-- Ranking por XP (público) -->
-        <div class="section-heading"><div><p class="eyebrow">Gamificação</p><h2>Ranking da equipe</h2></div><p>XP por entrega</p></div>
-        <section class="ranking" aria-label="Ranking por XP">
-            <div class="filters" id="rankFilters">
-                <button data-period="7" onclick="setRankPeriod(7)">7 dias</button>
-                <button data-period="30" class="on" onclick="setRankPeriod(30)">30 dias</button>
-                <button data-period="0" onclick="setRankPeriod(0)">Geral</button>
-            </div>
-            <div id="podium" class="podium"></div>
-            <div id="rankList" class="rank-list"></div>
-            <p class="xp-rules">Cada entrega vale XP: Baixa 60 · Normal 100 · Alta 140 · Urgente 200. No prazo: +50 XP. Atrasada: metade. O nível usa o XP total acumulado; entregas reabertas pelo ADM deixam de contar.</p>
-        </section>
-
-        <div class="section-heading"><div><p class="eyebrow">Fluxo de trabalho</p><h2>Demandas recentes</h2></div><p>Atualizado neste dispositivo</p></div>
-        <div class="filters" id="statusFilters">
-            <button data-filter="ALL" class="on" onclick="setFilter('ALL')">Todas</button>
-            <button data-filter="PENDENTE" onclick="setFilter('PENDENTE')">Pendentes</button>
-            <button data-filter="ATRASADA" onclick="setFilter('ATRASADA')">Atrasadas</button>
-            <button data-filter="CONCLUÍDO" onclick="setFilter('CONCLUÍDO')">Entregues</button>
+        <div class="section-heading"><h2>Demandas</h2></div>
+        <div class="filters">
+            <button class="on" onclick="setFilter('ALL')">Todas</button>
+            <button onclick="setFilter('PENDENTE')">Pendentes</button>
+            <button onclick="setFilter('CONCLUÍDO')">Entregues</button>
         </div>
-        <div id="tasksGrid" class="grid" aria-live="polite"></div>
+        <div id="tasksGrid" class="grid"></div>
+
+        <div class="section-heading"><h2>Ranking</h2></div>
+        <div class="ranking">
+            <div id="rankList"></div>
+        </div>
     </main>
 
-    <!-- Modais -->
     <div id="modalAuth" class="modal">
         <div class="modal-content">
-            <h3>Acesso Restrito ADM</h3>
+            <h3>Acesso ADM</h3>
             <div class="form-group">
-                <label for="adminPasswordInput">Senha de acesso (PIN)</label>
+                <label>Senha</label>
                 <input type="password" id="adminPasswordInput" placeholder="Digite a senha">
             </div>
             <button onclick="authenticateAdmin()">Entrar</button>
@@ -573,10 +243,10 @@
 
     <div id="modalUser" class="modal">
         <div class="modal-content">
-            <h3>Novo Menor</h3>
+            <h3>Novo Membro</h3>
             <div class="form-group">
-                <label for="newUserName">Nome completo</label>
-                <input type="text" id="newUserName" placeholder="Ex: Gabriel Souza">
+                <label>Nome</label>
+                <input type="text" id="newUserName" placeholder="Ex: Gabriel">
             </div>
             <button onclick="addUser()">Salvar</button>
             <button onclick="closeModal('modalUser')" class="secondary">Cancelar</button>
@@ -585,17 +255,17 @@
 
     <div id="modalTask" class="modal">
         <div class="modal-content">
-            <h3 id="taskModalTitle">Criar Nova Demanda</h3>
+            <h3>Nova Demanda</h3>
             <div class="form-group">
-                <label for="taskAssignedTo">Direcionado para</label>
+                <label>Responsável</label>
                 <select id="taskAssignedTo"></select>
             </div>
             <div class="form-group">
-                <label for="taskDescription">Descrição / instrução</label>
-                <textarea id="taskDescription" rows="3" placeholder="Escreva os detalhes da tarefa..."></textarea>
+                <label>Descrição</label>
+                <textarea id="taskDescription" rows="3" placeholder="Detalhes..."></textarea>
             </div>
             <div class="form-group">
-                <label for="taskPriority">Prioridade</label>
+                <label>Prioridade</label>
                 <select id="taskPriority">
                     <option value="BAIXA">Baixa</option>
                     <option value="NORMAL" selected>Normal</option>
@@ -603,140 +273,92 @@
                     <option value="URGENTE">Urgente</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="taskDueAt">Prazo de entrega (opcional)</label>
-                <input type="datetime-local" id="taskDueAt">
-            </div>
-            <div class="form-group" id="taskImageGroup">
-                <label for="taskImageInput">Foto do trabalho / instrução</label>
-                <input type="file" id="taskImageInput" accept="image/*" capture="environment">
-            </div>
-            <button id="btnCreateTask" onclick="createTask()">Enviar Demanda</button>
+            <button onclick="createTask()">Enviar</button>
             <button onclick="closeModal('modalTask')" class="secondary">Cancelar</button>
         </div>
     </div>
 
-    <div id="modalResponse" class="modal">
-        <div class="modal-content">
-            <h3>Enviar Devolutiva</h3>
-            <div class="form-group">
-                <label for="responseNotes">Observação (opcional)</label>
-                <textarea id="responseNotes" rows="2" placeholder="Ex: Concluído conforme solicitado."></textarea>
-            </div>
-            <div class="form-group">
-                <label for="responseImageInput">Foto do resultado</label>
-                <input type="file" id="responseImageInput" accept="image/*" capture="environment">
-            </div>
-            <button id="btnSubmitResponse" onclick="submitResponse()">Concluir Tarefa</button>
-            <button onclick="closeModal('modalResponse')" class="secondary">Cancelar</button>
-        </div>
-    </div>
-
-    <div id="modalTeam" class="modal">
-        <div class="modal-content">
-            <h3>Gerenciar Equipe</h3>
-            <p style="font-size: .8rem; color: var(--text-muted);">Renomeie ou desative menores. Desativar mantém o histórico de demandas e entregas.</p>
-            <div id="teamList" class="team-list"></div>
-            <button onclick="closeModal('modalTeam')" class="secondary">Fechar</button>
-        </div>
-    </div>
-
-    <div id="modalFeedback" class="modal">
-        <div class="modal-content">
-            <h3 id="feedbackTitle">Retorno do ADM</h3>
-            <div class="form-group">
-                <label for="feedbackText">Comentário para o menor</label>
-                <textarea id="feedbackText" rows="3" placeholder="Ex: Refazer a foto mostrando o resultado completo."></textarea>
-            </div>
-            <button id="btnFeedback" onclick="submitFeedback()">Salvar</button>
-            <button onclick="closeModal('modalFeedback')" class="secondary">Cancelar</button>
-        </div>
-    </div>
-
-    <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
-        <img id="lightboxImg" src="" alt="Ampliação">
-    </div>
-
     <script>
-        // CONFIGURAÇÕES
-        const ADMIN_PIN = "1234"; // Senha para abrir o painel ADM
+        const ADMIN_PIN = "1234";
         let isAdmin = false;
-        let activeUserId = null;
-        let currentTaskIdForResponse = null;
-        let editingTaskId = null;
-        let feedbackTaskId = null;
-        let feedbackMode = 'feedback';
         let statusFilter = 'ALL';
-        let showDashboard = false;
         let users = [];
         let tasks = [];
         let deliveries = [];
-        let rankPeriod = 30;
 
-        async function apiRequest(options = {}) {
-            const response = await fetch('/api/data', options);
-            if (!response.ok) {
-                const body = await response.json().catch(() => ({}));
-                throw new Error(body.error || 'Não foi possível carregar os dados.');
-            }
-            return response.status === 204 ? null : response.json();
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
+
+        // Sistema de dados local
+        const DataStore = {
+            loadData() {
+                const stored = localStorage.getItem('demandas-data');
+                if (stored) {
+                    try {
+                        return JSON.parse(stored);
+                    } catch (e) {
+                        console.error('Erro ao carregar:', e);
+                    }
+                }
+                return {
+                    users: [
+                        { id: '1', name: 'Gabriel', active: true },
+                        { id: '2', name: 'Maria', active: true }
+                    ],
+                    tasks: [],
+                    deliveries: []
+                };
+            },
+            save(data) {
+                localStorage.setItem('demandas-data', JSON.stringify(data));
+            },
+            addUser(data, name) {
+                const id = Date.now().toString();
+                data.users.push({ id, name, active: true });
+                this.save(data);
+            },
+            addTask(data, assignedTo, description, priority) {
+                const id = Date.now().toString();
+                data.tasks.push({
+                    id,
+                    assignedTo,
+                    description,
+                    priority,
+                    status: 'PENDENTE',
+                    createdAt: new Date().toISOString()
+                });
+                this.save(data);
+            },
+            deliverTask(data, taskId) {
+                const task = data.tasks.find(t => t.id === taskId);
+                if (task) {
+                    const xpTable = { BAIXA: 60, NORMAL: 100, ALTA: 140, URGENTE: 200 };
+                    let xp = xpTable[task.priority] || 100;
+                    data.deliveries.push({
+                        taskId,
+                        userId: task.assignedTo,
+                        description: task.description,
+                        priority: task.priority,
+                        deliveredAt: new Date().toISOString(),
+                        xp
+                    });
+                    data.tasks = data.tasks.filter(t => t.id !== taskId);
+                    this.save(data);
+                }
+            }
+        };
 
         async function loadData() {
-            const data = await apiRequest();
-            users = data.users;
-            tasks = data.tasks;
+            const data = DataStore.loadData();
+            users = data.users || [];
+            tasks = data.tasks || [];
             deliveries = data.deliveries || [];
+            render();
         }
 
-        // NÍVEIS: XP necessário para atingir o nível L = 50 * L * (L - 1)
-        const LEVEL_TITLES = ['Novato', 'Aprendiz', 'Ágil', 'Confiável', 'Veterano', 'Expert', 'Mestre', 'Elite', 'Lenda'];
-        const xpForLevel = level => 50 * level * (level - 1);
-        function levelInfo(xp) {
-            let level = 1;
-            while (xp >= xpForLevel(level + 1)) level++;
-            const floor = xpForLevel(level), next = xpForLevel(level + 1);
-            return {
-                level, xp, floor, next,
-                title: LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)],
-                progress: Math.round(((xp - floor) / (next - floor)) * 100),
-            };
-        }
-        const userXp = (id, list = deliveries) => list.filter(d => d.userId === id).reduce((sum, d) => sum + d.xp, 0);
-        const sinceDays = days => days ? Date.now() - days * 86400000 : 0;
-        const deliveriesSince = since => deliveries.filter(d => new Date(d.deliveredAt).getTime() >= since);
-        const initials = name => name.split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
-
-        // COMPRESSÃO AUTOMÁTICA DA FOTO (Não trava o celular)
-        function compressImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > MAX_WIDTH) {
-                            height = Math.round((height * MAX_WIDTH) / width);
-                            width = MAX_WIDTH;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        canvas.toBlob(resolve, 'image/jpeg', 0.72);
-                    };
-                };
-            });
-        }
-
-        // AÇÕES DO SISTEMA
         function authenticateAdmin() {
             const pin = document.getElementById('adminPasswordInput').value;
             if (pin === ADMIN_PIN) {
@@ -744,7 +366,6 @@
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('adminBtn').classList.add('hidden');
                 closeModal('modalAuth');
-                document.getElementById('adminPasswordInput').value = '';
                 render();
             } else {
                 alert('PIN Incorreto!');
@@ -753,481 +374,99 @@
 
         function logoutAdmin() {
             isAdmin = false;
-            showDashboard = false;
             document.getElementById('adminPanel').classList.add('hidden');
             document.getElementById('adminBtn').classList.remove('hidden');
             render();
         }
 
-        function switchUser(val) {
-            activeUserId = val === 'ALL' ? null : val;
-            render();
+        function addUser() {
+            const name = document.getElementById('newUserName').value.trim();
+            if (!name) return alert('Informe o nome');
+            const data = DataStore.loadData();
+            DataStore.addUser(data, name);
+            document.getElementById('newUserName').value = '';
+            closeModal('modalUser');
+            loadData();
         }
 
-        async function addUser() {
-            const input = document.getElementById('newUserName');
-            if (!input.value.trim()) return;
-            try {
-                const form = new FormData();
-                form.append('action', 'user');
-                form.append('name', input.value.trim());
-                await apiRequest({ method: 'POST', body: form });
-                input.value = '';
-                closeModal('modalUser');
-                await refresh();
-            } catch (error) { alert(error.message); }
-        }
-
-        function toLocalInput(iso) {
-            if (!iso) return '';
-            const d = new Date(iso);
-            const pad = n => String(n).padStart(2, '0');
-            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-        }
-
-        function openTaskModal(taskId = null) {
-            editingTaskId = taskId;
-            const task = tasks.find(t => t.id === taskId);
-            render();
-            document.getElementById('taskModalTitle').textContent = task ? 'Editar Demanda' : 'Criar Nova Demanda';
-            document.getElementById('btnCreateTask').textContent = task ? 'Salvar Alterações' : 'Enviar Demanda';
-            document.getElementById('taskImageGroup').classList.toggle('hidden', !!task);
-            document.getElementById('taskDescription').value = task ? task.description : '';
-            document.getElementById('taskPriority').value = task ? task.priority : 'NORMAL';
-            document.getElementById('taskDueAt').value = task ? toLocalInput(task.dueAt) : '';
-            if (task) document.getElementById('taskAssignedTo').value = task.assignedTo;
-            openModal('modalTask');
-        }
-
-        async function createTask() {
+        function createTask() {
             const assignedTo = document.getElementById('taskAssignedTo').value;
             const description = document.getElementById('taskDescription').value;
-            const fileInput = document.getElementById('taskImageInput').files[0];
-            const dueValue = document.getElementById('taskDueAt').value;
-
-            if (!assignedTo || !description.trim() || (!editingTaskId && !fileInput)) {
-                alert(editingTaskId ? 'Preencha a descrição e o responsável.' : 'Preencha a descrição e selecione uma foto.');
-                return;
-            }
-
-            const btn = document.getElementById('btnCreateTask');
-            btn.disabled = true;
-            btn.textContent = 'Processando...';
-
-            try {
-                const form = new FormData();
-                form.append('action', editingTaskId ? 'updateTask' : 'task');
-                if (editingTaskId) form.append('id', editingTaskId);
-                form.append('assignedTo', assignedTo);
-                form.append('description', description.trim());
-                form.append('priority', document.getElementById('taskPriority').value);
-                form.append('dueAt', dueValue ? new Date(dueValue).toISOString() : '');
-                if (!editingTaskId) form.append('image', await compressImage(fileInput), 'demanda.jpg');
-                await apiRequest({ method: 'POST', body: form });
-                closeModal('modalTask');
-                document.getElementById('taskDescription').value = '';
-                document.getElementById('taskImageInput').value = '';
-                document.getElementById('taskDueAt').value = '';
-                editingTaskId = null;
-                await refresh();
-            } catch (error) { alert(error.message); }
-            finally {
-                btn.disabled = false;
-                btn.textContent = editingTaskId ? 'Salvar Alterações' : 'Enviar Demanda';
-            }
+            const priority = document.getElementById('taskPriority').value;
+            if (!assignedTo || !description.trim()) return alert('Preencha os campos');
+            const data = DataStore.loadData();
+            DataStore.addTask(data, assignedTo, description, priority);
+            closeModal('modalTask');
+            document.getElementById('taskDescription').value = '';
+            loadData();
         }
 
-        function openFeedbackModal(taskId, mode) {
-            feedbackTaskId = taskId;
-            feedbackMode = mode;
-            const task = tasks.find(t => t.id === taskId);
-            document.getElementById('feedbackTitle').textContent = mode === 'reopen' ? 'Reabrir Demanda' : 'Retorno do ADM';
-            document.getElementById('btnFeedback').textContent = mode === 'reopen' ? 'Reabrir e Enviar' : 'Salvar';
-            document.getElementById('feedbackText').value = task ? task.adminFeedback : '';
-            openModal('modalFeedback');
+        function deliverTask(taskId) {
+            const data = DataStore.loadData();
+            DataStore.deliverTask(data, taskId);
+            loadData();
         }
 
-        async function submitFeedback() {
-            const btn = document.getElementById('btnFeedback');
-            btn.disabled = true;
-            try {
-                const form = new FormData();
-                form.append('action', feedbackMode);
-                form.append('id', feedbackTaskId);
-                form.append('feedback', document.getElementById('feedbackText').value.trim());
-                await apiRequest({ method: 'POST', body: form });
-                closeModal('modalFeedback');
-                await refresh();
-            } catch (error) { alert(error.message); }
-            finally { btn.disabled = false; }
-        }
-
-        function openTeamModal() {
-            renderTeam();
-            openModal('modalTeam');
-        }
-
-        function renderTeam() {
-            document.getElementById('teamList').innerHTML = users.map(u => `
-                <div class="team-row ${u.active ? '' : 'inactive'}">
-                    <input type="text" id="name-${u.id}" value="${escapeHtml(u.name)}" aria-label="Nome">
-                    <div>
-                        <button onclick="saveUser('${u.id}', ${u.active})">Salvar</button>
-                        <button class="secondary" onclick="saveUser('${u.id}', ${!u.active})">${u.active ? 'Desativar' : 'Reativar'}</button>
-                    </div>
-                </div>`).join('') || '<p>Nenhum menor cadastrado.</p>';
-        }
-
-        async function saveUser(id, active) {
-            const name = document.getElementById(`name-${id}`).value.trim();
-            if (!name) return alert('Informe o nome.');
-            const pending = tasks.filter(t => t.assignedTo === id && t.status === 'PENDENTE').length;
-            if (!active && pending && !confirm(`Este menor tem ${pending} demanda(s) pendente(s). Elas continuarão ativas. Desativar mesmo assim?`)) return;
-            try {
-                const form = new FormData();
-                form.append('action', 'updateUser');
-                form.append('id', id);
-                form.append('name', name);
-                form.append('active', String(active));
-                await apiRequest({ method: 'POST', body: form });
-                await refresh();
-                renderTeam();
-            } catch (error) { alert(error.message); }
-        }
-
-        function setFilter(value) {
-            statusFilter = value;
-            document.querySelectorAll('#statusFilters button').forEach(b => b.classList.toggle('on', b.dataset.filter === value));
+        function setFilter(val) {
+            statusFilter = val;
+            document.querySelectorAll('.filters button').forEach(b => {
+                b.classList.remove('on');
+            });
+            event.target.classList.add('on');
             render();
         }
 
-        function toggleDashboard() {
-            showDashboard = !showDashboard;
-            render();
-            if (showDashboard) document.getElementById('dashboardSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function isOverdue(task) {
-            return task.status === 'PENDENTE' && task.dueAt && new Date(task.dueAt) < new Date();
-        }
-
-        function formatDuration(ms) {
-            if (ms == null || Number.isNaN(ms)) return '—';
-            const minutes = Math.max(0, Math.round(ms / 60000));
-            if (minutes < 60) return `${minutes} min`;
-            const hours = minutes / 60;
-            if (hours < 24) return `${hours.toFixed(1).replace('.', ',')} h`;
-            return `${(hours / 24).toFixed(1).replace('.', ',')} d`;
-        }
-
-        const fmtDate = iso => iso ? new Date(iso).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : '—';
-        const pct = (a, b) => b ? Math.round((a / b) * 100) : 0;
-
-        // Entregas vêm do histórico permanente; pendências vêm das demandas atuais.
-        function computeStats(doneList, openTasks) {
-            const withDue = doneList.filter(d => d.onTime !== null);
-            const onTime = withDue.filter(d => d.onTime);
-            const avg = doneList.length ? doneList.reduce((s, d) => s + (new Date(d.deliveredAt) - new Date(d.taskCreatedAt)), 0) / doneList.length : null;
-            const last = doneList.map(d => d.deliveredAt).sort().pop() || null;
-            const pending = openTasks.filter(t => t.status === 'PENDENTE').length;
-            return {
-                total: doneList.length + pending, done: doneList.length, pending,
-                overdue: openTasks.filter(isOverdue).length,
-                rate: pct(doneList.length, doneList.length + pending),
-                onTimeRate: withDue.length ? pct(onTime.length, withDue.length) : null,
-                xp: doneList.reduce((s, d) => s + d.xp, 0),
-                avg, last,
-            };
-        }
-
-        function renderDashboard() {
-            const since = sinceDays(Number(document.getElementById('dashPeriod').value));
-            const doneInPeriod = deliveriesSince(since);
-            const openTasks = tasks.filter(t => t.status === 'PENDENTE');
-            const overall = computeStats(doneInPeriod, openTasks);
-
-            document.getElementById('dashKpis').innerHTML = [
-                [overall.total, 'Demandas'],
-                [overall.done, 'Entregues'],
-                [`${overall.rate}%`, 'Conclusão'],
-                [formatDuration(overall.avg), 'Tempo médio'],
-                [overall.onTimeRate == null ? '—' : `${overall.onTimeRate}%`, 'No prazo'],
-                [overall.overdue, 'Atrasadas'],
-                [overall.xp, 'XP gerado'],
-            ].map(([v, l]) => `<div class="kpi"><strong>${v}</strong><span>${l}</span></div>`).join('');
-
-            const ranking = users
-                .map(u => ({ user: u, lv: levelInfo(userXp(u.id)), s: computeStats(doneInPeriod.filter(d => d.userId === u.id), openTasks.filter(t => t.assignedTo === u.id)) }))
-                .filter(r => r.user.active || r.s.total)
-                .sort((a, b) => b.s.xp - a.s.xp || b.s.done - a.s.done || b.s.rate - a.s.rate);
-
-            document.getElementById('dashPerf').innerHTML = ranking.map((r, i) => `
-                <div class="perf-card">
-                    <header><h4>${escapeHtml(r.user.name)} <span class="lv-chip">Nv ${r.lv.level}</span>${r.user.active ? '' : ' <small style="color: var(--text-muted);">(inativo)</small>'}</h4><span class="rank">#${i + 1} · ${r.s.xp} XP</span></header>
-                    <div style="display: flex; justify-content: space-between; font-size: .75rem; color: var(--text-muted);"><span>Conclusão</span><b style="color: var(--ink);">${r.s.rate}%</b></div>
-                    <div class="meter" role="img" aria-label="${r.s.rate}% concluído"><div style="width: ${r.s.rate}%;"></div></div>
-                    <div class="perf-stats">
-                        <div><b>${r.s.done}</b>Entregues</div>
-                        <div><b>${r.s.pending}</b>Pendentes</div>
-                        <div><b class="${r.s.overdue ? 'late' : ''}">${r.s.overdue}</b>Atrasadas</div>
-                        <div><b>${formatDuration(r.s.avg)}</b>Tempo médio</div>
-                        <div><b>${r.s.onTimeRate == null ? '—' : r.s.onTimeRate + '%'}</b>No prazo</div>
-                        <div><b style="font-size: .8rem;">${r.s.last ? new Date(r.s.last).toLocaleDateString('pt-BR') : '—'}</b>Última entrega</div>
-                    </div>
-                    <button class="secondary" onclick="viewUser('${r.user.id}')">Ver demandas</button>
-                </div>`).join('') || '<div class="empty-state"><strong>Sem dados no período</strong></div>';
-
-            document.getElementById('dashDeliveries').innerHTML = doneInPeriod.map(d => {
-                const user = users.find(u => u.id === d.userId);
-                const deadline = d.onTime === null ? '<span style="color: var(--text-muted);">—</span>'
-                    : d.onTime ? '<span class="ok">No prazo</span>' : '<span class="late">Atrasada</span>';
-                const desc = d.description.length > 60 ? d.description.slice(0, 60) + '…' : d.description;
-                return `<tr><td>${user ? escapeHtml(user.name) : '—'}</td><td>${escapeHtml(desc)}</td><td>${fmtDate(d.taskCreatedAt)}</td><td>${fmtDate(d.deliveredAt)}</td><td>${formatDuration(new Date(d.deliveredAt) - new Date(d.taskCreatedAt))}</td><td>${deadline}</td><td><span class="xp-chip">+${d.xp}</span></td></tr>`;
-            }).join('') || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Nenhuma entrega no período.</td></tr>';
-        }
-
-        function setRankPeriod(days) {
-            rankPeriod = days;
-            document.querySelectorAll('#rankFilters button').forEach(b => b.classList.toggle('on', Number(b.dataset.period) === days));
-            renderRanking();
-        }
-
-        function renderRanking() {
-            const list = deliveriesSince(sinceDays(rankPeriod));
-            const ranking = users
-                .map(u => {
-                    const mine = list.filter(d => d.userId === u.id);
-                    const timed = mine.filter(d => d.onTime !== null);
-                    return { user: u, xp: userXp(u.id, list), count: mine.length, lv: levelInfo(userXp(u.id)),
-                        onTime: timed.length ? pct(timed.filter(d => d.onTime).length, timed.length) : null };
-                })
-                .filter(r => r.user.active || r.count)
-                .sort((a, b) => b.xp - a.xp || b.count - a.count || b.lv.xp - a.lv.xp || a.user.name.localeCompare(b.user.name));
-
-            const podium = document.getElementById('podium');
-            const top = ranking.slice(0, 3).filter(r => r.xp > 0);
-            podium.classList.toggle('hidden', top.length === 0);
-            podium.innerHTML = [top[1], top[0], top[2]].map((r, i) => {
-                if (!r) return '<div></div>';
-                const place = [2, 1, 3][i];
-                return `<div class="podium-spot p${place}" onclick="viewUser('${r.user.id}')" style="cursor: pointer;">
-                    <div class="avatar">${escapeHtml(initials(r.user.name))}</div>
-                    <div class="pname">${escapeHtml(r.user.name.split(' ')[0])}</div>
-                    <div class="pxp">${r.xp} XP</div>
-                    <div class="podium-base">${place}</div>
-                </div>`;
-            }).join('');
-
-            document.getElementById('rankList').innerHTML = ranking.map((r, i) => `
-                <div class="rank-row ${activeUserId === r.user.id ? 'me' : ''}" onclick="viewUser('${r.user.id}')">
-                    <div class="rank-pos">${i < 3 && r.xp > 0 ? ['🥇', '🥈', '🥉'][i] : i + 1}</div>
-                    <div class="rank-name">
-                        <strong>${escapeHtml(r.user.name)}</strong>
-                        <span><span class="lv-chip">Nv ${r.lv.level} · ${r.lv.title}</span> ${r.count} entrega${r.count === 1 ? '' : 's'}${r.onTime == null ? '' : ` · ${r.onTime}% no prazo`}</span>
-                    </div>
-                    <div class="rank-xp">${r.xp}<small>XP</small></div>
-                </div>`).join('') || '<div class="empty-state"><strong>Ranking vazio</strong><p>Cadastre menores para começar.</p></div>';
-        }
-
-        function renderHero() {
-            const hero = document.getElementById('heroCard');
-            const user = users.find(u => u.id === activeUserId);
-            if (user) {
-                const lv = levelInfo(userXp(user.id));
-                hero.innerHTML = `
-                    <div class="hero-top">
-                        <div class="lv"><div><small>Nível</small><b>${lv.level}</b></div></div>
-                        <div><div class="label">${escapeHtml(user.name)}</div><div class="hero-title">${lv.title}</div><div class="hero-sub">${lv.xp} XP acumulados</div></div>
-                    </div>
-                    <div class="xp-track" role="img" aria-label="${lv.progress}% para o próximo nível"><div style="width: ${lv.progress}%;"></div></div>
-                    <div class="xp-foot"><span>Nv ${lv.level}</span><span>Faltam ${lv.next - lv.xp} XP</span><span>Nv ${lv.level + 1}</span></div>`;
-                return;
-            }
-            const totalXp = deliveries.reduce((s, d) => s + d.xp, 0);
-            const weekly = deliveriesSince(sinceDays(7));
-            const leader = users.map(u => ({ u, xp: userXp(u.id, weekly) })).sort((a, b) => b.xp - a.xp)[0];
-            hero.innerHTML = `
-                <div class="hero-top">
-                    <div class="lv"><div><small>Equipe</small><b>${users.filter(u => u.active).length}</b></div></div>
-                    <div><div class="label">Visão geral</div><div class="hero-title">${totalXp} XP conquistados</div>
-                    <div class="hero-sub">${leader && leader.xp ? `Destaque da semana: ${escapeHtml(leader.u.name)} (${leader.xp} XP)` : 'Selecione um menor para ver o nível dele'}</div></div>
-                </div>`;
-        }
-
-        function viewUser(id) {
-            activeUserId = id;
-            render();
-            document.getElementById('tasksGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        function openResponseModal(taskId) {
-            currentTaskIdForResponse = taskId;
-            openModal('modalResponse');
-        }
-
-        async function submitResponse() {
-            const notes = document.getElementById('responseNotes').value;
-            const fileInput = document.getElementById('responseImageInput').files[0];
-
-            if (!fileInput) {
-                alert('Selecione uma foto da devolutiva.');
-                return;
-            }
-
-            const btn = document.getElementById('btnSubmitResponse');
-            btn.disabled = true;
-            btn.textContent = 'Enviando...';
-
-            try {
-                const image = await compressImage(fileInput);
-                const form = new FormData();
-                form.append('action', 'response');
-                form.append('id', currentTaskIdForResponse);
-                form.append('notes', notes.trim());
-                form.append('image', image, 'devolutiva.jpg');
-                await apiRequest({ method: 'POST', body: form });
-                closeModal('modalResponse');
-                document.getElementById('responseNotes').value = '';
-                document.getElementById('responseImageInput').value = '';
-                await refresh();
-            } catch (error) { alert(error.message); }
-            finally {
-                btn.disabled = false;
-                btn.textContent = 'Concluir Tarefa';
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            if (id === 'modalTask') {
+                const select = document.getElementById('taskAssignedTo');
+                select.innerHTML = users.map(u => `<option value="${u.id}">${escapeHtml(u.name)}</option>`).join('');
             }
         }
 
-        async function deleteTask(id) {
-            if (confirm('Deseja excluir esta demanda?')) {
-                try {
-                    await apiRequest({ method: 'DELETE', headers: { 'X-Task-Id': id } });
-                    await refresh();
-                } catch (error) { alert(error.message); }
-            }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
         }
 
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        function showLightbox(src) {
-            document.getElementById('lightboxImg').src = src;
-            document.getElementById('lightbox').style.display = 'flex';
-        }
-
-        function escapeHtml(value) {
-            const node = document.createElement('div');
-            node.textContent = String(value ?? '');
-            return node.innerHTML;
-        }
-
-        async function refresh() {
-            await loadData();
-            render();
-        }
-
-        // RENDERIZAÇÃO NA TELA
         function render() {
-
-            const userSelect = document.getElementById('userSelect');
-            const taskAssignedTo = document.getElementById('taskAssignedTo');
-
-            userSelect.innerHTML = `<option value="ALL"> Visão Geral (Todos) </option>` + 
-                users.map(u => `<option value="${u.id}" ${activeUserId === u.id ? 'selected' : ''}>${escapeHtml(u.name)}</option>`).join('');
-
-            const editingTask = tasks.find(t => t.id === editingTaskId);
-            const selectedAssignee = taskAssignedTo.value;
-            taskAssignedTo.innerHTML = users.filter(u => u.active || (editingTask && editingTask.assignedTo === u.id))
-                .map(u => `<option value="${u.id}">${escapeHtml(u.name)}</option>`).join('');
-            if (selectedAssignee) taskAssignedTo.value = selectedAssignee;
-
-            document.getElementById('dashboardSection').classList.toggle('hidden', !(isAdmin && showDashboard));
-            document.getElementById('dashToggle').textContent = showDashboard ? 'Fechar Rendimento' : 'Rendimento';
-            if (isAdmin && showDashboard) renderDashboard();
-
-            const userTasks = tasks.filter(t => activeUserId === null || t.assignedTo === activeUserId);
-            const filteredTasks = userTasks.filter(t =>
-                statusFilter === 'ALL' ? true : statusFilter === 'ATRASADA' ? isOverdue(t) : t.status === statusFilter);
-
-            document.getElementById('statPending').textContent = userTasks.filter(t => t.status === 'PENDENTE').length;
-            document.getElementById('statDone').textContent = deliveries.filter(d => activeUserId === null || d.userId === activeUserId).length;
-            renderHero();
-            renderRanking();
-
-            const grid = document.getElementById('tasksGrid');
-            grid.innerHTML = '';
-
-            if (filteredTasks.length === 0) {
-                grid.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 12.5 10.5 15 16 9.5M5 3.5h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Tudo em ordem por aqui</strong><p>Nenhuma demanda encontrada para esta visualização.</p></div>`;
-                return;
-            }
-
-            filteredTasks.forEach(task => {
+            const filtered = statusFilter === 'ALL' ? tasks : tasks.filter(t => t.status === statusFilter);
+            const tasksHtml = filtered.length ? filtered.map(task => {
                 const user = users.find(u => u.id === task.assignedTo);
-                const isPending = task.status === 'PENDENTE';
-
-                const delivery = !isPending && deliveries.find(d => d.taskId === task.id);
-                const card = document.createElement('div');
-                card.className = `card ${isOverdue(task) ? 'is-late' : isPending ? '' : 'is-done'}`;
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div>
-                            <strong>${user ? escapeHtml(user.name) : 'Não Atribuído'}</strong> ${user ? `<span class="lv-chip">Nv ${levelInfo(userXp(user.id)).level}</span>` : ''}
-                            <div style="font-size: 0.7rem; color: var(--text-muted);">${new Date(task.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</div>
-                        </div>
-                        <span class="badge ${isOverdue(task) ? 'badge-overdue' : isPending ? 'badge-pending' : 'badge-done'}">${isOverdue(task) ? 'ATRASADA' : task.status}</span>
-                    </div>
-
-                    ${(task.priority && task.priority !== 'NORMAL') || task.dueAt || task.completedAt ? `<div class="card-meta">
-                        ${task.priority && task.priority !== 'NORMAL' ? `<span class="badge badge-prio ${task.priority}">${task.priority}</span>` : ''}
-                        ${task.dueAt ? `<span>Prazo: ${fmtDate(task.dueAt)}</span>` : ''}
-                        ${task.completedAt ? `<span>· Entregue: ${fmtDate(task.completedAt)}</span>` : ''}
-                        ${delivery ? `<span class="xp-chip">+${delivery.xp} XP</span>` : ''}
-                    </div>` : ''}
-
-                    <p style="font-size: 0.85rem;">${escapeHtml(task.description)}</p>
-
-                    <div>
-                        <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.2rem;">Demanda:</small>
-                        <div class="img-container">
-                            <img src="${task.taskImage}" onclick="showLightbox('${task.taskImage}')" alt="Demanda">
-                        </div>
-                    </div>
-
-                    ${task.responseImage ? `
-                        <div>
-                            <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 0.2rem;">Devolutiva:</small>
-                            <div class="img-container">
-                                <img src="${task.responseImage}" onclick="showLightbox('${task.responseImage}')" alt="Devolutiva">
-                            </div>
-                            ${task.responseNotes ? `<p style="font-size: 0.8rem; margin-top: 0.4rem; background: #fff0b8; padding: 0.4rem; border-radius: 6px;">"${escapeHtml(task.responseNotes)}"</p>` : ''}
-                        </div>
-                    ` : ''}
-
-                    ${task.adminFeedback ? `<p class="admin-note"><strong>Retorno do ADM:</strong> ${escapeHtml(task.adminFeedback)}</p>` : ''}
-
-                    <div class="card-actions">
-                        ${isPending ? `<button style="flex: 1;" onclick="openResponseModal('${task.id}')">Enviar Resposta</button>` : ''}
-                        ${isAdmin ? `<button class="secondary" onclick="openTaskModal('${task.id}')">Editar</button>` : ''}
-                        ${isAdmin && !isPending ? `<button class="secondary" onclick="openFeedbackModal('${task.id}', 'reopen')">Reabrir</button>` : ''}
-                        ${isAdmin ? `<button class="secondary" onclick="openFeedbackModal('${task.id}', 'feedback')">Comentar</button>` : ''}
-                        ${isAdmin ? `<button class="danger" onclick="deleteTask('${task.id}')">Excluir</button>` : ''}
+                return `
+                    <div class="card ${task.status === 'CONCLUÍDO' ? 'is-done' : ''}">
+                        <strong>${escapeHtml(task.description.substring(0, 50))}</strong>
+                        <div class="meta">${user ? escapeHtml(user.name) : 'Sem responsável'}</div>
+                        <span class="badge ${task.status === 'PENDENTE' ? 'badge-pending' : 'badge-done'}">${task.status}</span>
+                        ${task.status === 'PENDENTE' ? `<div class="card-actions"><button onclick="deliverTask('${task.id}')" style="background: #2f7a3b;">✓ Entregar</button></div>` : ''}
                     </div>
                 `;
-                grid.appendChild(card);
+            }).join('') : '<div class="empty-state">Nenhuma demanda</div>';
+
+            document.getElementById('tasksGrid').innerHTML = tasksHtml;
+
+            const userXp = {};
+            deliveries.forEach(d => {
+                userXp[d.userId] = (userXp[d.userId] || 0) + d.xp;
             });
+
+            const ranking = users.map(u => ({
+                name: u.name,
+                xp: userXp[u.id] || 0
+            })).sort((a, b) => b.xp - a.xp);
+
+            document.getElementById('rankList').innerHTML = ranking.length ? ranking.map((r, i) => `
+                <div class="rank-row">
+                    <div class="rank-pos">${i + 1}º</div>
+                    <div class="rank-name"><strong>${escapeHtml(r.name)}</strong></div>
+                    <div class="rank-xp">${r.xp} XP</div>
+                </div>
+            `).join('') : '<div class="empty-state">Sem dados</div>';
+
+            document.getElementById('statPending').textContent = tasks.filter(t => t.status === 'PENDENTE').length;
+            document.getElementById('statDone').textContent = deliveries.length;
         }
 
-        // INICIALIZAÇÃO
-        window.addEventListener('DOMContentLoaded', async () => {
-            try { await refresh(); }
-            catch (error) {
-                document.getElementById('tasksGrid').innerHTML = `<div class="empty-state"><strong>Não foi possível carregar</strong><p>${escapeHtml(error.message)}</p></div>`;
-            }
-        });
-        window.addEventListener('focus', () => refresh().catch(() => {}));
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') refresh().catch(() => {});
-        });
+        window.addEventListener('load', loadData);
     </script>
 </body>
 </html>
