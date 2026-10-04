@@ -2,8 +2,9 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEMANDASSHEETS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#5c0f12">
+    <title>DEMANDASSHEETS — Gestão Integrada</title>
     <!-- SDK Oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -13,37 +14,41 @@
             --card-dark: #3b090b;
             --yellow-main: #f59e0b;
             --yellow-bright: #fbbf24;
+            --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
             --red-main: #b91c1c;
+            --red-bright: #ef4444;
             --border: #fcd34d;
             --text-dark: #1f2937;
+            --text-muted: #78353a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-dark); padding: 10px; display: flex; justify-content: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-main); color: var(--text-dark); padding: 10px; display: flex; justify-content: center; min-height: 100vh; }
         
-        .app-container { width: 100%; max-width: 600px; background-color: #fefce8; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 2px solid var(--border); }
+        .app-container { width: 100%; max-width: 600px; background-color: #fefce8; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 2px solid var(--border); display: flex; flex-direction: column; }
         
-        .header { background-color: var(--card-dark); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--border); }
-        .logo { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.2rem; color: #fff; }
+        .header { background-color: var(--card-dark); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 50; }
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.1rem; color: #fff; }
         .logo span { color: var(--yellow-bright); }
         
-        .sync-badge { font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; color: #fff; text-transform: uppercase; }
+        .sync-badge { font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
         .sync-online { background-color: #15803d; }
         .sync-offline { background-color: #b91c1c; }
         .sync-syncing { background-color: #d97706; }
 
-        .user-selector select { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; font-weight: 600; cursor: pointer; }
-        .btn-pin { background: var(--yellow-main); border: none; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; color: #000; }
+        .user-selector select { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-weight: 700; cursor: pointer; color: var(--text-dark); outline: none; }
+        .btn-pin { background: var(--yellow-main); border: none; padding: 6px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; color: #000; transition: transform 0.1s; }
+        .btn-pin:active { transform: scale(0.95); }
 
-        .hero-card { background: var(--card-dark); margin: 15px; padding: 15px; border-radius: 16px; border: 2px solid var(--border); color: #fff; }
+        .hero-card { background: var(--card-dark); margin: 15px; padding: 15px; border-radius: 16px; border: 2px solid var(--border); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .user-profile-header { display: flex; align-items: center; gap: 12px; }
-        .avatar-frame { width: 50px; height: 50px; background: var(--yellow-bright); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; color: #000; position: relative; }
-        .level-badge-floating { position: absolute; bottom: -8px; background: var(--red-main); color: #fff; font-size: 0.6rem; padding: 2px 6px; border-radius: 10px; font-weight: 800; border: 1px solid #fff; }
+        .avatar-frame { width: 52px; height: 52px; background: var(--gold-gradient); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 900; color: #000; position: relative; flex-shrink: 0; }
+        .level-badge-floating { position: absolute; bottom: -8px; background: var(--red-main); color: #fff; font-size: 0.6rem; padding: 2px 6px; border-radius: 10px; font-weight: 800; border: 1px solid #fff; white-space: nowrap; }
 
         .xp-container { margin-top: 15px; }
-        .xp-bar-bg { background: rgba(255,255,255,0.2); height: 10px; border-radius: 5px; overflow: hidden; }
-        .xp-bar-fill { background: var(--yellow-bright); height: 100%; width: 0%; transition: width 0.3s; }
-        .xp-stats { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 4px; color: #fde68a; font-weight: 600; }
+        .xp-bar-bg { background: rgba(255,255,255,0.15); height: 10px; border-radius: 5px; overflow: hidden; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .xp-bar-fill { background: var(--gold-gradient); height: 100%; width: 0%; transition: width 0.5s ease; }
+        .xp-stats { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 5px; color: #fde68a; font-weight: 600; }
 
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px; }
         .metric-card { background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 10px; text-align: center; }
@@ -51,33 +56,36 @@
         .metric-label { font-size: 0.65rem; font-weight: 800; color: #78350f; text-transform: uppercase; }
 
         .nav-tabs { display: flex; gap: 10px; padding: 15px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 800; background: #fef3c7; color: #78350f; cursor: pointer; }
+        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 800; background: #fef3c7; color: #78350f; cursor: pointer; transition: all 0.2s; }
         .tab-btn.active { background: var(--red-main); color: #fff; }
 
         .filter-chips { display: flex; gap: 6px; padding: 0 15px 15px; overflow-x: auto; }
-        .chip { padding: 6px 14px; border-radius: 20px; background: #fff; border: 1px solid var(--border); font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .chip { padding: 6px 14px; border-radius: 20px; background: #fff; border: 1px solid var(--border); font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; color: var(--text-muted); }
         .chip.active { background: var(--red-main); color: #fff; border-color: var(--red-main); }
 
         .tasks-container { padding: 0 15px 20px; display: flex; flex-direction: column; gap: 10px; }
-        .task-card { background: #fff; border-radius: 12px; padding: 12px; border: 1px solid var(--border); border-left: 5px solid var(--yellow-main); }
-        .task-card.URGENTE { border-left-color: var(--red-main); }
-        .task-card.is-done { opacity: 0.6; }
+        .task-card { background: #fff; border-radius: 12px; padding: 12px; border: 1px solid var(--border); border-left: 6px solid var(--yellow-main); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .task-card.URGENTE { border-left-color: var(--red-bright); }
+        .task-card.BAIXA { border-left-color: #10b981; }
+        .task-card.is-done { opacity: 0.65; border-left-color: #6b7280; background: #f9fafb; }
         .task-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .tag { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: #fef3c7; }
-        .task-desc { font-weight: 700; margin-bottom: 8px; font-size: 0.95rem; }
-        .task-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280; }
+        .tag { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: #fef3c7; color: #92400e; }
+        .task-desc { font-weight: 700; margin-bottom: 8px; font-size: 0.95rem; color: var(--text-dark); word-break: break-word; }
+        .task-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280; font-weight: 600; }
         .task-actions { margin-top: 10px; display: flex; gap: 6px; }
         
-        button.gold { background: var(--yellow-bright); border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; flex: 1; }
-        button.danger { background: var(--red-main); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        button.gold { background: var(--yellow-bright); border: none; padding: 8px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; flex: 1; color: #000; }
+        button.danger { background: var(--red-main); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
-        .admin-bar { background: #fef3c7; padding: 10px 15px; margin: 0 15px 15px; border-radius: 10px; border: 1px dashed var(--yellow-main); display: flex; gap: 8px; flex-wrap: wrap; }
+        .admin-bar { background: #fef3c7; padding: 12px 15px; margin: 0 15px 15px; border-radius: 12px; border: 2px dashed var(--yellow-main); display: flex; gap: 8px; flex-wrap: wrap; }
 
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; }
-        .modal.active { display: flex; }
-        .modal-body { background: #fff; width: 100%; max-width: 400px; border-radius: 16px; padding: 20px; border: 2px solid var(--border); }
-        .modal-body h3 { margin-bottom: 12px; }
-        .modal-body input, .modal-body select, .modal-body textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
+        .modal.active { display: flex; opacity: 1; }
+        .modal-body { background: #fff; width: 100%; max-width: 400px; border-radius: 16px; padding: 20px; border: 2px solid var(--border); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
+        .modal-body h3 { margin-bottom: 12px; font-size: 1.1rem; color: var(--card-dark); }
+        .modal-body label { font-size: 0.75rem; font-weight: 700; color: #4b5563; margin-bottom: 4px; display: block; }
+        .modal-body input, .modal-body select, .modal-body textarea { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; outline: none; }
+        .modal-body input:focus, .modal-body textarea:focus { border-color: var(--yellow-main); }
 
         .hidden { display: none !important; }
     </style>
@@ -118,9 +126,9 @@
 
     <div id="adminPanel" class="admin-bar hidden">
         <button class="gold" onclick="openTaskModal()">+ Nova Demanda</button>
-        <button class="gold" onclick="openUserModal()">+ Novo Usuário</button>
+        <button class="gold" onclick="openUserModal()">+ Novo Membro</button>
         <button class="gold" onclick="openChangePinModal()">🔑 Mudar PIN</button>
-        <button class="danger" onclick="logoutAdmin()">Sair</button>
+        <button class="danger" onclick="logoutAdmin()">Sair ADM</button>
     </div>
 
     <div id="tabTasks">
@@ -141,66 +149,76 @@
 <!-- MODAL DE CRIAR DEMANDA -->
 <div class="modal" id="modalTask">
     <div class="modal-body">
-        <h3>Criar Nova Demanda</h3>
+        <h3>🚀 Criar Nova Demanda</h3>
+        <label>Atribuir a:</label>
         <select id="taskAssignee"></select>
-        <textarea id="taskDesc" placeholder="Descrição da demanda..."></textarea>
+        <label>Descrição:</label>
+        <textarea id="taskDesc" rows="3" placeholder="Descrição detalhada da demanda..."></textarea>
+        <label>Prioridade:</label>
         <select id="taskPriority">
-            <option value="BAIXA">Baixa (+60 XP)</option>
-            <option value="NORMAL" selected>Normal (+100 XP)</option>
-            <option value="ALTA">Alta (+150 XP)</option>
-            <option value="URGENTE">Urgente (+250 XP)</option>
+            <option value="BAIXA">🟢 Baixa (+60 XP)</option>
+            <option value="NORMAL" selected>🟡 Normal (+100 XP)</option>
+            <option value="ALTA">🟠 Alta (+150 XP)</option>
+            <option value="URGENTE">🔴 Urgente (+250 XP)</option>
         </select>
+        <label>Prazo Limite:</label>
         <input type="date" id="taskDeadline">
         <button class="gold" onclick="saveTask()">Salvar Demanda</button>
-        <button class="danger" style="width:100%; margin-top:5px;" onclick="closeModal('modalTask')">Cancelar</button>
+        <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalTask')">Cancelar</button>
     </div>
 </div>
 
 <!-- MODAL DE FINALIZAR DEMANDA -->
 <div class="modal" id="modalComplete">
     <div class="modal-body">
-        <h3>Finalizar Tarefa</h3>
+        <h3>✅ Finalizar Tarefa</h3>
         <input type="hidden" id="completeTaskId">
-        <textarea id="completeComment" placeholder="Escreva uma devolutiva/comentário (opcional)..."></textarea>
+        <label>Observações / Devolutiva:</label>
+        <textarea id="completeComment" rows="3" placeholder="O que foi realizado para concluir?"></textarea>
         <button class="gold" onclick="submitTaskCompletion()">Concluir e Ganhar XP!</button>
-        <button class="danger" style="width:100%; margin-top:5px;" onclick="closeModal('modalComplete')">Cancelar</button>
+        <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalComplete')">Cancelar</button>
     </div>
 </div>
 
 <!-- MODAL DE AUTENTICAÇÃO DO ADMIN -->
 <div class="modal" id="modalAuth">
     <div class="modal-body">
-        <h3>Autenticação do Administrador</h3>
-        <input type="password" id="adminPinInput" placeholder="Digite o PIN de Admin">
-        <button class="gold" onclick="verifyAdminPin()">Entrar</button>
-        <button class="danger" style="width:100%; margin-top:5px;" onclick="closeModal('modalAuth')">Cancelar</button>
+        <h3>🔐 Autenticação de Gestor</h3>
+        <label>PIN de Acesso (Padrão: 1234):</label>
+        <input type="password" id="adminPinInput" placeholder="Digite seu PIN" maxlength="8">
+        <button class="gold" onclick="verifyAdminPin()">Entrar no Painel</button>
+        <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalAuth')">Cancelar</button>
     </div>
 </div>
 
 <!-- MODAL DE NOVO USUÁRIO -->
 <div class="modal" id="modalUser">
     <div class="modal-body">
-        <h3>Cadastrar Novo Usuário</h3>
-        <input type="text" id="newUserName" placeholder="Nome do Usuário">
-        <input type="text" id="newUserRole" placeholder="Cargo (Ex: Aprendiz, Supervisor)">
-        <button class="gold" onclick="saveUser()">Cadastrar</button>
-        <button class="danger" style="width:100%; margin-top:5px;" onclick="closeModal('modalUser')">Cancelar</button>
+        <h3>👤 Cadastrar Novo Membro</h3>
+        <label>Nome do Colaborador:</label>
+        <input type="text" id="newUserName" placeholder="Ex: Gabriel Silva">
+        <label>Cargo:</label>
+        <input type="text" id="newUserRole" placeholder="Ex: Aprendiz, Operador, Supervisor">
+        <button class="gold" onclick="saveUser()">Cadastrar Membro</button>
+        <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalUser')">Cancelar</button>
     </div>
 </div>
 
 <!-- MODAL DE ALTERAR PIN -->
 <div class="modal" id="modalChangePin">
     <div class="modal-body">
-        <h3>Alterar PIN de Administrador</h3>
+        <h3>🔑 Alterar PIN de Gestor</h3>
+        <label>PIN Atual:</label>
         <input type="password" id="pinCurrentInput" placeholder="PIN Atual">
+        <label>Novo PIN:</label>
         <input type="password" id="pinNewInput" placeholder="Novo PIN">
         <button class="gold" onclick="changeAdminPin()">Atualizar PIN</button>
-        <button class="danger" style="width:100%; margin-top:5px;" onclick="closeModal('modalChangePin')">Cancelar</button>
+        <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalChangePin')">Cancelar</button>
     </div>
 </div>
 
 <script>
-    // Configurações do Supabase atualizadas com a sua chave pública ativa
+    // Credenciais de Integração com o Supabase
     const SUPABASE_URL = "https://qktpaeeinmkatwqbqtfs.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_vj6uL2ox55armNv-UDy_jA_v8B5bXUH"; 
 
@@ -225,29 +243,43 @@
         return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    async function fetchGoogleSheetsData() {
-        updateSyncBadge('syncing', 'Carregando...');
+    // Busca de Dados no Supabase
+    async function fetchSupabaseData() {
+        updateSyncBadge('syncing', 'Sincronizando...');
         
         try {
-            const { data, error } = await supabase
+            // 1. Busca Tarefas
+            const { data: tasksData, error: tasksErr } = await supabase
                 .from('tasks')
                 .select('*');
 
-            if (error) throw error;
+            if (tasksErr) throw tasksErr;
 
-            if (data) {
-                state.tasks = data;
+            if (tasksData) {
+                state.tasks = tasksData;
                 localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
-                updateSyncBadge('online', 'ONLINE');
-                renderApp();
             }
+
+            // 2. Busca Usuários (se a tabela existir)
+            const { data: usersData } = await supabase
+                .from('users')
+                .select('*');
+
+            if (usersData && usersData.length > 0) {
+                state.users = usersData;
+                localStorage.setItem('express_users', JSON.stringify(state.users));
+            }
+
+            updateSyncBadge('online', 'ONLINE');
+            renderApp();
         } catch (err) {
-            console.error('Erro ao conectar ao Supabase:', err);
+            console.error('Sincronização em background falhou:', err);
             updateSyncBadge('offline', 'OFFLINE');
         }
     }
 
-    async function syncToGoogleSheets() {
+    // Salvar Tarefas no Supabase
+    async function syncTasksToSupabase() {
         updateSyncBadge('syncing', 'Salvando...');
         localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
 
@@ -257,12 +289,33 @@
                 .upsert(state.tasks, { onConflict: 'id' });
 
             if (error) throw error;
-
             updateSyncBadge('online', 'ONLINE');
         } catch (err) {
             console.error('Erro ao salvar no Supabase:', err);
             updateSyncBadge('offline', 'OFFLINE');
         }
+    }
+
+    // Salvar Usuários no Supabase
+    async function syncUsersToSupabase() {
+        localStorage.setItem('express_users', JSON.stringify(state.users));
+        try {
+            await supabase
+                .from('users')
+                .upsert(state.users, { onConflict: 'id' });
+        } catch (err) {
+            console.warn('Salvamento de usuários no Supabase ignorado (tabela opcional).');
+        }
+    }
+
+    // Inscrição para Atualizações em Tempo Real (Realtime WebSockets)
+    function subscribeRealtime() {
+        supabase
+            .channel('public:tasks')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
+                fetchSupabaseData();
+            })
+            .subscribe();
     }
 
     function updateSyncBadge(type, text) {
@@ -342,7 +395,7 @@
         });
 
         if (list.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px; font-weight:600;">Nenhuma demanda encontrada.</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px; font-weight:600; color:#6b7280;">Nenhuma demanda encontrada neste filtro.</div>`;
             return;
         }
 
@@ -362,7 +415,7 @@
                         <span>👤 ${assignee.name}</span>
                         <span>⏰ ${t.deadline ? new Date(t.deadline).toLocaleDateString('pt-BR') : 'Sem prazo'}</span>
                     </div>
-                    ${t.devolutiva ? `<div style="background:#fff8f0; padding:6px; font-size:0.75rem; border-left:3px solid var(--yellow-main); margin-top:6px;">💬 ${t.devolutiva}</div>` : ''}
+                    ${t.devolutiva ? `<div style="background:#fff8f0; padding:8px; font-size:0.75rem; border-left:3px solid var(--yellow-main); margin-top:8px; border-radius:4px; color:#4b5563;">💬 <b>Devolutiva:</b> ${t.devolutiva}</div>` : ''}
                     <div class="task-actions">
                         ${canComplete ? `<button onclick="openCompleteModal('${t.id}')" class="gold">✅ Finalizar Tarefa</button>` : ''}
                         ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑 Apagar</button>` : ''}
@@ -375,15 +428,20 @@
     function renderRanking() {
         const sorted = [...state.users].sort((a, b) => b.xp - a.xp);
         document.getElementById('rankList').innerHTML = sorted.map((u, i) => `
-            <div style="display:flex; justify-content:space-between; padding:0.6rem; background:#fff; border-radius:8px; border:1px solid var(--border);">
-                <div><b>#${i+1} ${u.name}</b> <small>(${u.role})</small></div>
-                <div style="font-weight:800; color:#b45309;">${u.xp} XP</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#fff; border-radius:10px; border:1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <div>
+                    <b style="font-size:0.95rem;">#${i+1} ${u.name}</b> 
+                    <div style="font-size:0.7rem; color:#6b7280; font-weight:600;">${u.role || 'Membro'}</div>
+                </div>
+                <div style="font-weight:800; color:#b45309; font-size:1rem;">${u.xp || 0} XP</div>
             </div>
         `).join('');
     }
 
     function openTaskModal() {
         document.getElementById('taskAssignee').innerHTML = state.users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+        document.getElementById('taskDesc').value = '';
+        document.getElementById('taskDeadline').value = '';
         openModal('modalTask');
     }
 
@@ -393,7 +451,7 @@
         const priority = document.getElementById('taskPriority').value;
         const deadline = document.getElementById('taskDeadline').value;
 
-        if (!desc || !deadline) return alert('Preencha todos os campos.');
+        if (!desc || !deadline) return alert('Preencha a descrição e a data limite.');
 
         const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
 
@@ -405,11 +463,12 @@
 
         closeModal('modalTask');
         renderApp();
-        syncToGoogleSheets();
+        syncTasksToSupabase();
     }
 
     function openCompleteModal(id) {
         document.getElementById('completeTaskId').value = id;
+        document.getElementById('completeComment').value = '';
         openModal('modalComplete');
     }
 
@@ -429,34 +488,39 @@
 
         closeModal('modalComplete');
         renderApp();
-        syncToGoogleSheets();
+        syncTasksToSupabase();
+        syncUsersToSupabase();
     }
 
     async function deleteTask(id) {
-        if (!confirm('Remover esta demanda?')) return;
+        if (!confirm('Tem certeza que deseja apagar esta demanda?')) return;
         state.tasks = state.tasks.filter(t => t.id !== id);
         
         try {
             await supabase.from('tasks').delete().eq('id', id);
         } catch (e) {
-            console.error("Erro ao deletar no Supabase:", e);
+            console.error("Erro ao apagar no Supabase:", e);
         }
 
         renderApp();
-        syncToGoogleSheets();
+        syncTasksToSupabase();
     }
 
-    function openUserModal() { openModal('modalUser'); }
+    function openUserModal() { 
+        document.getElementById('newUserName').value = '';
+        document.getElementById('newUserRole').value = '';
+        openModal('modalUser'); 
+    }
 
     function saveUser() {
         const name = document.getElementById('newUserName').value.trim();
         const role = document.getElementById('newUserRole').value.trim();
-        if (!name) return;
+        if (!name) return alert('Por favor, informe o nome.');
 
-        state.users.push({ id: 'u_' + Date.now(), name, role, xp: 0, streak: 0 });
-        localStorage.setItem('express_users', JSON.stringify(state.users));
+        state.users.push({ id: 'u_' + Date.now(), name, role: role || 'Membro', xp: 0, streak: 0 });
         closeModal('modalUser');
         renderApp();
+        syncUsersToSupabase();
     }
 
     async function verifyAdminPin() {
@@ -478,13 +542,22 @@
         renderTasks();
     }
 
-    function openAdminAuthModal() { openModal('modalAuth'); }
-    function openChangePinModal() { openModal('modalChangePin'); }
+    function openAdminAuthModal() { 
+        document.getElementById('adminPinInput').value = '';
+        openModal('modalAuth'); 
+    }
+
+    function openChangePinModal() { 
+        document.getElementById('pinCurrentInput').value = '';
+        document.getElementById('pinNewInput').value = '';
+        openModal('modalChangePin'); 
+    }
 
     async function changeAdminPin() {
         const cur = document.getElementById('pinCurrentInput').value;
         const newP = document.getElementById('pinNewInput').value;
-        if ((await hashString(cur)) !== state.adminPinHash) return alert('PIN atual incorreto');
+        if ((await hashString(cur)) !== state.adminPinHash) return alert('PIN atual incorreto.');
+        if (!newP) return alert('Insira um novo PIN válido.');
 
         state.adminPinHash = await hashString(newP);
         localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
@@ -509,12 +582,13 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // Atualiza automaticamente os dados a cada 10 segundos
-    setInterval(fetchGoogleSheetsData, 10000);
+    // Sincronização automática em segundo plano a cada 8 segundos
+    setInterval(fetchSupabaseData, 8000);
 
     window.onload = () => {
         renderApp();
-        fetchGoogleSheetsData();
+        fetchSupabaseData();
+        subscribeRealtime();
     };
 </script>
 
