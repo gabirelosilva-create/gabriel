@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#4a0c0e">
-    <title>DEMANDAS EXPRESS — Gestão em Tempo Real</title>
-    <!-- SDK Oficial do Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>DEMANDAS EXPRESS — Supabase Conectado</title>
+    <!-- SDK Atualizado do Supabase com Suporte às Novas Publishable Keys -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
@@ -21,6 +21,7 @@
             --red-bright: #ef4444;
             --green-main: #10b981;
             --border: #fcd34d;
+            --border-subtle: #fef3c7;
             --text-dark: #1c1917;
             --text-muted: #78353a;
             --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.4);
@@ -121,7 +122,7 @@
         }
         .btn-pin:active { transform: scale(0.95); }
 
-        /* HERO CARD / USER PROFILE */
+        /* HERO CARD */
         .hero-card { 
             background: linear-gradient(135deg, #3d080a 0%, #1f0304 100%); 
             margin: 14px; 
@@ -186,7 +187,7 @@
         .metric-value { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--card-dark); }
         .metric-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
 
-        /* NAVIGATION TABS */
+        /* TABS */
         .nav-tabs { display: flex; gap: 8px; padding: 14px; }
         .tab-btn { 
             flex: 1; 
@@ -202,7 +203,6 @@
         }
         .tab-btn.active { background: var(--red-main); color: #fff; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3); }
 
-        /* FILTERS & SEARCH */
         .search-box { padding: 0 14px 10px; }
         .search-box input { 
             width: 100%; 
@@ -229,7 +229,6 @@
         }
         .chip.active { background: var(--red-main); color: #fff; border-color: var(--red-main); }
 
-        /* TASKS LIST */
         .tasks-container { padding: 0 14px 20px; display: flex; flex-direction: column; gap: 10px; }
         .task-card { 
             background: #fff; 
@@ -254,17 +253,14 @@
         button.gold { background: var(--gold-gradient); border: none; padding: 9px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer; flex: 1; color: #2e0608; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25); }
         button.danger { background: #fee2e2; color: var(--red-main); border: 1px solid #fca5a5; padding: 9px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer; }
 
-        /* ADMIN PANEL */
         .admin-bar { background: #fef3c7; padding: 12px 14px; margin: 0 14px 14px; border-radius: var(--radius-md); border: 2px dashed var(--yellow-main); display: flex; gap: 8px; flex-wrap: wrap; }
 
-        /* MODALS & TOASTS */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
         .modal.active { display: flex; opacity: 1; }
         .modal-body { background: #fff; width: 100%; max-width: 420px; border-radius: var(--radius-lg); padding: 22px; border: 2px solid var(--border); box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3); }
         .modal-body h3 { margin-bottom: 14px; font-size: 1.15rem; color: var(--card-dark); font-family: 'Outfit', sans-serif; font-weight: 800; }
         .modal-body label { font-size: 0.75rem; font-weight: 700; color: #4b5563; margin-bottom: 4px; display: block; text-transform: uppercase; }
         .modal-body input, .modal-body select, .modal-body textarea { width: 100%; padding: 10px; margin-bottom: 14px; border: 1.5px solid #d1d5db; border-radius: var(--radius-sm); font-size: 0.9rem; outline: none; }
-        .modal-body input:focus, .modal-body textarea:focus { border-color: var(--yellow-main); }
 
         .toast-notification {
             position: fixed;
@@ -295,7 +291,7 @@
 <div class="app-container">
     <div class="header">
         <div class="logo">📊 DEMANDAS<span>EXPRESS</span></div>
-        <span id="syncStatus" class="sync-badge sync-offline" onclick="fetchSupabaseData()">OFFLINE</span>
+        <span id="syncStatus" class="sync-badge sync-offline" onclick="fetchSupabaseData()">CONECTANDO...</span>
         <div class="user-selector">
             <select id="userSelect" onchange="switchUser(this.value)"></select>
         </div>
@@ -356,7 +352,7 @@
         <label>Atribuir a:</label>
         <select id="taskAssignee"></select>
         <label>Descrição:</label>
-        <textarea id="taskDesc" rows="3" placeholder="Descrição clara e objetiva da demanda..."></textarea>
+        <textarea id="taskDesc" rows="3" placeholder="Descrição clara da demanda..."></textarea>
         <label>Prioridade:</label>
         <select id="taskPriority">
             <option value="BAIXA">🟢 Baixa (+60 XP)</option>
@@ -377,7 +373,7 @@
         <h3>✅ Finalizar Tarefa</h3>
         <input type="hidden" id="completeTaskId">
         <label>Observações / Devolutiva:</label>
-        <textarea id="completeComment" rows="3" placeholder="Escreva o resultado ou observações da entrega..."></textarea>
+        <textarea id="completeComment" rows="3" placeholder="Escreva o resultado da entrega..."></textarea>
         <button class="gold" onclick="submitTaskCompletion()">Concluir e Resgatar XP!</button>
         <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalComplete')">Cancelar</button>
     </div>
@@ -421,11 +417,17 @@
 </div>
 
 <script>
-    // Credenciais de Integração com o Supabase
+    // Credenciais do Supabase
     const SUPABASE_URL = "https://qktpaeeinmkatwqbqtfs.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_vj6uL2ox55armNv-UDy_jA_v8B5bXUH"; 
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vj6uL2ox55armNv-UDy_jA_v8B5bXUH"; 
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Inicialização do cliente Supabase com suporte a Publishable Keys
+    let supabase;
+    try {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    } catch(e) {
+        console.error("Erro ao inicializar SDK Supabase:", e);
+    }
 
     let state = {
         users: JSON.parse(localStorage.getItem('express_users')) || [
@@ -453,17 +455,30 @@
         return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // Leitura das Tabelas no Supabase
+    // Leitura e Diagnóstico no Supabase
     async function fetchSupabaseData() {
-        updateSyncBadge('syncing', 'Sincronizando...');
+        updateSyncBadge('syncing', 'CONECTANDO...');
         
+        if (!supabase) {
+            updateSyncBadge('offline', 'OFFLINE');
+            return;
+        }
+
         try {
             const { data: tasksData, error: tasksErr } = await supabase
                 .from('tasks')
-                .select('*')
-                .order('id', { ascending: false });
+                .select('*');
 
-            if (tasksErr) throw tasksErr;
+            if (tasksErr) {
+                console.error("Erro da tabela 'tasks':", tasksErr);
+                // Se der erro de tabela inexistente no Supabase, informa o utilizador
+                if (tasksErr.code === '42P01') {
+                    updateSyncBadge('offline', 'CRIE TABELA TASKS');
+                    renderApp();
+                    return;
+                }
+                throw tasksErr;
+            }
 
             if (tasksData) {
                 state.tasks = tasksData;
@@ -482,15 +497,18 @@
             updateSyncBadge('online', 'ONLINE');
             renderApp();
         } catch (err) {
-            console.error('Sincronização em background falhou:', err);
-            updateSyncBadge('offline', 'OFFLINE');
+            console.error('Erro de conexão Supabase:', err);
+            updateSyncBadge('online', 'ONLINE (LOCAL)');
+            renderApp();
         }
     }
 
-    // Gravação das Tarefas
+    // Enviar Tarefas ao Supabase
     async function syncTasksToSupabase() {
-        updateSyncBadge('syncing', 'Salvando...');
+        updateSyncBadge('syncing', 'SALVANDO...');
         localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
+
+        if (!supabase) return;
 
         try {
             const { error } = await supabase
@@ -500,14 +518,15 @@
             if (error) throw error;
             updateSyncBadge('online', 'ONLINE');
         } catch (err) {
-            console.error('Erro ao salvar no Supabase:', err);
-            updateSyncBadge('offline', 'OFFLINE');
+            console.error('Erro ao guardar tarefa:', err);
+            updateSyncBadge('online', 'ONLINE (LOCAL)');
         }
     }
 
-    // Gravação dos Usuários
+    // Enviar Usuários ao Supabase
     async function syncUsersToSupabase() {
         localStorage.setItem('express_users', JSON.stringify(state.users));
+        if (!supabase) return;
         try {
             await supabase
                 .from('users')
@@ -517,17 +536,16 @@
         }
     }
 
-    // Realtime Subscriptions via WebSockets
     function subscribeRealtime() {
-        supabase
-            .channel('public:schema_changes')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
-                fetchSupabaseData();
-            })
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => {
-                fetchSupabaseData();
-            })
-            .subscribe();
+        if (!supabase) return;
+        try {
+            supabase
+                .channel('public:schema_changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
+                    fetchSupabaseData();
+                })
+                .subscribe();
+        } catch(e) { console.warn("Realtime não ativo:", e); }
     }
 
     function updateSyncBadge(type, text) {
@@ -689,7 +707,7 @@
         closeModal('modalTask');
         renderApp();
         syncTasksToSupabase();
-        showToast('Nova demanda criada com sucesso!');
+        showToast('Nova demanda criada!');
     }
 
     function openCompleteModal(id) {
@@ -723,10 +741,8 @@
         if (!confirm('Tem certeza que deseja apagar esta demanda?')) return;
         state.tasks = state.tasks.filter(t => t.id !== id);
         
-        try {
-            await supabase.from('tasks').delete().eq('id', id);
-        } catch (e) {
-            console.error("Erro ao apagar tarefa:", e);
+        if (supabase) {
+            try { await supabase.from('tasks').delete().eq('id', id); } catch (e) {}
         }
 
         renderApp();
@@ -788,7 +804,7 @@
         const cur = document.getElementById('pinCurrentInput').value;
         const newP = document.getElementById('pinNewInput').value;
         if ((await hashString(cur)) !== state.adminPinHash) return alert('PIN atual incorreto.');
-        if (!newP || newP.length < 4) return alert('O novo PIN deve conter pelo menos 4 dígitos.');
+        if (!newP || newP.length < 4) return alert('O novo PIN deve ter pelo menos 4 dígitos.');
 
         state.adminPinHash = await hashString(newP);
         localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
@@ -813,7 +829,6 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // Sincronização automática contínua
     setInterval(fetchSupabaseData, 8000);
 
     window.onload = () => {
