@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#4a0c0e">
-    <title>DEMANDAS EXPRESS — Supabase Conectado</title>
-    <!-- SDK Atualizado do Supabase com Suporte às Novas Publishable Keys -->
+    <title>DEMANDAS EXPRESS — Gestão com Anexos e Ranking</title>
+    <!-- SDK Oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -21,7 +21,6 @@
             --red-bright: #ef4444;
             --green-main: #10b981;
             --border: #fcd34d;
-            --border-subtle: #fef3c7;
             --text-dark: #1c1917;
             --text-muted: #78353a;
             --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.4);
@@ -242,7 +241,7 @@
         .task-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
         .task-card.URGENTE { border-left-color: var(--red-bright); }
         .task-card.BAIXA { border-left-color: var(--green-main); }
-        .task-card.is-done { opacity: 0.65; border-left-color: #6b7280; background: #f9fafb; }
+        .task-card.is-done { opacity: 0.75; border-left-color: #6b7280; background: #f9fafb; }
         
         .task-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .tag { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: #fef3c7; color: #92400e; text-transform: uppercase; }
@@ -250,6 +249,15 @@
         .task-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280; font-weight: 600; }
         .task-actions { margin-top: 12px; display: flex; gap: 8px; }
         
+        .task-img-preview {
+            width: 100%;
+            max-height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
         button.gold { background: var(--gold-gradient); border: none; padding: 9px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer; flex: 1; color: #2e0608; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25); }
         button.danger { background: #fee2e2; color: var(--red-main); border: 1px solid #fca5a5; padding: 9px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer; }
 
@@ -257,7 +265,7 @@
 
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
         .modal.active { display: flex; opacity: 1; }
-        .modal-body { background: #fff; width: 100%; max-width: 420px; border-radius: var(--radius-lg); padding: 22px; border: 2px solid var(--border); box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3); }
+        .modal-body { background: #fff; width: 100%; max-width: 420px; border-radius: var(--radius-lg); padding: 22px; border: 2px solid var(--border); box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3); max-height: 90vh; overflow-y: auto; }
         .modal-body h3 { margin-bottom: 14px; font-size: 1.15rem; color: var(--card-dark); font-family: 'Outfit', sans-serif; font-weight: 800; }
         .modal-body label { font-size: 0.75rem; font-weight: 700; color: #4b5563; margin-bottom: 4px; display: block; text-transform: uppercase; }
         .modal-body input, .modal-body select, .modal-body textarea { width: 100%; padding: 10px; margin-bottom: 14px; border: 1.5px solid #d1d5db; border-radius: var(--radius-sm); font-size: 0.9rem; outline: none; }
@@ -345,7 +353,7 @@
     </div>
 </div>
 
-<!-- MODAL DE CRIAR DEMANDA -->
+<!-- MODAL DE CRIAR DEMANDA (ADM) -->
 <div class="modal" id="modalTask">
     <div class="modal-body">
         <h3>🚀 Criar Nova Demanda</h3>
@@ -362,18 +370,22 @@
         </select>
         <label>Prazo Limite:</label>
         <input type="date" id="taskDeadline">
+        <label>Anexar Foto de Instrução (Opcional):</label>
+        <input type="file" id="taskAdminImage" accept="image/*">
         <button class="gold" onclick="saveTask()">Salvar Demanda</button>
         <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalTask')">Cancelar</button>
     </div>
 </div>
 
-<!-- MODAL DE FINALIZAR DEMANDA -->
+<!-- MODAL DE FINALIZAR DEMANDA (USUÁRIO) -->
 <div class="modal" id="modalComplete">
     <div class="modal-body">
         <h3>✅ Finalizar Tarefa</h3>
         <input type="hidden" id="completeTaskId">
         <label>Observações / Devolutiva:</label>
         <textarea id="completeComment" rows="3" placeholder="Escreva o resultado da entrega..."></textarea>
+        <label>Anexar Foto de Comprovação (Opcional):</label>
+        <input type="file" id="taskUserImage" accept="image/*">
         <button class="gold" onclick="submitTaskCompletion()">Concluir e Resgatar XP!</button>
         <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalComplete')">Cancelar</button>
     </div>
@@ -421,7 +433,6 @@
     const SUPABASE_URL = "https://qktpaeeinmkatwqbqtfs.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vj6uL2ox55armNv-UDy_jA_v8B5bXUH"; 
 
-    // Inicialização do cliente Supabase com suporte a Publishable Keys
     let supabase;
     try {
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -455,40 +466,31 @@
         return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // Leitura e Diagnóstico no Supabase
+    function convertFileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            if (!file) resolve('');
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Busca de dados no Supabase
     async function fetchSupabaseData() {
         updateSyncBadge('syncing', 'CONECTANDO...');
-        
-        if (!supabase) {
-            updateSyncBadge('offline', 'OFFLINE');
-            return;
-        }
+        if (!supabase) { updateSyncBadge('offline', 'OFFLINE'); return; }
 
         try {
-            const { data: tasksData, error: tasksErr } = await supabase
-                .from('tasks')
-                .select('*');
-
-            if (tasksErr) {
-                console.error("Erro da tabela 'tasks':", tasksErr);
-                // Se der erro de tabela inexistente no Supabase, informa o utilizador
-                if (tasksErr.code === '42P01') {
-                    updateSyncBadge('offline', 'CRIE TABELA TASKS');
-                    renderApp();
-                    return;
-                }
-                throw tasksErr;
-            }
+            const { data: tasksData, error: tasksErr } = await supabase.from('tasks').select('*');
+            if (tasksErr) throw tasksErr;
 
             if (tasksData) {
                 state.tasks = tasksData;
                 localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
             }
 
-            const { data: usersData } = await supabase
-                .from('users')
-                .select('*');
-
+            const { data: usersData } = await supabase.from('users').select('*');
             if (usersData && usersData.length > 0) {
                 state.users = usersData;
                 localStorage.setItem('express_users', JSON.stringify(state.users));
@@ -503,18 +505,13 @@
         }
     }
 
-    // Enviar Tarefas ao Supabase
     async function syncTasksToSupabase() {
         updateSyncBadge('syncing', 'SALVANDO...');
         localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
-
         if (!supabase) return;
 
         try {
-            const { error } = await supabase
-                .from('tasks')
-                .upsert(state.tasks, { onConflict: 'id' });
-
+            const { error } = await supabase.from('tasks').upsert(state.tasks, { onConflict: 'id' });
             if (error) throw error;
             updateSyncBadge('online', 'ONLINE');
         } catch (err) {
@@ -523,29 +520,12 @@
         }
     }
 
-    // Enviar Usuários ao Supabase
     async function syncUsersToSupabase() {
         localStorage.setItem('express_users', JSON.stringify(state.users));
         if (!supabase) return;
         try {
-            await supabase
-                .from('users')
-                .upsert(state.users, { onConflict: 'id' });
-        } catch (err) {
-            console.warn('Sincronização de usuários omitida.');
-        }
-    }
-
-    function subscribeRealtime() {
-        if (!supabase) return;
-        try {
-            supabase
-                .channel('public:schema_changes')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
-                    fetchSupabaseData();
-                })
-                .subscribe();
-        } catch(e) { console.warn("Realtime não ativo:", e); }
+            await supabase.from('users').upsert(state.users, { onConflict: 'id' });
+        } catch (err) { console.warn('Erro ao sincronizar usuários:', err); }
     }
 
     function updateSyncBadge(type, text) {
@@ -627,7 +607,7 @@
                 (state.currentFilter === 'MINHAS' && t.assigneeId === state.activeUserId) ||
                 (state.currentFilter === 'CONCLUÍDO' && t.status === 'CONCLUÍDO')
             );
-            const matchesSearch = t.desc.toLowerCase().includes(query);
+            const matchesSearch = t.desc ? t.desc.toLowerCase().includes(query) : true;
             return matchesFilter && matchesSearch;
         });
 
@@ -648,11 +628,13 @@
                         <span style="font-weight:800; color:#b45309;">+${t.xp} XP</span>
                     </div>
                     <div class="task-desc">${t.desc}</div>
-                    <div class="task-meta">
+                    ${t.admin_img ? `<img src="${t.admin_img}" class="task-img-preview" alt="Foto da instrução">` : ''}
+                    <div class="task-meta" style="margin-top:8px;">
                         <span>👤 ${assignee.name}</span>
                         <span>⏰ ${t.deadline ? new Date(t.deadline).toLocaleDateString('pt-BR') : 'Sem prazo'}</span>
                     </div>
                     ${t.devolutiva ? `<div style="background:#fff8f0; padding:8px; font-size:0.75rem; border-left:3px solid var(--yellow-main); margin-top:8px; border-radius:4px; color:#4b5563;">💬 <b>Devolutiva:</b> ${t.devolutiva}</div>` : ''}
+                    ${t.user_img ? `<img src="${t.user_img}" class="task-img-preview" alt="Foto da comprovação">` : ''}
                     <div class="task-actions">
                         ${canComplete ? `<button onclick="openCompleteModal('${t.id}')" class="gold">✅ Finalizar Tarefa</button>` : ''}
                         ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑 Apagar</button>` : ''}
@@ -685,46 +667,71 @@
         document.getElementById('taskAssignee').innerHTML = state.users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
         document.getElementById('taskDesc').value = '';
         document.getElementById('taskDeadline').value = '';
+        document.getElementById('taskAdminImage').value = '';
         openModal('modalTask');
     }
 
-    function saveTask() {
+    async function saveTask() {
         const assigneeId = document.getElementById('taskAssignee').value;
         const desc = document.getElementById('taskDesc').value.trim();
         const priority = document.getElementById('taskPriority').value;
         const deadline = document.getElementById('taskDeadline').value;
+        const fileInput = document.getElementById('taskAdminImage');
 
         if (!desc || !deadline) return alert('Por favor, defina a descrição e o prazo limite.');
 
         const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
+        
+        let adminImgBase64 = '';
+        if (fileInput.files && fileInput.files[0]) {
+            adminImgBase64 = await convertFileToBase64(fileInput.files[0]);
+        }
 
-        state.tasks.unshift({
+        const newTask = {
             id: 't_' + Date.now(),
-            assigneeId, desc, priority, xp: xpMap[priority],
-            deadline, status: 'PENDENTE', devolutiva: ''
-        });
+            assigneeId: assigneeId,
+            desc: desc,
+            priority: priority,
+            xp: xpMap[priority],
+            deadline: deadline,
+            status: 'PENDENTE',
+            devolutiva: '',
+            admin_img: adminImgBase64,
+            user_img: ''
+        };
+
+        state.tasks.unshift(newTask);
 
         closeModal('modalTask');
         renderApp();
         syncTasksToSupabase();
-        showToast('Nova demanda criada!');
+        showToast('Nova demanda enviada!');
     }
 
     function openCompleteModal(id) {
         document.getElementById('completeTaskId').value = id;
         document.getElementById('completeComment').value = '';
+        document.getElementById('taskUserImage').value = '';
         openModal('modalComplete');
     }
 
-    function submitTaskCompletion() {
+    async function submitTaskCompletion() {
         const id = document.getElementById('completeTaskId').value;
         const comment = document.getElementById('completeComment').value.trim();
+        const fileInput = document.getElementById('taskUserImage');
         
         const task = state.tasks.find(t => t.id === id);
         const user = state.users.find(u => u.id === task.assigneeId);
 
+        let userImgBase64 = '';
+        if (fileInput.files && fileInput.files[0]) {
+            userImgBase64 = await convertFileToBase64(fileInput.files[0]);
+        }
+
         task.status = 'CONCLUÍDO';
         task.devolutiva = comment;
+        task.user_img = userImgBase64;
+
         if (user) {
             user.xp = (user.xp || 0) + Number(task.xp);
             user.streak = (user.streak || 0) + 1;
@@ -834,7 +841,6 @@
     window.onload = () => {
         renderApp();
         fetchSupabaseData();
-        subscribeRealtime();
     };
 </script>
 
