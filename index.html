@@ -3,99 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#5c0f12">
-    <title>DEMANDASSHEETS — Gestão Integrada</title>
+    <meta name="theme-color" content="#4a0c0e">
+    <title>DEMANDAS EXPRESS — Gestão em Tempo Real</title>
     <!-- SDK Oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
         :root {
-            --bg-main: #5c0f12;
-            --card-bg: #fffbf0;
-            --card-dark: #3b090b;
+            --bg-gradient: radial-gradient(circle at 50% 0%, #7a1518 0%, #3d080a 60%, #1f0304 100%);
+            --card-bg: #fffdf7;
+            --card-dark: #2e0608;
             --yellow-main: #f59e0b;
             --yellow-bright: #fbbf24;
-            --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+            --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fef08a 50%, #d97706 100%);
             --red-main: #b91c1c;
             --red-bright: #ef4444;
+            --green-main: #10b981;
             --border: #fcd34d;
-            --text-dark: #1f2937;
+            --text-dark: #1c1917;
             --text-muted: #78353a;
+            --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.4);
+            --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.06);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-main); color: var(--text-dark); padding: 10px; display: flex; justify-content: center; min-height: 100vh; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        .app-container { width: 100%; max-width: 600px; background-color: #fefce8; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 2px solid var(--border); display: flex; flex-direction: column; }
+        body { 
+            background: var(--bg-gradient); 
+            background-attachment: fixed; 
+            color: var(--text-dark); 
+            padding: 12px; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
         
-        .header { background-color: var(--card-dark); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 50; }
-        .logo { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.1rem; color: #fff; }
+        .app-container { 
+            width: 100%; 
+            max-width: 620px; 
+            background-color: #fffefa; 
+            border-radius: var(--radius-lg); 
+            overflow: hidden; 
+            box-shadow: var(--shadow-lg); 
+            border: 2px solid var(--border); 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        /* HEADER */
+        .header { 
+            background-color: var(--card-dark); 
+            padding: 14px 18px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border-bottom: 2px solid var(--border); 
+            position: sticky; 
+            top: 0; 
+            z-index: 50; 
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900; 
+            font-size: 1.15rem; 
+            color: #fff; 
+            letter-spacing: -0.02em;
+        }
+        
         .logo span { color: var(--yellow-bright); }
         
-        .sync-badge { font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; }
-        .sync-online { background-color: #15803d; }
-        .sync-offline { background-color: #b91c1c; }
-        .sync-syncing { background-color: #d97706; }
+        .sync-badge { 
+            font-size: 0.68rem; 
+            font-weight: 800; 
+            padding: 4px 10px; 
+            border-radius: 99px; 
+            color: #fff; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .sync-online { background-color: var(--green-main); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .sync-offline { background-color: var(--red-bright); box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .sync-syncing { background-color: var(--yellow-main); color: #000; }
 
-        .user-selector select { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-weight: 700; cursor: pointer; color: var(--text-dark); outline: none; }
-        .btn-pin { background: var(--yellow-main); border: none; padding: 6px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; color: #000; transition: transform 0.1s; }
+        .user-selector select { 
+            background: #fff; 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius-sm); 
+            padding: 6px 10px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            color: var(--text-dark); 
+            outline: none; 
+            font-size: 0.85rem;
+        }
+
+        .btn-pin { 
+            background: var(--gold-gradient); 
+            border: none; 
+            padding: 6px 12px; 
+            border-radius: var(--radius-sm); 
+            font-weight: 800; 
+            cursor: pointer; 
+            color: #2e0608; 
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+            transition: transform 0.15s ease; 
+        }
         .btn-pin:active { transform: scale(0.95); }
 
-        .hero-card { background: var(--card-dark); margin: 15px; padding: 15px; border-radius: 16px; border: 2px solid var(--border); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .user-profile-header { display: flex; align-items: center; gap: 12px; }
-        .avatar-frame { width: 52px; height: 52px; background: var(--gold-gradient); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 900; color: #000; position: relative; flex-shrink: 0; }
-        .level-badge-floating { position: absolute; bottom: -8px; background: var(--red-main); color: #fff; font-size: 0.6rem; padding: 2px 6px; border-radius: 10px; font-weight: 800; border: 1px solid #fff; white-space: nowrap; }
+        /* HERO CARD / USER PROFILE */
+        .hero-card { 
+            background: linear-gradient(135deg, #3d080a 0%, #1f0304 100%); 
+            margin: 14px; 
+            padding: 16px; 
+            border-radius: var(--radius-md); 
+            border: 2px solid var(--border); 
+            color: #fff; 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25); 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .user-profile-header { display: flex; align-items: center; gap: 14px; }
+        
+        .avatar-frame { 
+            width: 56px; 
+            height: 56px; 
+            background: var(--gold-gradient); 
+            border-radius: 16px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.7rem; 
+            font-weight: 900; 
+            color: #2e0608; 
+            position: relative; 
+            flex-shrink: 0; 
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+        }
+        
+        .level-badge-floating { 
+            position: absolute; 
+            bottom: -8px; 
+            background: var(--red-main); 
+            color: #fff; 
+            font-size: 0.6rem; 
+            padding: 2px 7px; 
+            border-radius: 10px; 
+            font-weight: 800; 
+            border: 1.5px solid var(--yellow-bright); 
+            white-space: nowrap; 
+        }
 
-        .xp-container { margin-top: 15px; }
-        .xp-bar-bg { background: rgba(255,255,255,0.15); height: 10px; border-radius: 5px; overflow: hidden; border: 1px solid rgba(251, 191, 36, 0.3); }
-        .xp-bar-fill { background: var(--gold-gradient); height: 100%; width: 0%; transition: width 0.5s ease; }
-        .xp-stats { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 5px; color: #fde68a; font-weight: 600; }
+        .xp-container { margin-top: 14px; }
+        .xp-bar-bg { background: rgba(255,255,255,0.12); height: 10px; border-radius: 99px; overflow: hidden; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .xp-bar-fill { background: var(--gold-gradient); height: 100%; width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .xp-stats { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 6px; color: #fde68a; font-weight: 600; }
 
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px; }
-        .metric-card { background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 10px; text-align: center; }
-        .metric-value { font-size: 1.4rem; font-weight: 900; color: var(--text-dark); }
-        .metric-label { font-size: 0.65rem; font-weight: 800; color: #78350f; text-transform: uppercase; }
+        /* METRICS GRID */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 14px; }
+        .metric-card { 
+            background: #fff; 
+            border: 1.5px solid var(--border); 
+            border-radius: var(--radius-md); 
+            padding: 10px; 
+            text-align: center; 
+            box-shadow: var(--shadow-card);
+            border-bottom: 3px solid var(--red-main);
+        }
+        .metric-card.gold { border-bottom-color: var(--yellow-main); }
+        .metric-value { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--card-dark); }
+        .metric-label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
 
-        .nav-tabs { display: flex; gap: 10px; padding: 15px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-weight: 800; background: #fef3c7; color: #78350f; cursor: pointer; transition: all 0.2s; }
-        .tab-btn.active { background: var(--red-main); color: #fff; }
+        /* NAVIGATION TABS */
+        .nav-tabs { display: flex; gap: 8px; padding: 14px; }
+        .tab-btn { 
+            flex: 1; 
+            padding: 10px; 
+            border: none; 
+            border-radius: var(--radius-md); 
+            font-weight: 800; 
+            background: #fef3c7; 
+            color: #78350f; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            font-size: 0.85rem;
+        }
+        .tab-btn.active { background: var(--red-main); color: #fff; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3); }
 
-        .filter-chips { display: flex; gap: 6px; padding: 0 15px 15px; overflow-x: auto; }
-        .chip { padding: 6px 14px; border-radius: 20px; background: #fff; border: 1px solid var(--border); font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; color: var(--text-muted); }
+        /* FILTERS & SEARCH */
+        .search-box { padding: 0 14px 10px; }
+        .search-box input { 
+            width: 100%; 
+            padding: 9px 12px; 
+            border: 1.5px solid var(--border); 
+            border-radius: var(--radius-md); 
+            font-size: 0.85rem; 
+            outline: none; 
+            background: #fff;
+        }
+
+        .filter-chips { display: flex; gap: 6px; padding: 0 14px 14px; overflow-x: auto; }
+        .chip { 
+            padding: 6px 14px; 
+            border-radius: 99px; 
+            background: #fff; 
+            border: 1px solid var(--border); 
+            font-size: 0.78rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            white-space: nowrap; 
+            color: var(--text-muted); 
+            transition: all 0.15s ease;
+        }
         .chip.active { background: var(--red-main); color: #fff; border-color: var(--red-main); }
 
-        .tasks-container { padding: 0 15px 20px; display: flex; flex-direction: column; gap: 10px; }
-        .task-card { background: #fff; border-radius: 12px; padding: 12px; border: 1px solid var(--border); border-left: 6px solid var(--yellow-main); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        /* TASKS LIST */
+        .tasks-container { padding: 0 14px 20px; display: flex; flex-direction: column; gap: 10px; }
+        .task-card { 
+            background: #fff; 
+            border-radius: var(--radius-md); 
+            padding: 14px; 
+            border: 1px solid var(--border); 
+            border-left: 6px solid var(--yellow-main); 
+            box-shadow: var(--shadow-card); 
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .task-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
         .task-card.URGENTE { border-left-color: var(--red-bright); }
-        .task-card.BAIXA { border-left-color: #10b981; }
+        .task-card.BAIXA { border-left-color: var(--green-main); }
         .task-card.is-done { opacity: 0.65; border-left-color: #6b7280; background: #f9fafb; }
-        .task-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .tag { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: #fef3c7; color: #92400e; }
-        .task-desc { font-weight: 700; margin-bottom: 8px; font-size: 0.95rem; color: var(--text-dark); word-break: break-word; }
-        .task-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280; font-weight: 600; }
-        .task-actions { margin-top: 10px; display: flex; gap: 6px; }
         
-        button.gold { background: var(--yellow-bright); border: none; padding: 8px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; flex: 1; color: #000; }
-        button.danger { background: var(--red-main); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        .task-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .tag { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: #fef3c7; color: #92400e; text-transform: uppercase; }
+        .task-desc { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-dark); word-break: break-word; line-height: 1.4; }
+        .task-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280; font-weight: 600; }
+        .task-actions { margin-top: 12px; display: flex; gap: 8px; }
+        
+        button.gold { background: var(--gold-gradient); border: none; padding: 9px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer; flex: 1; color: #2e0608; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25); }
+        button.danger { background: #fee2e2; color: var(--red-main); border: 1px solid #fca5a5; padding: 9px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer; }
 
-        .admin-bar { background: #fef3c7; padding: 12px 15px; margin: 0 15px 15px; border-radius: 12px; border: 2px dashed var(--yellow-main); display: flex; gap: 8px; flex-wrap: wrap; }
+        /* ADMIN PANEL */
+        .admin-bar { background: #fef3c7; padding: 12px 14px; margin: 0 14px 14px; border-radius: var(--radius-md); border: 2px dashed var(--yellow-main); display: flex; gap: 8px; flex-wrap: wrap; }
 
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
+        /* MODALS & TOASTS */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
         .modal.active { display: flex; opacity: 1; }
-        .modal-body { background: #fff; width: 100%; max-width: 400px; border-radius: 16px; padding: 20px; border: 2px solid var(--border); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
-        .modal-body h3 { margin-bottom: 12px; font-size: 1.1rem; color: var(--card-dark); }
-        .modal-body label { font-size: 0.75rem; font-weight: 700; color: #4b5563; margin-bottom: 4px; display: block; }
-        .modal-body input, .modal-body select, .modal-body textarea { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; outline: none; }
+        .modal-body { background: #fff; width: 100%; max-width: 420px; border-radius: var(--radius-lg); padding: 22px; border: 2px solid var(--border); box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3); }
+        .modal-body h3 { margin-bottom: 14px; font-size: 1.15rem; color: var(--card-dark); font-family: 'Outfit', sans-serif; font-weight: 800; }
+        .modal-body label { font-size: 0.75rem; font-weight: 700; color: #4b5563; margin-bottom: 4px; display: block; text-transform: uppercase; }
+        .modal-body input, .modal-body select, .modal-body textarea { width: 100%; padding: 10px; margin-bottom: 14px; border: 1.5px solid #d1d5db; border-radius: var(--radius-sm); font-size: 0.9rem; outline: none; }
         .modal-body input:focus, .modal-body textarea:focus { border-color: var(--yellow-main); }
+
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #1c1917;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: 1.5px solid var(--yellow-bright);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 200;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+        .toast-notification.show { transform: translateX(-50%) translateY(0); }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
+<div id="toast" class="toast-notification">Notificação</div>
+
 <div class="app-container">
     <div class="header">
-        <div class="logo">📊 DEMANDAS<span>SHEETS</span></div>
-        <span id="syncStatus" class="sync-badge sync-offline">OFFLINE</span>
+        <div class="logo">📊 DEMANDAS<span>EXPRESS</span></div>
+        <span id="syncStatus" class="sync-badge sync-offline" onclick="fetchSupabaseData()">OFFLINE</span>
         <div class="user-selector">
             <select id="userSelect" onchange="switchUser(this.value)"></select>
         </div>
@@ -109,7 +309,7 @@
             <div class="metric-value" id="metricPending">0</div>
             <div class="metric-label">Pendentes</div>
         </div>
-        <div class="metric-card">
+        <div class="metric-card gold">
             <div class="metric-value" id="metricDone">0</div>
             <div class="metric-label">Entregues</div>
         </div>
@@ -132,6 +332,9 @@
     </div>
 
     <div id="tabTasks">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Pesquisar demandas..." oninput="renderTasks()">
+        </div>
         <div class="filter-chips" id="statusFilters">
             <div class="chip active" onclick="setFilter('ALL', this)">Todas</div>
             <div class="chip" onclick="setFilter('PENDENTE', this)">Pendentes</div>
@@ -141,7 +344,7 @@
         <div class="tasks-container" id="tasksGrid"></div>
     </div>
 
-    <div id="tabRanking" class="hidden" style="padding: 0 15px 20px;">
+    <div id="tabRanking" class="hidden" style="padding: 0 14px 20px;">
         <div id="rankList" style="display: flex; flex-direction: column; gap: 8px;"></div>
     </div>
 </div>
@@ -153,7 +356,7 @@
         <label>Atribuir a:</label>
         <select id="taskAssignee"></select>
         <label>Descrição:</label>
-        <textarea id="taskDesc" rows="3" placeholder="Descrição detalhada da demanda..."></textarea>
+        <textarea id="taskDesc" rows="3" placeholder="Descrição clara e objetiva da demanda..."></textarea>
         <label>Prioridade:</label>
         <select id="taskPriority">
             <option value="BAIXA">🟢 Baixa (+60 XP)</option>
@@ -174,8 +377,8 @@
         <h3>✅ Finalizar Tarefa</h3>
         <input type="hidden" id="completeTaskId">
         <label>Observações / Devolutiva:</label>
-        <textarea id="completeComment" rows="3" placeholder="O que foi realizado para concluir?"></textarea>
-        <button class="gold" onclick="submitTaskCompletion()">Concluir e Ganhar XP!</button>
+        <textarea id="completeComment" rows="3" placeholder="Escreva o resultado ou observações da entrega..."></textarea>
+        <button class="gold" onclick="submitTaskCompletion()">Concluir e Resgatar XP!</button>
         <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalComplete')">Cancelar</button>
     </div>
 </div>
@@ -197,7 +400,7 @@
         <h3>👤 Cadastrar Novo Membro</h3>
         <label>Nome do Colaborador:</label>
         <input type="text" id="newUserName" placeholder="Ex: Gabriel Silva">
-        <label>Cargo:</label>
+        <label>Cargo / Função:</label>
         <input type="text" id="newUserRole" placeholder="Ex: Aprendiz, Operador, Supervisor">
         <button class="gold" onclick="saveUser()">Cadastrar Membro</button>
         <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalUser')">Cancelar</button>
@@ -207,7 +410,7 @@
 <!-- MODAL DE ALTERAR PIN -->
 <div class="modal" id="modalChangePin">
     <div class="modal-body">
-        <h3>🔑 Alterar PIN de Gestor</h3>
+        <h3>🔑 Alterar PIN do Gestor</h3>
         <label>PIN Atual:</label>
         <input type="password" id="pinCurrentInput" placeholder="PIN Atual">
         <label>Novo PIN:</label>
@@ -236,6 +439,13 @@
         currentFilter: 'ALL'
     };
 
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
     async function hashString(str) {
         const encoder = new TextEncoder();
         const data = encoder.encode(str);
@@ -243,15 +453,15 @@
         return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // Busca de Dados no Supabase
+    // Leitura das Tabelas no Supabase
     async function fetchSupabaseData() {
         updateSyncBadge('syncing', 'Sincronizando...');
         
         try {
-            // 1. Busca Tarefas
             const { data: tasksData, error: tasksErr } = await supabase
                 .from('tasks')
-                .select('*');
+                .select('*')
+                .order('id', { ascending: false });
 
             if (tasksErr) throw tasksErr;
 
@@ -260,7 +470,6 @@
                 localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
             }
 
-            // 2. Busca Usuários (se a tabela existir)
             const { data: usersData } = await supabase
                 .from('users')
                 .select('*');
@@ -278,7 +487,7 @@
         }
     }
 
-    // Salvar Tarefas no Supabase
+    // Gravação das Tarefas
     async function syncTasksToSupabase() {
         updateSyncBadge('syncing', 'Salvando...');
         localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
@@ -296,7 +505,7 @@
         }
     }
 
-    // Salvar Usuários no Supabase
+    // Gravação dos Usuários
     async function syncUsersToSupabase() {
         localStorage.setItem('express_users', JSON.stringify(state.users));
         try {
@@ -304,15 +513,18 @@
                 .from('users')
                 .upsert(state.users, { onConflict: 'id' });
         } catch (err) {
-            console.warn('Salvamento de usuários no Supabase ignorado (tabela opcional).');
+            console.warn('Sincronização de usuários omitida.');
         }
     }
 
-    // Inscrição para Atualizações em Tempo Real (Realtime WebSockets)
+    // Realtime Subscriptions via WebSockets
     function subscribeRealtime() {
         supabase
-            .channel('public:tasks')
+            .channel('public:schema_changes')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => {
+                fetchSupabaseData();
+            })
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => {
                 fetchSupabaseData();
             })
             .subscribe();
@@ -351,6 +563,7 @@
         localStorage.setItem('express_active_user', id);
         renderHeroCard();
         renderTasks();
+        showToast(`Perfil alterado para ${getActiveUser().name}`);
     }
 
     function renderHeroCard() {
@@ -368,12 +581,12 @@
                     </div>
                     <div>
                         <div style="font-weight:800; font-size:1.2rem; color:#fff;">${u.name}</div>
-                        <div style="font-size:0.75rem; color:var(--yellow-bright); text-transform:uppercase;">${u.role || 'Membro'}</div>
+                        <div style="font-size:0.75rem; color:var(--yellow-bright); text-transform:uppercase; font-weight:700;">${u.role || 'Membro'}</div>
                     </div>
                 </div>
                 <div class="xp-container">
                     <div class="xp-bar-bg"><div class="xp-bar-fill" style="width:${progress}%"></div></div>
-                    <div class="xp-stats"><span>${u.xp || 0} XP Total</span><span>Progresso: ${progress}%</span></div>
+                    <div class="xp-stats"><span>${u.xp || 0} XP Total</span><span>Nível ${lvl} (${progress}%)</span></div>
                 </div>
             `;
         }
@@ -387,15 +600,21 @@
 
     function renderTasks() {
         const container = document.getElementById('tasksGrid');
+        const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
+
         let list = state.tasks.filter(t => {
-            if (state.currentFilter === 'PENDENTE') return t.status === 'PENDENTE';
-            if (state.currentFilter === 'MINHAS') return t.assigneeId === state.activeUserId;
-            if (state.currentFilter === 'CONCLUÍDO') return t.status === 'CONCLUÍDO';
-            return true;
+            const matchesFilter = (
+                state.currentFilter === 'ALL' ||
+                (state.currentFilter === 'PENDENTE' && t.status === 'PENDENTE') ||
+                (state.currentFilter === 'MINHAS' && t.assigneeId === state.activeUserId) ||
+                (state.currentFilter === 'CONCLUÍDO' && t.status === 'CONCLUÍDO')
+            );
+            const matchesSearch = t.desc.toLowerCase().includes(query);
+            return matchesFilter && matchesSearch;
         });
 
         if (list.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px; font-weight:600; color:#6b7280;">Nenhuma demanda encontrada neste filtro.</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:2rem; background:#fff; border-radius:12px; font-weight:600; color:#6b7280; border: 1px solid var(--border);">Nenhuma demanda encontrada.</div>`;
             return;
         }
 
@@ -426,16 +645,22 @@
     }
 
     function renderRanking() {
-        const sorted = [...state.users].sort((a, b) => b.xp - a.xp);
-        document.getElementById('rankList').innerHTML = sorted.map((u, i) => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem; background:#fff; border-radius:10px; border:1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <div>
-                    <b style="font-size:0.95rem;">#${i+1} ${u.name}</b> 
-                    <div style="font-size:0.7rem; color:#6b7280; font-weight:600;">${u.role || 'Membro'}</div>
+        const sorted = [...state.users].sort((a, b) => (b.xp || 0) - (a.xp || 0));
+        document.getElementById('rankList').innerHTML = sorted.map((u, i) => {
+            const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`;
+            return `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0.75rem 1rem; background:#fff; border-radius:10px; border:1px solid var(--border); box-shadow: var(--shadow-card);">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:1.1rem; font-weight:800;">${medal}</span>
+                        <div>
+                            <b style="font-size:0.95rem; color:var(--text-dark);">${u.name}</b> 
+                            <div style="font-size:0.7rem; color:#6b7280; font-weight:600;">${u.role || 'Membro'}</div>
+                        </div>
+                    </div>
+                    <div style="font-weight:900; color:#b45309; font-size:1rem; font-family:'Outfit', sans-serif;">${u.xp || 0} XP</div>
                 </div>
-                <div style="font-weight:800; color:#b45309; font-size:1rem;">${u.xp || 0} XP</div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     function openTaskModal() {
@@ -451,7 +676,7 @@
         const priority = document.getElementById('taskPriority').value;
         const deadline = document.getElementById('taskDeadline').value;
 
-        if (!desc || !deadline) return alert('Preencha a descrição e a data limite.');
+        if (!desc || !deadline) return alert('Por favor, defina a descrição e o prazo limite.');
 
         const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
 
@@ -464,6 +689,7 @@
         closeModal('modalTask');
         renderApp();
         syncTasksToSupabase();
+        showToast('Nova demanda criada com sucesso!');
     }
 
     function openCompleteModal(id) {
@@ -490,6 +716,7 @@
         renderApp();
         syncTasksToSupabase();
         syncUsersToSupabase();
+        showToast(`Demanda concluída! +${task.xp} XP acumulados!`);
     }
 
     async function deleteTask(id) {
@@ -499,11 +726,12 @@
         try {
             await supabase.from('tasks').delete().eq('id', id);
         } catch (e) {
-            console.error("Erro ao apagar no Supabase:", e);
+            console.error("Erro ao apagar tarefa:", e);
         }
 
         renderApp();
         syncTasksToSupabase();
+        showToast('Demanda removida.');
     }
 
     function openUserModal() { 
@@ -515,12 +743,13 @@
     function saveUser() {
         const name = document.getElementById('newUserName').value.trim();
         const role = document.getElementById('newUserRole').value.trim();
-        if (!name) return alert('Por favor, informe o nome.');
+        if (!name) return alert('Informe o nome do membro.');
 
         state.users.push({ id: 'u_' + Date.now(), name, role: role || 'Membro', xp: 0, streak: 0 });
         closeModal('modalUser');
         renderApp();
         syncUsersToSupabase();
+        showToast(`Membro ${name} cadastrado!`);
     }
 
     async function verifyAdminPin() {
@@ -531,6 +760,7 @@
             closeModal('modalAuth');
             document.getElementById('adminPanel').classList.remove('hidden');
             renderTasks();
+            showToast('Painel Gestor desbloqueado');
         } else {
             alert('PIN Incorreto');
         }
@@ -540,6 +770,7 @@
         state.isAdmin = false;
         document.getElementById('adminPanel').classList.add('hidden');
         renderTasks();
+        showToast('Sessão de Gestor encerrada');
     }
 
     function openAdminAuthModal() { 
@@ -557,12 +788,12 @@
         const cur = document.getElementById('pinCurrentInput').value;
         const newP = document.getElementById('pinNewInput').value;
         if ((await hashString(cur)) !== state.adminPinHash) return alert('PIN atual incorreto.');
-        if (!newP) return alert('Insira um novo PIN válido.');
+        if (!newP || newP.length < 4) return alert('O novo PIN deve conter pelo menos 4 dígitos.');
 
         state.adminPinHash = await hashString(newP);
         localStorage.setItem('express_admin_pin_hash', state.adminPinHash);
         closeModal('modalChangePin');
-        alert('PIN atualizado com sucesso!');
+        showToast('PIN de Gestor atualizado!');
     }
 
     function switchTab(t) {
@@ -582,7 +813,7 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // Sincronização automática em segundo plano a cada 8 segundos
+    // Sincronização automática contínua
     setInterval(fetchSupabaseData, 8000);
 
     window.onload = () => {
