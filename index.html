@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#4a0c0e">
-    <title>DEMANDAS EXPRESS — Gestão com Anexos e Ranking</title>
-    <!-- SDK Oficial do Supabase -->
+    <title>DEMANDAS EXPRESS — Sistema de Gestão & Gamificação</title>
+    <!-- SDK Oficial do Supabase v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -21,6 +21,7 @@
             --red-bright: #ef4444;
             --green-main: #10b981;
             --border: #fcd34d;
+            --border-subtle: #fef3c7;
             --text-dark: #1c1917;
             --text-muted: #78353a;
             --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.4);
@@ -251,11 +252,12 @@
         
         .task-img-preview {
             width: 100%;
-            max-height: 180px;
+            max-height: 200px;
             object-fit: cover;
             border-radius: 8px;
             margin-top: 8px;
             border: 1px solid #e5e7eb;
+            cursor: pointer;
         }
 
         button.gold { background: var(--gold-gradient); border: none; padding: 9px 14px; border-radius: var(--radius-sm); font-weight: 800; cursor: pointer; flex: 1; color: #2e0608; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25); }
@@ -263,7 +265,7 @@
 
         .admin-bar { background: #fef3c7; padding: 12px 14px; margin: 0 14px 14px; border-radius: var(--radius-md); border: 2px dashed var(--yellow-main); display: flex; gap: 8px; flex-wrap: wrap; }
 
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
         .modal.active { display: flex; opacity: 1; }
         .modal-body { background: #fff; width: 100%; max-width: 420px; border-radius: var(--radius-lg); padding: 22px; border: 2px solid var(--border); box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3); max-height: 90vh; overflow-y: auto; }
         .modal-body h3 { margin-bottom: 14px; font-size: 1.15rem; color: var(--card-dark); font-family: 'Outfit', sans-serif; font-weight: 800; }
@@ -353,14 +355,14 @@
     </div>
 </div>
 
-<!-- MODAL DE CRIAR DEMANDA (ADM) -->
+<!-- MODAL CRIAR DEMANDA (ADM) -->
 <div class="modal" id="modalTask">
     <div class="modal-body">
         <h3>🚀 Criar Nova Demanda</h3>
         <label>Atribuir a:</label>
         <select id="taskAssignee"></select>
         <label>Descrição:</label>
-        <textarea id="taskDesc" rows="3" placeholder="Descrição clara da demanda..."></textarea>
+        <textarea id="taskDesc" rows="3" placeholder="Descrição da demanda..."></textarea>
         <label>Prioridade:</label>
         <select id="taskPriority">
             <option value="BAIXA">🟢 Baixa (+60 XP)</option>
@@ -370,28 +372,28 @@
         </select>
         <label>Prazo Limite:</label>
         <input type="date" id="taskDeadline">
-        <label>Anexar Foto de Instrução (Opcional):</label>
+        <label>Foto de Instrução (ADM):</label>
         <input type="file" id="taskAdminImage" accept="image/*">
         <button class="gold" onclick="saveTask()">Salvar Demanda</button>
         <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalTask')">Cancelar</button>
     </div>
 </div>
 
-<!-- MODAL DE FINALIZAR DEMANDA (USUÁRIO) -->
+<!-- MODAL FINALIZAR DEMANDA (USUÁRIO) -->
 <div class="modal" id="modalComplete">
     <div class="modal-body">
         <h3>✅ Finalizar Tarefa</h3>
         <input type="hidden" id="completeTaskId">
         <label>Observações / Devolutiva:</label>
-        <textarea id="completeComment" rows="3" placeholder="Escreva o resultado da entrega..."></textarea>
-        <label>Anexar Foto de Comprovação (Opcional):</label>
+        <textarea id="completeComment" rows="3" placeholder="Escreva o resultado..."></textarea>
+        <label>Foto de Comprovação:</label>
         <input type="file" id="taskUserImage" accept="image/*">
         <button class="gold" onclick="submitTaskCompletion()">Concluir e Resgatar XP!</button>
         <button class="danger" style="width:100%; margin-top:6px;" onclick="closeModal('modalComplete')">Cancelar</button>
     </div>
 </div>
 
-<!-- MODAL DE AUTENTICAÇÃO DO ADMIN -->
+<!-- MODAL AUTENTICAÇÃO DO ADMIN -->
 <div class="modal" id="modalAuth">
     <div class="modal-body">
         <h3>🔐 Autenticação de Gestor</h3>
@@ -402,7 +404,7 @@
     </div>
 </div>
 
-<!-- MODAL DE NOVO USUÁRIO -->
+<!-- MODAL NOVO USUÁRIO -->
 <div class="modal" id="modalUser">
     <div class="modal-body">
         <h3>👤 Cadastrar Novo Membro</h3>
@@ -415,7 +417,7 @@
     </div>
 </div>
 
-<!-- MODAL DE ALTERAR PIN -->
+<!-- MODAL ALTERAR PIN -->
 <div class="modal" id="modalChangePin">
     <div class="modal-body">
         <h3>🔑 Alterar PIN do Gestor</h3>
@@ -428,8 +430,15 @@
     </div>
 </div>
 
+<!-- MODAL VISUALIZAR FOTO EXPANDIDA -->
+<div class="modal" id="modalImage">
+    <div class="modal-body" style="text-align: center;">
+        <img id="expandedImg" src="" style="width: 100%; border-radius: 8px; max-height: 70vh; object-fit: contain;">
+        <button class="danger" style="width:100%; margin-top:12px;" onclick="closeModal('modalImage')">Fechar</button>
+    </div>
+</div>
+
 <script>
-    // Credenciais do Supabase
     const SUPABASE_URL = "https://qktpaeeinmkatwqbqtfs.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vj6uL2ox55armNv-UDy_jA_v8B5bXUH"; 
 
@@ -476,7 +485,36 @@
         });
     }
 
-    // Busca de dados no Supabase
+    function mapTaskToSupabase(task) {
+        return {
+            id: task.id,
+            assignee_id: task.assigneeId,
+            desc: task.desc,
+            priority: task.priority,
+            xp: Number(task.xp) || 0,
+            deadline: task.deadline,
+            status: task.status,
+            devolutiva: task.devolutiva || '',
+            admin_img: task.admin_img || '',
+            user_img: task.user_img || ''
+        };
+    }
+
+    function mapTaskFromSupabase(dbTask) {
+        return {
+            id: dbTask.id,
+            assigneeId: dbTask.assignee_id || dbTask.assigneeId,
+            desc: dbTask.desc,
+            priority: dbTask.priority,
+            xp: dbTask.xp,
+            deadline: dbTask.deadline,
+            status: dbTask.status,
+            devolutiva: dbTask.devolutiva,
+            admin_img: dbTask.admin_img || '',
+            user_img: dbTask.user_img || ''
+        };
+    }
+
     async function fetchSupabaseData() {
         updateSyncBadge('syncing', 'CONECTANDO...');
         if (!supabase) { updateSyncBadge('offline', 'OFFLINE'); return; }
@@ -486,7 +524,7 @@
             if (tasksErr) throw tasksErr;
 
             if (tasksData) {
-                state.tasks = tasksData;
+                state.tasks = tasksData.map(mapTaskFromSupabase);
                 localStorage.setItem('express_tasks', JSON.stringify(state.tasks));
             }
 
@@ -511,11 +549,12 @@
         if (!supabase) return;
 
         try {
-            const { error } = await supabase.from('tasks').upsert(state.tasks, { onConflict: 'id' });
+            const dbPayload = state.tasks.map(mapTaskToSupabase);
+            const { error } = await supabase.from('tasks').upsert(dbPayload, { onConflict: 'id' });
             if (error) throw error;
             updateSyncBadge('online', 'ONLINE');
         } catch (err) {
-            console.error('Erro ao guardar tarefa:', err);
+            console.error('Erro ao salvar tarefa no Supabase:', err);
             updateSyncBadge('online', 'ONLINE (LOCAL)');
         }
     }
@@ -525,7 +564,7 @@
         if (!supabase) return;
         try {
             await supabase.from('users').upsert(state.users, { onConflict: 'id' });
-        } catch (err) { console.warn('Erro ao sincronizar usuários:', err); }
+        } catch (err) { console.warn('Aviso sincronização usuários:', err); }
     }
 
     function updateSyncBadge(type, text) {
@@ -596,6 +635,11 @@
         document.getElementById('metricStreak').innerText = `${getActiveUser().streak || 0}🔥`;
     }
 
+    function viewImage(url) {
+        document.getElementById('expandedImg').src = url;
+        openModal('modalImage');
+    }
+
     function renderTasks() {
         const container = document.getElementById('tasksGrid');
         const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
@@ -628,13 +672,13 @@
                         <span style="font-weight:800; color:#b45309;">+${t.xp} XP</span>
                     </div>
                     <div class="task-desc">${t.desc}</div>
-                    ${t.admin_img ? `<img src="${t.admin_img}" class="task-img-preview" alt="Foto da instrução">` : ''}
+                    ${t.admin_img ? `<img src="${t.admin_img}" class="task-img-preview" onclick="viewImage('${t.admin_img}')" alt="Foto da instrução">` : ''}
                     <div class="task-meta" style="margin-top:8px;">
                         <span>👤 ${assignee.name}</span>
                         <span>⏰ ${t.deadline ? new Date(t.deadline).toLocaleDateString('pt-BR') : 'Sem prazo'}</span>
                     </div>
                     ${t.devolutiva ? `<div style="background:#fff8f0; padding:8px; font-size:0.75rem; border-left:3px solid var(--yellow-main); margin-top:8px; border-radius:4px; color:#4b5563;">💬 <b>Devolutiva:</b> ${t.devolutiva}</div>` : ''}
-                    ${t.user_img ? `<img src="${t.user_img}" class="task-img-preview" alt="Foto da comprovação">` : ''}
+                    ${t.user_img ? `<img src="${t.user_img}" class="task-img-preview" onclick="viewImage('${t.user_img}')" alt="Foto da comprovação">` : ''}
                     <div class="task-actions">
                         ${canComplete ? `<button onclick="openCompleteModal('${t.id}')" class="gold">✅ Finalizar Tarefa</button>` : ''}
                         ${state.isAdmin ? `<button onclick="deleteTask('${t.id}')" class="danger">🗑 Apagar</button>` : ''}
@@ -672,40 +716,45 @@
     }
 
     async function saveTask() {
-        const assigneeId = document.getElementById('taskAssignee').value;
-        const desc = document.getElementById('taskDesc').value.trim();
-        const priority = document.getElementById('taskPriority').value;
-        const deadline = document.getElementById('taskDeadline').value;
-        const fileInput = document.getElementById('taskAdminImage');
+        try {
+            const assigneeId = document.getElementById('taskAssignee').value;
+            const desc = document.getElementById('taskDesc').value.trim();
+            const priority = document.getElementById('taskPriority').value;
+            const deadline = document.getElementById('taskDeadline').value;
+            const fileInput = document.getElementById('taskAdminImage');
 
-        if (!desc || !deadline) return alert('Por favor, defina a descrição e o prazo limite.');
+            if (!desc || !deadline) return alert('Por favor, preencha a descrição e o prazo limite.');
 
-        const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
-        
-        let adminImgBase64 = '';
-        if (fileInput.files && fileInput.files[0]) {
-            adminImgBase64 = await convertFileToBase64(fileInput.files[0]);
+            const xpMap = { BAIXA: 60, NORMAL: 100, ALTA: 150, URGENTE: 250 };
+            
+            let adminImgBase64 = '';
+            if (fileInput.files && fileInput.files[0]) {
+                adminImgBase64 = await convertFileToBase64(fileInput.files[0]);
+            }
+
+            const newTask = {
+                id: 't_' + Date.now(),
+                assigneeId: assigneeId,
+                desc: desc,
+                priority: priority,
+                xp: xpMap[priority],
+                deadline: deadline,
+                status: 'PENDENTE',
+                devolutiva: '',
+                admin_img: adminImgBase64,
+                user_img: ''
+            };
+
+            state.tasks.unshift(newTask);
+
+            closeModal('modalTask');
+            renderApp();
+            await syncTasksToSupabase();
+            showToast('Nova demanda enviada!');
+        } catch(e) {
+            console.error("Erro ao salvar tarefa:", e);
+            alert("Erro ao criar demanda: " + e.message);
         }
-
-        const newTask = {
-            id: 't_' + Date.now(),
-            assigneeId: assigneeId,
-            desc: desc,
-            priority: priority,
-            xp: xpMap[priority],
-            deadline: deadline,
-            status: 'PENDENTE',
-            devolutiva: '',
-            admin_img: adminImgBase64,
-            user_img: ''
-        };
-
-        state.tasks.unshift(newTask);
-
-        closeModal('modalTask');
-        renderApp();
-        syncTasksToSupabase();
-        showToast('Nova demanda enviada!');
     }
 
     function openCompleteModal(id) {
@@ -716,32 +765,37 @@
     }
 
     async function submitTaskCompletion() {
-        const id = document.getElementById('completeTaskId').value;
-        const comment = document.getElementById('completeComment').value.trim();
-        const fileInput = document.getElementById('taskUserImage');
-        
-        const task = state.tasks.find(t => t.id === id);
-        const user = state.users.find(u => u.id === task.assigneeId);
+        try {
+            const id = document.getElementById('completeTaskId').value;
+            const comment = document.getElementById('completeComment').value.trim();
+            const fileInput = document.getElementById('taskUserImage');
+            
+            const task = state.tasks.find(t => t.id === id);
+            const user = state.users.find(u => u.id === task.assigneeId);
 
-        let userImgBase64 = '';
-        if (fileInput.files && fileInput.files[0]) {
-            userImgBase64 = await convertFileToBase64(fileInput.files[0]);
+            let userImgBase64 = '';
+            if (fileInput.files && fileInput.files[0]) {
+                userImgBase64 = await convertFileToBase64(fileInput.files[0]);
+            }
+
+            task.status = 'CONCLUÍDO';
+            task.devolutiva = comment;
+            task.user_img = userImgBase64;
+
+            if (user) {
+                user.xp = (user.xp || 0) + Number(task.xp);
+                user.streak = (user.streak || 0) + 1;
+            }
+
+            closeModal('modalComplete');
+            renderApp();
+            await syncTasksToSupabase();
+            await syncUsersToSupabase();
+            showToast(`Demanda concluída! +${task.xp} XP acumulados!`);
+        } catch(e) {
+            console.error("Erro ao finalizar tarefa:", e);
+            alert("Erro ao finalizar: " + e.message);
         }
-
-        task.status = 'CONCLUÍDO';
-        task.devolutiva = comment;
-        task.user_img = userImgBase64;
-
-        if (user) {
-            user.xp = (user.xp || 0) + Number(task.xp);
-            user.streak = (user.streak || 0) + 1;
-        }
-
-        closeModal('modalComplete');
-        renderApp();
-        syncTasksToSupabase();
-        syncUsersToSupabase();
-        showToast(`Demanda concluída! +${task.xp} XP acumulados!`);
     }
 
     async function deleteTask(id) {
