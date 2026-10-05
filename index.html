@@ -140,6 +140,49 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
 #toast{background:rgba(28,25,23,.95);backdrop-filter:blur(8px);box-shadow:0 12px 30px -8px rgba(0,0,0,.6)}
 @media(min-width:640px){.modal{align-items:center;padding:16px}.mbody{border-radius:24px}.mbody::before{display:none}}
 @media(max-width:380px){.metric b{font-size:1.15rem}.logo{font-size:1rem}}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:12px}.gal:empty{display:none}.gal .thumb{margin:0;height:130px;max-height:none}.mbody .gal{margin-top:-6px}
+
+/* ===== GAMIFICAÇÃO + RANKING ===== */
+.bd-head{display:flex;justify-content:space-between;margin-top:16px;font-size:.78rem;font-weight:700;color:#fde68a}
+.bd{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:8px}
+.bdg{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;font-size:1.15rem;background:rgba(255,255,255,.07);border:1px solid rgba(252,211,77,.2);cursor:pointer;filter:grayscale(1);opacity:.45}
+.bdg.on{filter:none;opacity:1;background:linear-gradient(145deg,rgba(251,191,36,.35),rgba(251,191,36,.08));border-color:var(--gold2);box-shadow:0 0 14px -2px rgba(251,191,36,.7)}
+.rk-msg{background:linear-gradient(135deg,#4a0c0e,#2e0608);color:#fde68a;border-radius:16px;padding:12px 14px;font-size:.85rem;font-weight:600;box-shadow:var(--shadow)}
+.rk-msg b{color:#fff}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;padding:30px 0 6px;background:radial-gradient(70% 60% at 50% 0%,rgba(251,191,36,.25),transparent 70%)}
+.pod{flex:1;max-width:170px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;animation:rise .7s cubic-bezier(.2,.9,.25,1) both}
+.pod.g{order:0;flex:1.2;animation-delay:.25s}.pod.s{animation-delay:.1s}.pod.b{animation-delay:.4s}
+@keyframes rise{from{transform:translateY(60px);opacity:0}}
+.crown{font-size:1.7rem;animation:bob 2s ease-in-out infinite;margin-bottom:-6px;filter:drop-shadow(0 4px 6px rgba(245,158,11,.6))}
+@keyframes bob{50%{transform:translateY(-5px) rotate(4deg)}}
+.pav{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font:900 1.5rem Outfit;color:var(--dark);background:var(--gradient);position:relative;box-shadow:0 0 0 3px #fff,0 8px 18px -6px rgba(0,0,0,.5)}
+.pod.g .pav{width:70px;height:70px;font-size:1.8rem;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--gold2),0 0 24px rgba(251,191,36,.8)}
+.pod.s .pav{background:linear-gradient(135deg,#f3f4f6,#9ca3af)}.pod.b .pav{background:linear-gradient(135deg,#fdba74,#b45309);color:#fff}
+.pav i{position:absolute;right:-8px;bottom:-6px;font-style:normal;font-size:1.3rem}
+.pn{font-weight:800;margin-top:10px;font-size:.9rem;color:var(--ink);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.px{font:900 1.05rem Outfit;color:var(--red)}
+.pt{font-size:.68rem;font-weight:700;color:var(--muted)}
+.pb{font-size:.8rem;min-height:1.1em;margin:2px 0 6px;letter-spacing:1px}
+.blk{width:100%;border-radius:14px 14px 0 0;display:grid;place-items:center;font:900 1.6rem Outfit;color:rgba(0,0,0,.35);position:relative;overflow:hidden}
+.pod.g .blk{height:96px;background:linear-gradient(180deg,#fde68a,#f59e0b)}
+.pod.s .blk{height:68px;background:linear-gradient(180deg,#f3f4f6,#9ca3af)}
+.pod.b .blk{height:50px;background:linear-gradient(180deg,#fdba74,#b45309);color:rgba(255,255,255,.6)}
+.pod.g .blk::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);transform:translateX(-120%);animation:shine 3s 1s infinite}
+.pod.me .pn{color:var(--red)}.pod.me .blk{box-shadow:inset 0 0 0 3px var(--red)}
+.pod .x{position:absolute;top:0;right:0;padding:2px 8px}
+.rank .sub{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank .pos{font-size:1.1rem;color:var(--muted)}
+.rank.me{background:linear-gradient(135deg,#fff7ed,#fff)}
+.xpfloat{position:fixed;left:50%;top:42%;transform:translateX(-50%);font:900 2.6rem Outfit;color:#fbbf24;text-shadow:0 3px 0 #92400e,0 8px 24px rgba(0,0,0,.5);z-index:320;pointer-events:none;animation:floatup 1.6s ease-out forwards}
+@keyframes floatup{0%{opacity:0;transform:translate(-50%,20px) scale(.6)}20%{opacity:1;transform:translate(-50%,0) scale(1.15)}100%{opacity:0;transform:translate(-50%,-90px) scale(1)}}
+.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:310}
+.lvlup{position:fixed;inset:0;display:grid;place-items:center;background:rgba(20,2,3,.82);z-index:300;animation:fadein .3s}
+.lvlup div{text-align:center;color:#fff;animation:pop .6s cubic-bezier(.2,1.4,.4,1)}
+.lvlup small{display:block;font-weight:700;color:#fde68a;margin-bottom:6px}
+.lvlup b{display:block;font:900 3.6rem Outfit;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.lvlup span{display:inline-block;margin-top:12px;padding:6px 18px;border-radius:99px;border:2px solid var(--gold2);color:var(--gold2);font-weight:800}
+@keyframes fadein{from{opacity:0}}@keyframes pop{from{transform:scale(.4);opacity:0}}
+@media(max-width:380px){.bd{gap:4px}.pn{font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -203,7 +246,7 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
 <div class="modal" id="mDone"><div class="mbody" role="dialog" aria-modal="true" aria-labelledby="hDone">
  <h3 id="hDone">✅ Finalizar tarefa</h3><input type="hidden" id="dId">
  <label for="dComment">Devolutiva</label><textarea id="dComment" rows="3" maxlength="500" placeholder="Qual foi o resultado?"></textarea>
- <label for="dImg">Foto de comprovação (opcional)</label><input type="file" id="dImg" accept="image/*">
+ <label for="dImg">Fotos de comprovação (até 3)</label><input type="file" id="dImg" accept="image/*" multiple><div class="gal" id="dPrev"></div>
  <button class="btn" id="confirmDone">Concluir e resgatar XP</button><button class="btn danger" data-close>Cancelar</button>
 </div></div>
 
@@ -332,7 +375,7 @@ function renderHero(){
  const u=me();if(!u){$('hero').innerHTML='<div class="empty" style="color:#fde68a">Cadastre um membro para começar.</div>';return}
  const l=lvl(u.xp),a=lvlStart(l),b=lvlStart(l+1),pct=Math.min(100,Math.round((u.xp-a)/(b-a)*100));
  $('hero').innerHTML=`<div class="who"><div class="avatar">${esc(u.name.trim()[0]||'?').toUpperCase()}<span class="lvl">NÍV ${l}</span></div>
- <div><div style="font:800 1.1rem Outfit">${esc(u.name)}</div><div style="font-size:.8rem;color:#fde68a">${esc(u.role||'')}</div></div></div>
+ <div><div style="font:800 1.1rem Outfit">${esc(u.name)}</div><div style="font-size:.8rem;color:#fde68a">${esc(u.role||'')} · ${titleOf(l)}</div></div></div>
  <div class="xpbg" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><div class="xpfill" style="width:${pct}%"></div></div>
  <div class="xps"><span>${u.xp} XP</span><span>faltam ${b-u.xp} XP para o nível ${l+1}</span></div>`;
  const mine=S.tasks.filter(t=>t.assignee_id===u.id);
@@ -358,18 +401,59 @@ function renderTasks(){
   <div class="desc">${esc(t.description)}</div>
   ${t.admin_image?`<img class="thumb" data-zoom loading="lazy" alt="Foto de instrução" src="${esc(t.admin_image)}">`:''}
   <div class="meta"><span>👤 ${esc(u?.name||'—')}</span><span>📅 ${fmtDate(t.deadline)}</span></div>
-  ${done?`${t.comment?`<div class="fb">💬 ${esc(t.comment)}</div>`:''}${t.user_image?`<img class="thumb" data-zoom loading="lazy" alt="Comprovação" src="${esc(t.user_image)}">`:''}`:''}
+  ${done?`${t.comment?`<div class="fb">💬 ${esc(t.comment)}</div>`:''}<div class="gal">${(t.user_images&&t.user_images.length?t.user_images:t.user_image?[t.user_image]:[]).map(i=>`<img class="thumb" data-zoom loading="lazy" alt="Comprovação" src="${esc(i)}">`).join('')}</div>`:''}
   <div class="acts">
    ${!done&&mine?`<button class="btn" data-done="${esc(t.id)}">Concluir</button>`:''}
    ${S.admin?`<button class="btn ghost" data-edit="${esc(t.id)}">Editar</button><button class="btn danger" data-del="${esc(t.id)}">Excluir</button>`:''}
   </div></article>`}).join('')}
+const TITLES=[[10,'Lenda'],[7,'Elite'],[5,'Mestre'],[4,'Craque'],[3,'Ágil'],[2,'Aprendiz'],[1,'Novato']];
+const titleOf=l=>TITLES.find(t=>l>=t[0])[1];
+const doneOf=u=>S.tasks.filter(t=>t.assignee_id===u.id&&t.status==='CONCLUÍDO');
+const BADGES=[
+ ['🚀','Primeira entrega','Entregue 1 demanda',(u,d)=>d.length>=1],
+ ['⭐','Constante','Entregue 5 demandas',(u,d)=>d.length>=5],
+ ['🏅','Dez de dez','Entregue 10 demandas',(u,d)=>d.length>=10],
+ ['🔥','Pegando fogo','Sequência de 3 dias',u=>streakOf(u)>=3],
+ ['⚡','Imparável','Sequência de 7 dias',u=>streakOf(u)>=7],
+ ['🎯','Sob pressão','Entregue uma demanda urgente',(u,d)=>d.some(t=>t.priority==='URGENTE')],
+ ['👑','Mestre','Chegue ao nível 5',u=>lvl(u.xp)>=5],
+ ['💎','Mil XP','Acumule 1000 XP',u=>u.xp>=1000]];
+const earnedOf=u=>{const d=doneOf(u);return BADGES.map(b=>b[3](u,d))};
+function renderBadges(){
+ const u=me();if(!u)return;const e=earnedOf(u),n=e.filter(Boolean).length;
+ $('hero').insertAdjacentHTML('beforeend',`<div class="bd-head"><span>Conquistas</span><b>${n}/${BADGES.length}</b></div><div class="bd">${BADGES.map((b,i)=>`<div class="bdg ${e[i]?'on':''}" tabindex="0" role="button" data-badge="${i}" aria-label="${esc(b[1])}"><span>${b[0]}</span></div>`).join('')}</div>`)}
 function renderRank(){
- const sorted=[...S.users].sort((a,b)=>b.xp-a.xp),medals=['🥇','🥈','🥉'];
- $('paneRank').innerHTML=sorted.map((u,i)=>`<div class="rank ${u.id===S.active?'me':''}"><div class="pos">${medals[i]||i+1}</div>
- <div style="flex:1"><b>${esc(u.name)}</b><div style="font-size:.75rem;color:var(--muted)">${esc(u.role||'')} · nível ${lvl(u.xp)}</div></div>
- <div style="text-align:right"><b>${u.xp} XP</b><div style="font-size:.75rem">${streakOf(u)}🔥</div></div>
- ${S.admin?`<button class="btn danger sm" data-deluser="${esc(u.id)}" aria-label="Remover ${esc(u.name)}">✕</button>`:''}</div>`).join('')||'<div class="empty">Sem membros ainda.</div>'}
-function renderAll(){renderUsers();renderHero();renderTasks();renderRank();$('admin').classList.toggle('hidden',!S.admin);$('pinBtn').classList.toggle('hidden',S.admin)}
+ const arr=[...S.users].sort((a,b)=>b.xp-a.xp);
+ if(!arr.length){$('paneRank').innerHTML='<div class="empty">Sem membros ainda.</div>';return}
+ const pos=arr.findIndex(u=>u.id===S.active),m=arr[pos];let msg='';
+ if(m)msg=pos===0?'👑 Você lidera o ranking! Segure a coroa.':`Você está em <b>${pos+1}º</b>. Faltam <b>${arr[pos-1].xp-m.xp+1} XP</b> para passar ${esc(arr[pos-1].name)}.`;
+ const del=u=>S.admin?`<button class="btn danger sm x" data-deluser="${esc(u.id)}" aria-label="Remover ${esc(u.name)}">✕</button>`:'';
+ const icons=u=>{const e=earnedOf(u);return BADGES.filter((b,j)=>e[j]).map(b=>b[0]).join('')};
+ const cls=['g','s','b'],med=['🥇','🥈','🥉'];
+ const pod=[1,0,2].filter(i=>arr[i]).map(i=>{const u=arr[i];return `<div class="pod ${cls[i]} ${u.id===S.active?'me':''}">
+  ${i===0?'<div class="crown">👑</div>':''}<div class="pav">${esc(u.name.trim()[0]||'?').toUpperCase()}<i>${med[i]}</i></div>
+  <div class="pn">${esc(u.name)}</div><div class="px">${u.xp} XP</div><div class="pt">${titleOf(lvl(u.xp))} · nív. ${lvl(u.xp)}</div>
+  <div class="pb">${icons(u)}</div><div class="blk"><span>${i+1}º</span></div>${del(u)}</div>`}).join('');
+ const rest=arr.slice(3).map((u,k)=>`<div class="rank ${u.id===S.active?'me':''}"><div class="pos">${k+4}º</div>
+  <div style="flex:1;min-width:0"><b>${esc(u.name)}</b><div class="sub">${titleOf(lvl(u.xp))} · nível ${lvl(u.xp)} ${icons(u)}</div></div>
+  <div style="text-align:right"><b>${u.xp} XP</b><div class="sub">${streakOf(u)}🔥</div></div>${del(u)}</div>`).join('');
+ $('paneRank').innerHTML=`<div class="rk-msg">${msg}</div><div class="podium">${pod}</div>${rest}`}
+/* ---------- celebração ---------- */
+function confetti(n){
+ const c=document.createElement('canvas');c.className='confetti';c.width=innerWidth;c.height=innerHeight;document.body.appendChild(c);
+ const x=c.getContext('2d'),cols=['#fbbf24','#f59e0b','#ef4444','#fff','#10b981','#fef08a'];
+ const P=Array.from({length:n},()=>({x:innerWidth/2+(Math.random()-.5)*120,y:innerHeight*.6,vx:(Math.random()-.5)*14,vy:-Math.random()*16-6,s:5+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}));
+ let t=0;(function loop(){t++;x.clearRect(0,0,c.width,c.height);
+  P.forEach(p=>{p.vy+=.45;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);x.restore()});
+  t<130?requestAnimationFrame(loop):c.remove()})()}
+function celebrate(gain,level){
+ const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const f=document.createElement('div');f.className='xpfloat';f.textContent='+'+gain+' XP';document.body.appendChild(f);setTimeout(()=>f.remove(),1700);
+ if(!rm)confetti(level?170:90);
+ if(level){const o=document.createElement('div');o.className='lvlup';o.innerHTML=`<div><small>Subiu de nível!</small><b>NÍVEL ${level}</b><span>${titleOf(level)}</span></div>`;o.onclick=()=>o.remove();document.body.appendChild(o);setTimeout(()=>o.remove(),3000)}
+ if(navigator.vibrate)try{navigator.vibrate(level?[60,40,60,40,120]:40)}catch{}
+}
+function renderAll(){renderUsers();renderHero();renderBadges();renderTasks();renderRank();$('admin').classList.toggle('hidden',!S.admin);$('pinBtn').classList.toggle('hidden',S.admin)}
 
 /* ---------- modais ---------- */
 const open=id=>{$(id).classList.add('active');const f=$(id).querySelector('input:not([type=hidden]),textarea,select,button');setTimeout(()=>f&&f.focus(),50)};
@@ -391,12 +475,12 @@ async function saveTask(){
  persist();closeAll();renderAll();toast(id?'Demanda atualizada':'Demanda criada');push()}
 async function finish(){
  const t=S.tasks.find(x=>x.id===$('dId').value),u=me();if(!t||!u||t.status==='CONCLUÍDO')return closeAll();
- try{t.user_image=await compress($('dImg').files[0])}catch{toast('Imagem inválida, enviando sem foto');t.user_image=null}
+ try{const fs=[...$('dImg').files].slice(0,3);t.user_images=await Promise.all(fs.map(f=>compress(f,720,.6)));t.user_image=t.user_images[0]||null}catch{toast('Imagem inválida, enviando sem foto');t.user_images=[];t.user_image=null}
  t.comment=$('dComment').value.trim()||null;t.status='CONCLUÍDO';t.done_at=new Date().toISOString();
  const before=lvl(u.xp),gain=XP[t.priority]||100;u.xp+=gain;
  const d=today();u.streak=u.last_done===d?u.streak:(u.last_done&&daysBetween(u.last_done,d)===1?u.streak+1:1);u.last_done=d;
  persist();closeAll();renderAll();
- toast(lvl(u.xp)>before?`🎉 Subiu para o nível ${lvl(u.xp)}! +${gain} XP`:`+${gain} XP resgatados!`);push()}
+ toast(lvl(u.xp)>before?`🎉 Subiu para o nível ${lvl(u.xp)}! +${gain} XP`:`+${gain} XP resgatados!`);celebrate(gain,lvl(u.xp)>before?lvl(u.xp):0);push()}
 async function verify(){
  const h=await sha($('aPin').value);const stored=localStorage.getItem('express_admin_pin_hash')||DEFAULT_PIN_HASH;
  if(h!==stored)return fail('aErr','PIN incorreto.');
@@ -425,7 +509,7 @@ function importData(f){
 /* ---------- eventos ---------- */
 document.addEventListener('click',e=>{
  const t=e.target.closest('[data-done],[data-edit],[data-del],[data-deluser],[data-zoom],[data-open],[data-close],[data-f],[data-tab]');if(!t)return;
- if(t.dataset.done){$('dId').value=t.dataset.done;$('dComment').value='';$('dImg').value='';open('mDone')}
+ if(t.dataset.done){$('dId').value=t.dataset.done;$('dComment').value='';$('dImg').value='';$('dPrev').innerHTML='';open('mDone')}
  else if(t.dataset.edit)openTask(S.tasks.find(x=>x.id===t.dataset.edit));
  else if(t.dataset.del){if(confirm('Excluir esta demanda?')){S.tasks=S.tasks.filter(x=>x.id!==t.dataset.del);persist();renderAll();remote('tasks',t.dataset.del);toast('Demanda excluída')}}
  else if(t.dataset.deluser){const id=t.dataset.deluser;if(S.users.length<2)return toast('Mantenha ao menos um membro');
@@ -448,8 +532,10 @@ $('saveUser').onclick=addUser;$('savePin').onclick=changePin;
 $('logout').onclick=()=>{S.admin=false;renderAll();toast('Saiu do modo gestor')};
 $('exportBtn').onclick=exportData;$('importFile').onchange=e=>{importData(e.target.files[0]);e.target.value=''};
 $('sync').onclick=()=>pull(true);
+$('dImg').onchange=e=>{const fs=[...e.target.files];if(fs.length>3)toast('Só as 3 primeiras fotos serão enviadas');$('dPrev').innerHTML=fs.slice(0,3).map(f=>`<img class="thumb" alt="Prévia" src="${URL.createObjectURL(f)}">`).join('')};
 window.addEventListener('offline',()=>setSync('off'));window.addEventListener('online',()=>setSync(db?'sync':'off'));
 
+document.addEventListener('click',e=>{const g=e.target.closest('[data-badge]');if(!g)return;const i=+g.dataset.badge,b=BADGES[i],u=me();toast(`${b[0]} ${b[1]}: ${b[2]}${earnedOf(u)[i]?' ✔':' 🔒'}`)});
 renderAll();startSync();
 </script>
 </body>
