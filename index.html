@@ -189,6 +189,7 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
 .ph{position:relative}.ph .thumb{margin:0;height:130px;max-height:none}
 .ph button{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-weight:800;cursor:pointer}
 .acts{flex-wrap:wrap}
+.errbar{background:#fee2e2;color:#991b1b;padding:10px 16px;font-size:.8rem;font-weight:700;border-bottom:1px solid #fca5a5}
 </style>
 </head>
 <body>
@@ -200,6 +201,7 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
   <select id="userSelect" aria-label="Membro ativo"></select>
   <button class="btn sm" id="pinBtn">🔐 Gestor</button>
  </header>
+ <div id="errBar" class="errbar hidden" role="alert"></div>
 
  <section class="hero" id="hero" aria-label="Perfil"></section>
  <section class="metrics" aria-label="Resumo">
@@ -251,7 +253,7 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
  <button class="btn" id="saveTask">Salvar demanda</button><button class="btn danger" data-close>Cancelar</button>
 </div></div>
 
-<div class="modal" id="mDone"><div class="mbody" role="dialog" aria-modal="true" aria-labelledby="hDone">
+<div class="modal" id="mFinish"><div class="mbody" role="dialog" aria-modal="true" aria-labelledby="hDone">
  <h3 id="hDone">✅ Finalizar tarefa</h3><input type="hidden" id="dId">
  <label for="dComment">Devolutiva</label><textarea id="dComment" rows="3" maxlength="500" placeholder="Qual foi o resultado?"></textarea>
  <label>Foto de comprovação (obrigatória)</label><button class="btn" type="button" id="camBtn" style="margin-bottom:12px">📷 Abrir câmera</button><input type="file" id="dImg" accept="image/*" capture="environment" hidden><div class="gal" id="dPrev"></div><div class="err" id="dErr"></div>
@@ -332,7 +334,8 @@ const S={
 };
 if(!S.users.some(u=>u.id===S.active))S.active=S.users[0]?.id;
 const me=()=>S.users.find(u=>u.id===S.active);
-const persist=()=>{save('express_users',S.users);save('express_tasks',S.tasks)};
+const slim=t=>db?{...t,admin_image:null,user_image:null,user_images:[]}:t;
+const persist=()=>{save('express_users',S.users);save('express_tasks',S.tasks.map(slim))};
 
 /* ---------- util ---------- */
 let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
@@ -341,29 +344,41 @@ const lvl=xp=>Math.floor(Math.sqrt(xp/100))+1;
 const lvlStart=l=>(l-1)*(l-1)*100;
 function streakOf(u){if(!u.last_done)return 0;return daysBetween(u.last_done,today())<=1?u.streak:0}
 function isLate(t){return t.status==='PENDENTE'&&t.deadline&&t.deadline<today()}
-function compress(file,max=800,q=.65){return new Promise((res,rej)=>{
- if(!file)return res(null);
- const r=new FileReader();r.onerror=()=>rej();
- r.onload=()=>{const i=new Image();i.onerror=()=>rej();i.onload=()=>{
-  const k=Math.min(1,max/Math.max(i.width,i.height));const c=document.createElement('canvas');
-  c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',q))};i.src=r.result};
- r.readAsDataURL(file)})}
+function compress(file,max=720,q=.6){
+ return new Promise((res,rej)=>{
+  if(!file)return res(null);
+  const url=URL.createObjectURL(file),i=new Image();
+  i.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('img'))};
+  i.onload=()=>{try{
+   let m=max,qq=q,out;
+   for(let n=0;n<4;n++){
+    const k=Math.min(1,m/Math.max(i.naturalWidth,i.naturalHeight)),c=document.createElement('canvas');
+    c.width=Math.max(1,Math.round(i.naturalWidth*k));c.height=Math.max(1,Math.round(i.naturalHeight*k));
+    c.getContext('2d').drawImage(i,0,0,c.width,c.height);out=c.toDataURL('image/jpeg',qq);
+    if(out.length<200000)break;m*=.8;qq=Math.max(.35,qq-.08);
+   }
+   URL.revokeObjectURL(url);res(out)}catch(e){rej(e)}};
+  i.src=url})}
 
 /* ---------- sync (Firebase Firestore, tempo real) ---------- */
 function setSync(st){const b=$('sync');b.className='badge '+st;b.textContent={on:'Online',off:'Offline',sync:'Sincronizando…'}[st];S.online=st==='on'}
 const known={users:new Map(),tasks:new Map()},ready={users:false,tasks:false};
 const clean=o=>JSON.parse(JSON.stringify(o));
+function showErr(e){
+ const m=e&&e.code==='permission-denied'?'Sem permissão no Firestore. Publique as regras na aba Regras do Firebase.':(e&&e.message)||String(e);
+ lastErr=m;setSync('off');const b=$('errBar');b.textContent='⚠ '+m;b.classList.remove('hidden')}
+function clearErr(){lastErr='';$('errBar').classList.add('hidden')}
 function push(){
- if(!db)return;
+ if(!db)return Promise.resolve(false);
+ const jobs=[];
  for(const col of ['users','tasks']){
   if(!ready[col])continue;
   const ids=new Set();
-  S[col].forEach(it=>{
-   ids.add(it.id);const c=clean(it);
-   if(known[col].get(it.id)!==JSON.stringify(c))db.collection(col).doc(it.id).set(c).catch(e=>{lastErr=e.message;setSync('off')});
-  });
-  known[col].forEach((v,id)=>{if(!ids.has(id))db.collection(col).doc(id).delete().catch(e=>{lastErr=e.message})});
+  S[col].forEach(it=>{ids.add(it.id);const c=clean(it);
+   if(known[col].get(it.id)!==JSON.stringify(c))jobs.push(db.collection(col).doc(it.id).set(c))});
+  known[col].forEach((v,id)=>{if(!ids.has(id))jobs.push(db.collection(col).doc(id).delete())});
  }
+ return Promise.all(jobs).then(()=>{if(jobs.length)clearErr();return true}).catch(e=>{showErr(e);return false});
 }
 function listen(col){
  db.collection(col).onSnapshot(snap=>{
@@ -373,8 +388,8 @@ function listen(col){
   if(first&&!arr.length&&S[col].length){push();return}
   if(col==='tasks'&&!S.admin){const pv=new Map(S.tasks.map(t=>[t.id,t.status]));arr.forEach(t=>{if(t.assignee_id===S.active&&pv.get(t.id)==='EM VALIDAÇÃO'&&t.status==='CONCLUÍDO'){const g=XP[t.priority]||100;toast('✅ Aprovada! +'+g+' XP');celebrate(g,0)}})}
   S[col]=arr;if(!me()&&S.users.length)S.active=S.users[0].id;
-  persist();lastErr='';setSync(snap.metadata.fromCache&&!navigator.onLine?'off':'on');renderAll();
- },err=>{lastErr=err.code==='permission-denied'?'Permissão negada: revise as regras do Firestore.':err.message;setSync('off');console.warn(err)});
+  persist();clearErr();setSync(snap.metadata.fromCache&&!navigator.onLine?'off':'on');renderAll();
+ },err=>{showErr(err);console.warn(err)});
 }
 function pull(manual){
  if(!db){setSync('off');if(manual)toast('Firebase não configurado. Cole o firebaseConfig no código.');return}
@@ -473,7 +488,7 @@ function celebrate(gain,level){
 function renderAll(){renderUsers();renderHero();renderBadges();renderTasks();renderRank();$('admin').classList.toggle('hidden',!S.admin);$('pinBtn').classList.toggle('hidden',S.admin)}
 
 /* ---------- modais ---------- */
-const open=id=>{$(id).classList.add('active');const f=$(id).querySelector('input:not([type=hidden]),textarea,select,button');setTimeout(()=>f&&f.focus(),50)};
+const open=id=>{$(id).classList.add('active');const f=$(id).querySelector('input:not([type=hidden]),textarea,select,button');setTimeout(()=>f&&id!=='mFinish'&&f.focus(),50)};
 const closeAll=()=>document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active'));
 const fail=(id,m)=>{$(id).textContent=m};
 
@@ -492,12 +507,14 @@ async function saveTask(){
  persist();closeAll();renderAll();toast(id?'Demanda atualizada':'Demanda criada');push()}
 let dPhotos=[];
 function renderPrev(){$('dPrev').innerHTML=dPhotos.map((u,i)=>`<div class="ph"><img class="thumb" alt="Prévia" src="${u}"><button type="button" data-rm="${i}" aria-label="Remover foto">✕</button></div>`).join('');$('camBtn').textContent=dPhotos.length<3?(dPhotos.length?'📷 Tirar outra foto':'📷 Abrir câmera'):'📷 Máximo de 3 fotos'}
-function finish(){
+async function finish(){
  const t=S.tasks.find(x=>x.id===$('dId').value);if(!t||t.status!=='PENDENTE')return closeAll();
  if(!dPhotos.length)return fail('dErr','Tire pelo menos 1 foto para enviar.');
  t.user_images=[...dPhotos];t.user_image=dPhotos[0];t.comment=$('dComment').value.trim()||null;
  t.status='EM VALIDAÇÃO';t.done_at=new Date().toISOString();t.done_day=today();t.reject_reason=null;
- persist();closeAll();renderAll();toast('📤 Enviado! Aguarde a validação do gestor');push()}
+ persist();closeAll();renderAll();toast('📤 Enviando…');
+ const r=await Promise.race([push(),new Promise(ok=>setTimeout(()=>ok('timeout'),8000))]);
+ toast(r===true?'📤 Enviado! Aguarde a validação do gestor':r==='timeout'?'Sem internet: será enviado quando conectar':!db?'Salvo só neste aparelho (Firebase não configurado)':'Erro ao enviar. Veja o aviso no topo.')}
 function approve(id){
  const t=S.tasks.find(x=>x.id===id);if(!t||t.status!=='EM VALIDAÇÃO')return;
  const u=S.users.find(x=>x.id===t.assignee_id);if(!u)return;
@@ -537,7 +554,7 @@ function importData(f){
 /* ---------- eventos ---------- */
 document.addEventListener('click',e=>{
  const t=e.target.closest('[data-done],[data-ok],[data-no],[data-edit],[data-del],[data-deluser],[data-zoom],[data-open],[data-close],[data-f],[data-tab]');if(!t)return;
- if(t.dataset.done){$('dId').value=t.dataset.done;$('dComment').value='';dPhotos=[];renderPrev();$('dErr').textContent='';open('mDone');$('dImg').click()}
+ if(t.dataset.done){$('dId').value=t.dataset.done;$('dComment').value='';dPhotos=[];renderPrev();$('dErr').textContent='';open('mFinish');$('dImg').click()}
  else if(t.dataset.ok)approve(t.dataset.ok);
  else if(t.dataset.no){$('rId').value=t.dataset.no;$('rReason').value='';open('mReject')}
  else if(t.dataset.edit)openTask(S.tasks.find(x=>x.id===t.dataset.edit));
@@ -563,8 +580,9 @@ $('logout').onclick=()=>{S.admin=false;renderAll();toast('Saiu do modo gestor')}
 $('exportBtn').onclick=exportData;$('importFile').onchange=e=>{importData(e.target.files[0]);e.target.value=''};
 $('sync').onclick=()=>pull(true);
 $('camBtn').onclick=()=>{if(dPhotos.length>=3)return toast('Máximo de 3 fotos');$('dImg').click()};
-$('dImg').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;if(dPhotos.length>=3)return;
- try{dPhotos.push(await compress(f,720,.6));$('dErr').textContent='';renderPrev()}catch{toast('Não foi possível ler a foto')}};
+$('dImg').onchange=async e=>{const inp=e.target,f=inp.files[0];if(!f)return;if(dPhotos.length>=3){inp.value='';return}
+ try{dPhotos.push(await compress(f));$('dErr').textContent='';renderPrev()}catch{toast('Não foi possível ler a foto. Tente de novo.')}
+ inp.value=''};
 $('dPrev').onclick=e=>{const b=e.target.closest('[data-rm]');if(b){dPhotos.splice(+b.dataset.rm,1);renderPrev()}};
 $('confirmReject').onclick=reject;
 $('goVal').onclick=()=>{$('tabT').click();document.querySelector('[data-f="VALIDAR"]').click();$('tasks').scrollIntoView({behavior:'smooth'})};
