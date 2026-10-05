@@ -229,7 +229,7 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
  <div id="paneTasks">
   <div class="pad"><input type="search" id="search" placeholder="🔍 Pesquisar demandas..." aria-label="Pesquisar"></div>
   <div class="chips" id="filters">
-   <button class="chip" data-f="ALL" aria-pressed="true">Todas</button>
+   <button class="chip" data-f="ALL" aria-pressed="true">Ativas</button>
    <button class="chip" data-f="PENDENTE" aria-pressed="false">Pendentes</button>
    <button class="chip" data-f="VALIDAR" aria-pressed="false">⏳ Em validação <span id="valCount"></span></button>
    <button class="chip" data-f="MINHAS" aria-pressed="false">Minhas</button>
@@ -385,7 +385,7 @@ function listen(col){
   const arr=[];known[col]=new Map();
   snap.forEach(d=>{const v={...d.data(),id:d.id};arr.push(v);known[col].set(d.id,JSON.stringify(v))});
   const first=!ready[col];ready[col]=true;
-  if(first&&!arr.length&&S[col].length){push();return}
+  if(first&&!arr.length&&col==='users'&&S.users.length){push();return}
   if(col==='tasks'&&!S.admin){const pv=new Map(S.tasks.map(t=>[t.id,t.status]));arr.forEach(t=>{if(t.assignee_id===S.active&&pv.get(t.id)==='EM VALIDAÇÃO'&&t.status==='CONCLUÍDO'){const g=XP[t.priority]||100;toast('✅ Aprovada! +'+g+' XP');celebrate(g,0)}})}
   S[col]=arr;if(!me()&&S.users.length)S.active=S.users[0].id;
   persist();clearErr();setSync(snap.metadata.fromCache&&!navigator.onLine?'off':'on');renderAll();
@@ -419,6 +419,7 @@ function renderTasks(){
  let list=S.tasks.filter(t=>{
   if(S.filter==='PENDENTE'&&t.status!=='PENDENTE')return false;
   if(S.filter==='VALIDAR'&&t.status!=='EM VALIDAÇÃO')return false;
+  if(S.filter==='ALL'&&t.status==='CONCLUÍDO')return false;
   if(S.filter==='CONCLUÍDO'&&t.status!=='CONCLUÍDO')return false;
   if(S.filter==='MINHAS'&&t.assignee_id!==S.active)return false;
   if(S.filter==='ATRASADAS'&&!isLate(t))return false;
@@ -558,9 +559,9 @@ document.addEventListener('click',e=>{
  else if(t.dataset.ok)approve(t.dataset.ok);
  else if(t.dataset.no){$('rId').value=t.dataset.no;$('rReason').value='';open('mReject')}
  else if(t.dataset.edit)openTask(S.tasks.find(x=>x.id===t.dataset.edit));
- else if(t.dataset.del){if(confirm('Excluir esta demanda?')){S.tasks=S.tasks.filter(x=>x.id!==t.dataset.del);persist();renderAll();remote('tasks',t.dataset.del);toast('Demanda excluída')}}
+ else if(t.dataset.del){if(confirm('Excluir esta demanda?')){S.tasks=S.tasks.filter(x=>x.id!==t.dataset.del);persist();renderAll();push();toast('Demanda excluída')}}
  else if(t.dataset.deluser){const id=t.dataset.deluser;if(S.users.length<2)return toast('Mantenha ao menos um membro');
-  if(confirm('Remover membro e suas demandas?')){S.tasks.filter(x=>x.assignee_id===id).forEach(x=>remote('tasks',x.id));S.tasks=S.tasks.filter(x=>x.assignee_id!==id);S.users=S.users.filter(x=>x.id!==id);remote('users',id);if(S.active===id)S.active=S.users[0].id;persist();renderAll()}}
+  if(confirm('Remover membro e suas demandas?')){S.tasks.filter(x=>x.assignee_id===id).forEach(x=>remote('tasks',x.id));S.tasks=S.tasks.filter(x=>x.assignee_id!==id);S.users=S.users.filter(x=>x.id!==id);remote('users',id);if(S.active===id)S.active=S.users[0].id;persist();renderAll();push()}}
  else if(t.dataset.zoom){$('bigImg').src=t.src;open('mImg')}
  else if(t.dataset.open==='task')openTask();
  else if(t.dataset.open==='user'){$('uErr').textContent='';open('mUser')}
