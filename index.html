@@ -183,6 +183,12 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
 .lvlup span{display:inline-block;margin-top:12px;padding:6px 18px;border-radius:99px;border:2px solid var(--gold2);color:var(--gold2);font-weight:800}
 @keyframes fadein{from{opacity:0}}@keyframes pop{from{transform:scale(.4);opacity:0}}
 @media(max-width:380px){.bd{gap:4px}.pn{font-size:.8rem}}
+.tag.wait{background:#ede9fe;color:#5b21b6}
+.task.val::before{background:#8b5cf6}
+.fb.rej{background:#fee2e2;border-left-color:var(--red);margin-bottom:8px;margin-top:0}
+.ph{position:relative}.ph .thumb{margin:0;height:130px;max-height:none}
+.ph button{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-weight:800;cursor:pointer}
+.acts{flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -209,6 +215,7 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
  </div>
 
  <div id="admin" class="admin hidden">
+  <button class="btn" id="goVal">⏳ Validar <span id="valCount2"></span></button>
   <button class="btn" data-open="task">+ Demanda</button>
   <button class="btn" data-open="user">+ Membro</button>
   <button class="btn ghost" id="exportBtn">⬇ Backup</button>
@@ -222,6 +229,7 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
   <div class="chips" id="filters">
    <button class="chip" data-f="ALL" aria-pressed="true">Todas</button>
    <button class="chip" data-f="PENDENTE" aria-pressed="false">Pendentes</button>
+   <button class="chip" data-f="VALIDAR" aria-pressed="false">⏳ Em validação <span id="valCount"></span></button>
    <button class="chip" data-f="MINHAS" aria-pressed="false">Minhas</button>
    <button class="chip" data-f="ATRASADAS" aria-pressed="false">Atrasadas</button>
    <button class="chip" data-f="CONCLUÍDO" aria-pressed="false">Concluídas</button>
@@ -246,8 +254,14 @@ body{background:var(--bg) fixed;font-feature-settings:"tnum"}
 <div class="modal" id="mDone"><div class="mbody" role="dialog" aria-modal="true" aria-labelledby="hDone">
  <h3 id="hDone">✅ Finalizar tarefa</h3><input type="hidden" id="dId">
  <label for="dComment">Devolutiva</label><textarea id="dComment" rows="3" maxlength="500" placeholder="Qual foi o resultado?"></textarea>
- <label for="dImg">Fotos de comprovação (até 3)</label><input type="file" id="dImg" accept="image/*" multiple><div class="gal" id="dPrev"></div>
- <button class="btn" id="confirmDone">Concluir e resgatar XP</button><button class="btn danger" data-close>Cancelar</button>
+ <label>Foto de comprovação (obrigatória)</label><button class="btn" type="button" id="camBtn" style="margin-bottom:12px">📷 Abrir câmera</button><input type="file" id="dImg" accept="image/*" capture="environment" hidden><div class="gal" id="dPrev"></div><div class="err" id="dErr"></div>
+ <button class="btn" id="confirmDone">Enviar para validação</button><button class="btn danger" data-close>Cancelar</button>
+</div></div>
+
+<div class="modal" id="mReject"><div class="mbody" role="dialog" aria-modal="true" aria-labelledby="hRej">
+ <h3 id="hRej">↩ Devolver demanda</h3><input type="hidden" id="rId">
+ <label for="rReason">Motivo (o membro vai ver)</label><textarea id="rReason" rows="3" maxlength="300" placeholder="Ex.: foto desfocada, tire de novo."></textarea>
+ <button class="btn" id="confirmReject">Devolver ao membro</button><button class="btn danger" data-close>Cancelar</button>
 </div></div>
 
 <div class="modal" id="mAuth"><div class="mbody" role="dialog" aria-modal="true" aria-labelledby="hAuth">
@@ -326,7 +340,7 @@ async function sha(s){try{const b=await crypto.subtle.digest('SHA-256',new TextE
 const lvl=xp=>Math.floor(Math.sqrt(xp/100))+1;
 const lvlStart=l=>(l-1)*(l-1)*100;
 function streakOf(u){if(!u.last_done)return 0;return daysBetween(u.last_done,today())<=1?u.streak:0}
-function isLate(t){return t.status!=='CONCLUÍDO'&&t.deadline&&t.deadline<today()}
+function isLate(t){return t.status==='PENDENTE'&&t.deadline&&t.deadline<today()}
 function compress(file,max=800,q=.65){return new Promise((res,rej)=>{
  if(!file)return res(null);
  const r=new FileReader();r.onerror=()=>rej();
@@ -357,6 +371,7 @@ function listen(col){
   snap.forEach(d=>{const v={...d.data(),id:d.id};arr.push(v);known[col].set(d.id,JSON.stringify(v))});
   const first=!ready[col];ready[col]=true;
   if(first&&!arr.length&&S[col].length){push();return}
+  if(col==='tasks'&&!S.admin){const pv=new Map(S.tasks.map(t=>[t.id,t.status]));arr.forEach(t=>{if(t.assignee_id===S.active&&pv.get(t.id)==='EM VALIDAÇÃO'&&t.status==='CONCLUÍDO'){const g=XP[t.priority]||100;toast('✅ Aprovada! +'+g+' XP');celebrate(g,0)}})}
   S[col]=arr;if(!me()&&S.users.length)S.active=S.users[0].id;
   persist();lastErr='';setSync(snap.metadata.fromCache&&!navigator.onLine?'off':'on');renderAll();
  },err=>{lastErr=err.code==='permission-denied'?'Permissão negada: revise as regras do Firestore.':err.message;setSync('off');console.warn(err)});
@@ -384,26 +399,28 @@ function renderHero(){
  $('mLate').textContent=mine.filter(isLate).length;
  $('mStreak').textContent=streakOf(u)+'🔥'}
 function renderTasks(){
+ const nv=S.tasks.filter(t=>t.status==='EM VALIDAÇÃO').length;$('valCount').textContent=nv?'('+nv+')':'';$('valCount2').textContent=nv?'('+nv+')':'';
  const q=$('search').value.trim().toLowerCase();
  let list=S.tasks.filter(t=>{
-  if(S.filter==='PENDENTE'&&t.status==='CONCLUÍDO')return false;
+  if(S.filter==='PENDENTE'&&t.status!=='PENDENTE')return false;
+  if(S.filter==='VALIDAR'&&t.status!=='EM VALIDAÇÃO')return false;
   if(S.filter==='CONCLUÍDO'&&t.status!=='CONCLUÍDO')return false;
   if(S.filter==='MINHAS'&&t.assignee_id!==S.active)return false;
   if(S.filter==='ATRASADAS'&&!isLate(t))return false;
   if(q&&!(t.description||'').toLowerCase().includes(q))return false;return true});
- list.sort((a,b)=>(a.status==='CONCLUÍDO')-(b.status==='CONCLUÍDO')||(a.deadline||'9').localeCompare(b.deadline||'9')||ORDER[a.priority]-ORDER[b.priority]);
+ list.sort((a,b)=>(b.status==='EM VALIDAÇÃO')-(a.status==='EM VALIDAÇÃO')||(a.status==='CONCLUÍDO')-(b.status==='CONCLUÍDO')||(a.deadline||'9').localeCompare(b.deadline||'9')||ORDER[a.priority]-ORDER[b.priority]);
  if(!list.length){$('tasks').innerHTML='<div class="empty">Nenhuma demanda por aqui.'+(S.admin?' Toque em “+ Demanda” para criar.':'')+'</div>';return}
  $('tasks').innerHTML=list.map(t=>{
-  const u=S.users.find(x=>x.id===t.assignee_id),done=t.status==='CONCLUÍDO',late=isLate(t),mine=t.assignee_id===S.active;
-  return `<article class="task ${esc(t.priority)} ${done?'done':''}">
+  const u=S.users.find(x=>x.id===t.assignee_id),done=t.status==='CONCLUÍDO',val=t.status==='EM VALIDAÇÃO',late=isLate(t),mine=t.assignee_id===S.active;
+  return `<article class="task ${esc(t.priority)} ${done?'done':''} ${val?'val':''}">
   <div class="top"><span class="tag">${esc(t.priority)} · +${XP[t.priority]||100} XP</span>
-  ${done?'<span class="tag ok">Entregue</span>':late?'<span class="tag late">Atrasada</span>':''}</div>
+  ${done?'<span class="tag ok">Entregue</span>':val?'<span class="tag wait">⏳ Aguardando validação</span>':late?'<span class="tag late">Atrasada</span>':''}</div>
   <div class="desc">${esc(t.description)}</div>
   ${t.admin_image?`<img class="thumb" data-zoom loading="lazy" alt="Foto de instrução" src="${esc(t.admin_image)}">`:''}
   <div class="meta"><span>👤 ${esc(u?.name||'—')}</span><span>📅 ${fmtDate(t.deadline)}</span></div>
-  ${done?`${t.comment?`<div class="fb">💬 ${esc(t.comment)}</div>`:''}<div class="gal">${(t.user_images&&t.user_images.length?t.user_images:t.user_image?[t.user_image]:[]).map(i=>`<img class="thumb" data-zoom loading="lazy" alt="Comprovação" src="${esc(i)}">`).join('')}</div>`:''}
+  ${t.status==='PENDENTE'&&t.reject_reason?`<div class="fb rej">↩ Devolvida pelo gestor: ${esc(t.reject_reason)}</div>`:''}${(done||val)?`${t.comment?`<div class="fb">💬 ${esc(t.comment)}</div>`:''}<div class="gal">${(t.user_images&&t.user_images.length?t.user_images:t.user_image?[t.user_image]:[]).map(i=>`<img class="thumb" data-zoom loading="lazy" alt="Comprovação" src="${esc(i)}">`).join('')}</div>`:''}
   <div class="acts">
-   ${!done&&mine?`<button class="btn" data-done="${esc(t.id)}">Concluir</button>`:''}
+   ${t.status==='PENDENTE'&&mine?`<button class="btn" data-done="${esc(t.id)}">📷 Concluir</button>`:''}${val&&S.admin?`<button class="btn" data-ok="${esc(t.id)}">✅ Aprovar</button><button class="btn danger" data-no="${esc(t.id)}">↩ Devolver</button>`:''}
    ${S.admin?`<button class="btn ghost" data-edit="${esc(t.id)}">Editar</button><button class="btn danger" data-del="${esc(t.id)}">Excluir</button>`:''}
   </div></article>`}).join('')}
 const TITLES=[[10,'Lenda'],[7,'Elite'],[5,'Mestre'],[4,'Craque'],[3,'Ágil'],[2,'Aprendiz'],[1,'Novato']];
@@ -473,14 +490,25 @@ async function saveTask(){
  if(id){const t=S.tasks.find(x=>x.id===id);Object.assign(t,data);if(img)t.admin_image=img}
  else S.tasks.push({id:uid('t'),...data,status:'PENDENTE',admin_image:img,user_image:null,comment:null,created_at:new Date().toISOString(),done_at:null});
  persist();closeAll();renderAll();toast(id?'Demanda atualizada':'Demanda criada');push()}
-async function finish(){
- const t=S.tasks.find(x=>x.id===$('dId').value),u=me();if(!t||!u||t.status==='CONCLUÍDO')return closeAll();
- try{const fs=[...$('dImg').files].slice(0,3);t.user_images=await Promise.all(fs.map(f=>compress(f,720,.6)));t.user_image=t.user_images[0]||null}catch{toast('Imagem inválida, enviando sem foto');t.user_images=[];t.user_image=null}
- t.comment=$('dComment').value.trim()||null;t.status='CONCLUÍDO';t.done_at=new Date().toISOString();
- const before=lvl(u.xp),gain=XP[t.priority]||100;u.xp+=gain;
- const d=today();u.streak=u.last_done===d?u.streak:(u.last_done&&daysBetween(u.last_done,d)===1?u.streak+1:1);u.last_done=d;
- persist();closeAll();renderAll();
- toast(lvl(u.xp)>before?`🎉 Subiu para o nível ${lvl(u.xp)}! +${gain} XP`:`+${gain} XP resgatados!`);celebrate(gain,lvl(u.xp)>before?lvl(u.xp):0);push()}
+let dPhotos=[];
+function renderPrev(){$('dPrev').innerHTML=dPhotos.map((u,i)=>`<div class="ph"><img class="thumb" alt="Prévia" src="${u}"><button type="button" data-rm="${i}" aria-label="Remover foto">✕</button></div>`).join('');$('camBtn').textContent=dPhotos.length<3?(dPhotos.length?'📷 Tirar outra foto':'📷 Abrir câmera'):'📷 Máximo de 3 fotos'}
+function finish(){
+ const t=S.tasks.find(x=>x.id===$('dId').value);if(!t||t.status!=='PENDENTE')return closeAll();
+ if(!dPhotos.length)return fail('dErr','Tire pelo menos 1 foto para enviar.');
+ t.user_images=[...dPhotos];t.user_image=dPhotos[0];t.comment=$('dComment').value.trim()||null;
+ t.status='EM VALIDAÇÃO';t.done_at=new Date().toISOString();t.done_day=today();t.reject_reason=null;
+ persist();closeAll();renderAll();toast('📤 Enviado! Aguarde a validação do gestor');push()}
+function approve(id){
+ const t=S.tasks.find(x=>x.id===id);if(!t||t.status!=='EM VALIDAÇÃO')return;
+ const u=S.users.find(x=>x.id===t.assignee_id);if(!u)return;
+ const gain=XP[t.priority]||100,d=t.done_day||today();u.xp+=gain;
+ if(!u.last_done||d>u.last_done){u.streak=(u.last_done&&daysBetween(u.last_done,d)===1)?u.streak+1:1;u.last_done=d}
+ t.status='CONCLUÍDO';t.validated_at=new Date().toISOString();
+ persist();renderAll();toast(`✅ Aprovada! +${gain} XP para ${u.name}`);push()}
+function reject(){
+ const t=S.tasks.find(x=>x.id===$('rId').value);if(!t)return closeAll();
+ t.status='PENDENTE';t.reject_reason=$('rReason').value.trim()||'Refaça e envie uma nova foto.';t.user_images=[];t.user_image=null;t.comment=null;
+ persist();closeAll();renderAll();toast('Demanda devolvida ao membro');push()}
 async function verify(){
  const h=await sha($('aPin').value);const stored=localStorage.getItem('express_admin_pin_hash')||DEFAULT_PIN_HASH;
  if(h!==stored)return fail('aErr','PIN incorreto.');
@@ -508,8 +536,10 @@ function importData(f){
 
 /* ---------- eventos ---------- */
 document.addEventListener('click',e=>{
- const t=e.target.closest('[data-done],[data-edit],[data-del],[data-deluser],[data-zoom],[data-open],[data-close],[data-f],[data-tab]');if(!t)return;
- if(t.dataset.done){$('dId').value=t.dataset.done;$('dComment').value='';$('dImg').value='';$('dPrev').innerHTML='';open('mDone')}
+ const t=e.target.closest('[data-done],[data-ok],[data-no],[data-edit],[data-del],[data-deluser],[data-zoom],[data-open],[data-close],[data-f],[data-tab]');if(!t)return;
+ if(t.dataset.done){$('dId').value=t.dataset.done;$('dComment').value='';dPhotos=[];renderPrev();$('dErr').textContent='';open('mDone');$('dImg').click()}
+ else if(t.dataset.ok)approve(t.dataset.ok);
+ else if(t.dataset.no){$('rId').value=t.dataset.no;$('rReason').value='';open('mReject')}
  else if(t.dataset.edit)openTask(S.tasks.find(x=>x.id===t.dataset.edit));
  else if(t.dataset.del){if(confirm('Excluir esta demanda?')){S.tasks=S.tasks.filter(x=>x.id!==t.dataset.del);persist();renderAll();remote('tasks',t.dataset.del);toast('Demanda excluída')}}
  else if(t.dataset.deluser){const id=t.dataset.deluser;if(S.users.length<2)return toast('Mantenha ao menos um membro');
@@ -532,7 +562,12 @@ $('saveUser').onclick=addUser;$('savePin').onclick=changePin;
 $('logout').onclick=()=>{S.admin=false;renderAll();toast('Saiu do modo gestor')};
 $('exportBtn').onclick=exportData;$('importFile').onchange=e=>{importData(e.target.files[0]);e.target.value=''};
 $('sync').onclick=()=>pull(true);
-$('dImg').onchange=e=>{const fs=[...e.target.files];if(fs.length>3)toast('Só as 3 primeiras fotos serão enviadas');$('dPrev').innerHTML=fs.slice(0,3).map(f=>`<img class="thumb" alt="Prévia" src="${URL.createObjectURL(f)}">`).join('')};
+$('camBtn').onclick=()=>{if(dPhotos.length>=3)return toast('Máximo de 3 fotos');$('dImg').click()};
+$('dImg').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;if(dPhotos.length>=3)return;
+ try{dPhotos.push(await compress(f,720,.6));$('dErr').textContent='';renderPrev()}catch{toast('Não foi possível ler a foto')}};
+$('dPrev').onclick=e=>{const b=e.target.closest('[data-rm]');if(b){dPhotos.splice(+b.dataset.rm,1);renderPrev()}};
+$('confirmReject').onclick=reject;
+$('goVal').onclick=()=>{$('tabT').click();document.querySelector('[data-f="VALIDAR"]').click();$('tasks').scrollIntoView({behavior:'smooth'})};
 window.addEventListener('offline',()=>setSync('off'));window.addEventListener('online',()=>setSync(db?'sync':'off'));
 
 document.addEventListener('click',e=>{const g=e.target.closest('[data-badge]');if(!g)return;const i=+g.dataset.badge,b=BADGES[i],u=me();toast(`${b[0]} ${b[1]}: ${b[2]}${earnedOf(u)[i]?' ✔':' 🔒'}`)});
